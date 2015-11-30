@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/hinderson/olleenqvist.se/issues"
   },
-  "homepage": "https://github.com/hinderson/olleenqvist.se"
+  "homepage": "https://github.com/hinderson/olleenqvist.se",
+  "dependencies": {
+    "gulp": "~3.9.0"
+  },
+  "devDependencies": {
+    "webpack": "~1.12.9",
+    "postcss": "~5.0.12",
+    "csswring": "~4.0.0"
+  }
 }
