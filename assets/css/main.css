@@ -35,6 +35,7 @@ img {
 }
 
 
+
 /* Links
 -------------------------------------------------- */
 a {
@@ -65,13 +66,13 @@ html {
   -ms-text-size-adjust: 100%;
 }
 body {
-  margin: 0 auto;
-  font-size: 1.25em;
-  line-height: 1.5em;
-  padding: 1.5em;
-  max-width: 50em;
-  background: #fff;
-  color: #222;
+    margin: 0 auto;
+    font-size: 1.25em;
+    line-height: 1.5em;
+    padding: 1.5em;
+    max-width: 50em;
+    background: #fff;
+    color: #222;
 }
 
 
@@ -81,12 +82,14 @@ body {
   border-bottom: 2px solid red;
   margin-bottom: 1.5em;
 }
+
 .logo {
   display: block;
   margin-bottom: 1.5em;
-}
-.logo img {
-  width: 2em;
+
+  img {
+      width: 2em;
+  }
 }
 
 

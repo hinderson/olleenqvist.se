@@ -6,22 +6,19 @@ var webpack = require('webpack');
 var watch = require('gulp-watch');
 var postcss = require('gulp-postcss');
 var sourcemaps = require('gulp-sourcemaps');
-var autoprefixer = require('autoprefixer');
-var postcssImport = require('postcss-import');
 var csswring = require('csswring');
 var webpackConfig = require('./webpack.config.js');
 var imagemin = require('gulp-imagemin');
 var imageminJpegtran = require('imagemin-jpegtran');
-var postcssMixins = require('postcss-mixins');
 
 gulp.task('css', function ( ) {
     return gulp.src('./assets/css/main.css')
         .pipe(sourcemaps.init())
         .pipe(postcss([
-            postcssMixins(),
-            postcssImport(),
-            autoprefixer({ browsers: ['> 5%'] }),
-            csswring
+            require('postcss-import'),
+            require('postcss-mixins'),
+            require('postcss-nested'),
+            require('autoprefixer')({ browsers: ['> 5%'] })
         ]))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist/css'));
