@@ -1,11 +1,33 @@
 /* Headings
 -------------------------------------------------- */
-h1 {
-  font-size: 2em;
-  line-height: 1.25em;
+h1, h2, h3, h4, h5, h6 {
+  clear: both;
   font-weight: 400;
-  margin-bottom: .5em;
+  margin: 0;
+  line-height: 1em;
 }
+
+@mixin ballarur {color: green;}
+
+body {@include ballarur !important;}
+
+@mixin h1 {
+  font-size: 33px;
+  @media (min-width: 600px) {font-size: 48px;}
+}
+
+h1 {@include h1;}
+
+h2 {@include h2;}
+
+h3 {@include h3;}
+
+h4 {@include h4;}
+
+h5 {@include h5;}
+
+h6 {@include h6;}
+
 h2 {
   font-size: 2em;
   line-height: 1.25em;
