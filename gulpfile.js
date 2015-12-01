@@ -6,7 +6,6 @@ var webpack = require('webpack');
 var watch = require('gulp-watch');
 var postcss = require('gulp-postcss');
 var sourcemaps = require('gulp-sourcemaps');
-var csswring = require('csswring');
 var webpackConfig = require('./webpack.config.js');
 var imagemin = require('gulp-imagemin');
 var imageminJpegtran = require('imagemin-jpegtran');
@@ -16,9 +15,11 @@ gulp.task('css', function ( ) {
         .pipe(sourcemaps.init())
         .pipe(postcss([
             require('postcss-import'),
-            require('postcss-mixins'),
+            require('postcss-sassy-mixins'),
+            require('postcss-simple-vars'),
             require('postcss-nested'),
-            require('autoprefixer')({ browsers: ['> 5%'] })
+            require('autoprefixer')({ browsers: ['last 2 versions', '> 2%'] }),
+            require('csswring')
         ]))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist/css'));
