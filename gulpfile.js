@@ -30,3 +30,9 @@ gulp.task('optimize-thumbs', function ( ) {
         .pipe(imageminJpegtran({progressive: true})())
         .pipe(gulp.dest('./thumbs'));
 });
+
+gulp.task('watch', function ( ) {
+    gulp.watch('./thumbs/*.jpg', ['optimize-thumbs']);
+	gulp.watch('./assets/css/*.css', ['css']);
+    gulp.watch(['./assets/js/**/*'], ['webpack:build-dev']);
+});
