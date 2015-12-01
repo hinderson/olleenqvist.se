@@ -14,7 +14,7 @@ var imagemin = require('gulp-imagemin');
 var imageminJpegtran = require('imagemin-jpegtran');
 
 gulp.task('css', function ( ) {
-    return gulp.src('./assets/css/*.css')
+    return gulp.src('./assets/css/main.css')
         .pipe(sourcemaps.init())
         .pipe(postcss([
             postcssImport(),
