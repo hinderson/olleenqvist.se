@@ -7,9 +7,13 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1em;
 }
 
+@mixin ballarur {color: green;}
+
+body {@include ballarur !important;}
+
 @mixin h1 {
   font-size: 33px;
-  @media (min-width: $screen-med) {font-size: 48px;}
+  @media (min-width: 600px) {font-size: 48px;}
 }
 
 h1 {
