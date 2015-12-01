@@ -5,8 +5,11 @@ pages: false
 files:
   sortable: true
 fields:
-  title:
-    label: Title
+  project:
+    label: Project name
+    type:  text
+  client:
+    label: Client
     type:  text
   year:
     label: Year
