@@ -12,11 +12,13 @@ var csswring = require('csswring');
 var webpackConfig = require('./webpack.config.js');
 var imagemin = require('gulp-imagemin');
 var imageminJpegtran = require('imagemin-jpegtran');
+var postcssMixins = require('postcss-mixins');
 
 gulp.task('css', function ( ) {
     return gulp.src('./assets/css/main.css')
         .pipe(sourcemaps.init())
         .pipe(postcss([
+            postcssMixins(),
             postcssImport(),
             autoprefixer({ browsers: ['> 5%'] }),
             csswring
