@@ -8,13 +8,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-@define-mixin ballarur {color: green;}
+@mixin ballarur {color: green;}
 
 body {@mixin ballarur !important;}
 
 @mixin h1 {
   font-size: 33px;
   @media (min-width: 600px) {font-size: 48px;}
+}
+
+@mixin h2 {
+
+}
+
+@mixin h3 {
+
+}
+
+@mixin h4 {
+
 }
 
 h2 {
@@ -39,4 +51,3 @@ h1 a, h2 a, h3 a, h4 a {
   color: inherit;
   border: 0 !important;
 }
-
