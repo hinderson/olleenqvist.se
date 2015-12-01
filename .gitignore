@@ -1,3 +1,4 @@
 .DS_Thumb
 .vagrant
 node_modules
+dist
