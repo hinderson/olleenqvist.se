@@ -9,34 +9,6 @@ Email:  support@getkirby.com
 */
 
 
-/* Source Sans Pro
--------------------------------------------------- */
-@font-face {
-  font-family: 'Source Sans Pro';
-  font-style: normal;
-  font-weight: 300;
-  src: url(../fonts/sourcesanspro-300.woff) format('woff');
-}
-@font-face {
-  font-family: 'Source Sans Pro';
-  font-style: normal;
-  font-weight: 400;
-  src: url(../fonts/sourcesanspro-400.woff) format('woff');
-}
-@font-face {
-  font-family: 'Source Sans Pro';
-  font-style: normal;
-  font-weight: 600;
-  src: url(../fonts/sourcesanspro-600.woff) format('woff');
-}
-@font-face {
-  font-family: 'Source Sans Pro';
-  font-style: italic;
-  font-weight: 400;
-  src: url(../fonts/sourcesanspro-400-italic.woff) format('woff');
-}
-
-
 /* Reset
 -------------------------------------------------- */
 *, *:before, *:after {
@@ -51,6 +23,8 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, main, nav, section, summary {
   display: block;
 }
+
+@import "fonts.css";
 
 
 /* Pix
@@ -197,39 +171,6 @@ body {
 }
 
 
-/* Headings
--------------------------------------------------- */
-h1 {
-  font-size: 2em;
-  line-height: 1.25em;
-  font-weight: 400;
-  margin-bottom: .5em;
-}
-h2 {
-  font-size: 2em;
-  line-height: 1.25em;
-  font-weight: 300;
-  margin-bottom: .5em;
-  color: red;
-}
-h3 {
-  font-size: 1.4em;
-  line-height: 1.5em;
-  font-weight: 400;
-  margin-bottom: .5em;
-}
-h4 {
-  font-size: 1.125em;
-  font-weight: 600;
-  line-height: 1.5em;
-  margin-bottom: .5em;
-  color: red;
-}
-h1 a, h2 a, h3 a, h4 a {
-  color: inherit;
-  border: 0 !important;
-}
-
 
 
 /* Main
@@ -316,6 +257,7 @@ h1 a, h2 a, h3 a, h4 a {
   float: right;
 }
 
+@import "typography.css";
 
 /* Footer
 -------------------------------------------------- */
