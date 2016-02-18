@@ -132,15 +132,35 @@ body {
 -------------------------------------------------- */
 .header {
     padding: 2.5em 0 1em;
+    text-align: center;
 
     @media screen and (--medium-viewport) {
-        .view-toggler {
-            float: left;
-        }
+        text-align: inherit;
 
-        .logo {
-            float: right;
+        .group-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+    }
+}
+
+
+/* View toggler
+-------------------------------------------------- */
+.view-toggler {
+    display: none;
+
+    a {
+        display: none;
+
+        &.is-selected {
+            display: block;
+        }
+    }
+
+    @media screen and (--medium-viewport) {
+        display: block;
     }
 }
 
@@ -150,7 +170,47 @@ body {
 .projects {
 
     .project {
-        margin: 6em 0;
+        margin: 2em 0 3em;
+
+        ul {
+            list-style: none;
+
+            @media screen and (--medium-viewport) {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -0.4em;
+            }
+
+            @media screen and (--large-viewport) {
+                margin: -0.3em;
+            }
+        }
+
+        li {
+            width: 100%;
+            padding-bottom: 0.5em;
+            box-sizing: border-box;
+
+            @media screen and (--medium-viewport) {
+                width: 50%;
+                padding: 0.4em;
+            }
+
+            @media screen and (--large-viewport) {
+                width: 33.333%;
+                padding: 0.3em;
+            }
+        }
+
+        .images {
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            text-align: center;
+            margin: 0 auto;
+            max-width: 60rem;
+        }
     }
 }
 

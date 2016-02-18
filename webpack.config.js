@@ -6,11 +6,11 @@ module.exports = {
 		default: './assets/js/main.js',
 	},
 	output: {
-		filename: '[name].js',
+		filename: 'main.js',
 		path: './dist/js',
 		publicPath: '/js/'
 	},
-	plugins: [commonsPlugin],
+	plugins: [],
 	resolve: {
 	    extensions: ['', '.js', '.json', '.coffee'],
 	}
