@@ -13,5 +13,16 @@ module.exports = {
 	plugins: [],
 	resolve: {
 	    extensions: ['', '.js', '.json', '.coffee'],
+		alias: {
+			'eventEmitter/EventEmitter': 'wolfy87-eventemitter'
+		}
+	},
+	module: {
+		loaders: [
+			{
+				test: /(flickity|fizzy-ui-utils|get-size|unipointer)/,
+        		loader: 'imports?define=>false&this=>window'
+			}
+		]
 	}
 };
