@@ -71,6 +71,18 @@ a:focus {
 }
 
 
+/* Visually hidden
+-------------------------------------------------- */
+.visuallyhidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip: rect(1px,1px,1px,1px);
+    padding: 0;
+    border: 0;
+}
+
+
 /* Site
 -------------------------------------------------- */
 :root {
@@ -89,26 +101,58 @@ html {
 }
 
 body {
-    margin: 0 auto;
     font-size: 1.25em;
     line-height: 1.5em;
-    padding: 0;
-    margin: 0;
     background: #fff;
     color: #222;
+}
+
+.group {
+    box-sizing: border-box;
+    padding: 0 1.5rem;
+
+    @media screen and (--large-viewport) {
+        padding: 0 3rem;
+    }
+}
+
+.group::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.group-inner {
+    max-width: 100rem;
+    margin: 0 auto;
 }
 
 
 /* Header
 -------------------------------------------------- */
 .header {
-    margin-bottom: 1.5em;
+    padding: 2.5em 0 1em;
+
+    @media screen and (--medium-viewport) {
+        .view-toggler {
+            float: left;
+        }
+
+        .logo {
+            float: right;
+        }
+    }
 }
 
 
-/* Navigation
+/* Projects
 -------------------------------------------------- */
+.projects {
 
+    .project {
+        margin: 6em 0;
+    }
+}
 
 
 

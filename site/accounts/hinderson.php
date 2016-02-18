@@ -6,3 +6,5 @@ password: >
   $2a$10$Zv5gVhKyMVlptjD4UmQkxOLvtWMdI6gcwd1O5ub051uvGC46T02Pe
 language: en
 role: admin
+history:
+  - projects/project-b

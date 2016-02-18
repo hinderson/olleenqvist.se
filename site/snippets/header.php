@@ -11,7 +11,15 @@
 </head>
 <body>
     <header class="header cf" role="banner">
-        <a class="logo" href="<?php echo url() ?>">
-            <h1>Olle Enqvist</h1>
-        </a>
+        <div class="group">
+            <div class="group-inner">
+                <div class="view-toggler">
+                    <a href="?view=collage" class="collage is-selected">Collage view</a>
+                    <a href="?view=list" class="list">List view</a>
+                </div>
+                <a class="logo" href="<?php echo url() ?>">
+                    <h1>Olle Enqvist</h1>
+                </a>
+            </div>
+        </div>
     </header>

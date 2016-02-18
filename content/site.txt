@@ -1,12 +1,12 @@
-Title: Kirby Starterkit
+Title: Olle Enqvist
 
 ----
 
-Author: Bastian Allgeier GmbH
+Author: Hinderson & Hofweber
 
 ----
 
-Description: This is Kirby's Starterkit.
+Description: 
 
 ----
 

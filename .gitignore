@@ -2,3 +2,6 @@
 .vagrant
 node_modules
 dist
+npm-debug.log
+thumbs
+content

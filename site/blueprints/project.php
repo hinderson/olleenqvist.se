@@ -6,17 +6,11 @@ files:
   sortable: true
 fields:
   project:
-    label: Project name
+    label: Title
     type:  text
   client:
-    label: Client
-    type:  text
-  year:
-    label: Year
+    label: Subtitle
     type:  text
   text:
-    label: Text
+    label: Description
     type:  textarea
-  tags:
-    label: Tags
-    type:  tags
