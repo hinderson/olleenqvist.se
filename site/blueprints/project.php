@@ -5,12 +5,15 @@ pages: false
 files:
   sortable: true
 fields:
-  project:
+  title:
     label: Title
-    type:  text
-  client:
+    type: text
+  subtitle:
     label: Subtitle
-    type:  text
-  text:
+    type: text
+  description:
     label: Description
     type:  textarea
+    validate:
+        min: 10
+        max: 270
