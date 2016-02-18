@@ -35,9 +35,6 @@ footer, header, hgroup, main, nav, section, summary {
     display: block;
 }
 
-@import "fonts.css";
-
-
 /* Pix
 -------------------------------------------------- */
 img {
@@ -127,12 +124,20 @@ body {
     margin: 0 auto;
 }
 
+@import "typography.css";
+
 
 /* Header
 -------------------------------------------------- */
 .header {
-    padding: 2.5em 0 1em;
+    margin-bottom: 2.5em;
+    padding: 3em 0 1em;
     text-align: center;
+
+    h1 {
+        margin: 0;
+        font-size: 2rem;
+    }
 
     @media screen and (--medium-viewport) {
         text-align: inherit;
@@ -170,7 +175,7 @@ body {
 .projects {
 
     .project {
-        margin: 2em 0 3em;
+        margin: 0 0 6em;
 
         ul {
             list-style: none;
@@ -200,10 +205,6 @@ body {
                 width: 33.333%;
                 padding: 0.3em;
             }
-        }
-
-        .images {
-            margin-bottom: 1rem;
         }
 
         .description {
@@ -293,19 +294,12 @@ body {
     float: right;
 }
 
-@import "typography.css";
-
 
 /* Footer
 -------------------------------------------------- */
 .footer {
-    padding: 1em 0 6em;
+    padding: 1em 0 2em;
     font-size: .8em;
 }
-
-.copyright {
-    float: left;
-}
-
 
 @import "stacks.css";

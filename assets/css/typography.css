@@ -1,53 +1,45 @@
 /* Headings
 -------------------------------------------------- */
-h1, h2, h3, h4, h5, h6 {
-  clear: both;
-  font-weight: 400;
-  margin: 0;
-  line-height: 1em;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    clear: both;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1em;
 }
 
-
-@mixin ballarur {color: green;}
-
-body {@mixin ballarur !important;}
-
-@mixin h1 {
-  font-size: 33px;
-  @media (min-width: 600px) {font-size: 48px;}
-}
-
-@mixin h2 {
-
-}
-
-@mixin h3 {
-
-}
-
-@mixin h4 {
-
+h1 {
+    font-size: 4rem;
+    margin: 1em 0;
 }
 
 h2 {
+    font-size: 3rem;
+    margin: 0.5em 0 0.35em;
 }
 
 h3 {
+    font-size: 2.2rem;
+    margin: 0.7em 0 0.35em;
 }
 
 h4 {
+    font-size: 1.75rem;
+    margin: 0.3em 0 0.35em;
 }
 
-h1 {@include h1;}
-
-h2 {@include h2;}
-
-h3 {@include h3;}
-
-h4 {@include h4;}
-
-
-h1 a, h2 a, h3 a, h4 a {
+h1 a,
+h2 a,
+h3 a,
+h4 a {
   color: inherit;
-  border: 0 !important;
+}
+
+p {
+    font-size: 1.4rem;
+    line-height: 1.5;
 }
