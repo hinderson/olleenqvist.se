@@ -48,14 +48,15 @@ img {
 /* Links
 -------------------------------------------------- */
 a {
-    color: #000;
     text-decoration: none;
     transition: color .3s, background .3s, border .3s;
 }
 
+a:visited {color: inherit;}
+
 a:hover,
 a:focus {
-    color: red;
+    color: #000;
 }
 
 
@@ -92,16 +93,16 @@ a:focus {
 
 html {
     height: 101%;
-    font-family: sans-serif;
+    font-family: 'GT Cinetype', sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
 }
 
 body {
-    font-size: 1.25em;
+    font-size: 1.5em;
     line-height: 1.5em;
     background: #fff;
-    color: #222;
+    color: #000;
 }
 
 .group {
@@ -132,7 +133,21 @@ body {
 .header {
     margin-bottom: 1em;
     padding: 3em 0 1em;
-    text-align: center;
+    position: fixed;
+    width: 100%;
+    mix-blend-mode: difference;
+
+    a {
+        padding: 0.4em 0.8em 0.5em;
+        border-radius: 500px;
+        margin: 0 -0.85em;
+        background-color: white;
+    }
+
+    a:hover {
+        background-color: red;
+        mix-blend-mode-isolation: isolate;
+    }
 
     h1 {
         margin: 0;
@@ -209,9 +224,8 @@ body {
         }
 
         .description {
-            text-align: center;
             margin: 0 auto;
-            max-width: 60rem;
+            max-width: 32em;
         }
     }
 }
@@ -243,13 +257,6 @@ body {
     float: left;
     list-style: none;
     margin-right: 2em;
-    color: red;
-}
-
-.meta li b {
-    font-weight: 400;
-    color: #000;
-    padding-right: .25em;
 }
 
 
