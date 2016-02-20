@@ -1,8 +1,8 @@
 @font-face {
-  font-family: 'GT Cinetype';
-  src: url('/fonts/GT-Cinetype-Regular.woff') format('woff'), /* Modern Browsers */
-  font-style:   normal;
-  font-weight:  400;
+    font-family: 'GT Cinetype';
+    src: url('/fonts/GT-Cinetype-Regular.woff') format('woff'); /* Modern Browsers */
+    font-style: normal;
+    font-weight: 400;
 }
 
 /* Headings
