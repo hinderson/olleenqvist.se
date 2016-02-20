@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-    <title><?php echo $site->title()->html() ?> | <?php echo $page->title()->html() ?></title>
+    <title><?php echo $site->title()->html() ?><?php if (!$page->isHomePage()) { echo " | " . $page->title()->html(); } ?></title>
     <script>document.documentElement.className = document.documentElement.className.replace(/(^|\\\b)no-js(\b|$)/, 'js');if (!("ontouchstart" in document.documentElement)) {document.documentElement.className += " no-touch";}</script>
 
     <meta name="description" content="<?php echo $site->description()->html() ?>">
