@@ -218,6 +218,8 @@ body {
         li {
             width: 100%;
             padding-bottom: 0.5em;
+            transition: 0.08s transform ease;
+            will-change: transform;
             box-sizing: border-box;
 
             @media screen and (--medium-viewport) {
