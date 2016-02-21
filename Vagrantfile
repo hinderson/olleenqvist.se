@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
 
     # Forwarded Ports
     config.vm.network :forwarded_port, guest: 80, host: 8080
-    config.vm.network :private_network, ip: "192.168.68.8"
+    config.vm.network :private_network, ip: "192.168.68.10"
 
     # Shared Folders
     config.vm.synced_folder "./", "/vagrant",
