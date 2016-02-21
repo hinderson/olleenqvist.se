@@ -4,6 +4,16 @@ var utils = {};
 
 utils = {
 
+    requestAnimFrame: (
+		window.requestAnimationFrame        ||
+		window.webkitRequestAnimationFrame  ||
+		window.mozRequestAnimationFrame     ||
+		window.msRequestAnimationFrame      ||
+		function (callback) {
+			window.setTimeout(callback, 1000 / 60);
+		}
+	),
+
     forEach: function (array, callback, scope) {
 		for (var i = 0, len = array.length; i < len; i++) {
 			callback.call(scope, i, array[i]);

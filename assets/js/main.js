@@ -17,7 +17,9 @@ var toggleExpandedProject = function (e) {
 
     var images = project.querySelectorAll('.images li');
     utils.forEach(images, function (index, image) {
-        image.style.webkitTransform = '';
+        utils.requestAnimFrame.call(window, function ( ) {
+            image.style.webkitTransform = '';
+        });
     });
 };
 
@@ -29,7 +31,9 @@ var toggleCollapsedProject = function (e) {
 
     var images = project.querySelectorAll('.images li');
     utils.forEach(images, function (index, image) {
-        image.style.webkitTransform = 'translate3d(-' + Math.floor(Math.random()*20+1) + '%, -' + Math.floor(Math.random()*30+1) + '%, 0)';
+        utils.requestAnimFrame.call(window, function ( ) {
+            image.style.webkitTransform = 'translate3d(-' + (Math.floor(Math.random() * 30) + 1) + 'px, -' + (Math.floor(Math.random() * 30) + 4) + 'px, 0)';
+        });
     });
 };
 
