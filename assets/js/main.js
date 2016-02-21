@@ -10,23 +10,31 @@ viewToggler.addEventListener('click', function (e) {
 });
 
 var toggleExpandedProject = function (e) {
-    var project = e.delegateTarget;
+    var project = e.delegateTarget || e;
 
-    switch (e.type) {
-		case 'mouseover':
-            project.classList.remove('collapsed');
-            project.classList.add('expanded');
-			break;
-		case 'mouseout':
-            project.classList.remove('expanded');
-            project.classList.add('collapsed');
-			break;
-	}
+    project.classList.remove('collapsed');
+    project.classList.add('expanded');
+
+    var images = project.querySelectorAll('.images li');
+    utils.forEach(images, function (index, image) {
+        image.style.webkitTransform = '';
+    });
 };
 
-var projects = document.querySelectorAll('.project');
-utils.forEach(projects, function (index, project) {
+var toggleCollapsedProject = function (e) {
+    var project = e.delegateTarget || e;
+
+    project.classList.remove('expanded');
     project.classList.add('collapsed');
-    project.addEventListener('mouseover', utils.delegate(utils.criteria.hasClass('project'), toggleExpandedProject.bind(this)));
-    project.addEventListener('mouseout', utils.delegate(utils.criteria.hasClass('project'), toggleExpandedProject.bind(this)));
+
+    var images = project.querySelectorAll('.images li');
+    utils.forEach(images, function (index, image) {
+        image.style.webkitTransform = 'translate3d(-' + Math.floor(Math.random()*20+1) + '%, -' + Math.floor(Math.random()*30+1) + '%, 0)';
+    });
+};
+
+utils.forEach(document.querySelectorAll('.project'), function (index, project) {
+    toggleCollapsedProject(project);
+    project.addEventListener('mouseover', utils.delegate(utils.criteria.hasClass('project'), toggleExpandedProject));
+    project.addEventListener('mouseout', utils.delegate(utils.criteria.hasClass('project'), toggleCollapsedProject));
 });

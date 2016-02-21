@@ -194,11 +194,11 @@ body {
         margin: 0 0 6em;
 
         &.collapsed {
-            
+
         }
 
         &.expanded {
-            background: red;
+
         }
 
         ul {
