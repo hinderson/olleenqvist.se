@@ -134,6 +134,7 @@ body {
     margin-bottom: 1em;
     padding: 3em 0 1em;
     position: fixed;
+    z-index: 10;
     width: 100%;
     mix-blend-mode: difference;
 
