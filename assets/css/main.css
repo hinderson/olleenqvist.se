@@ -190,62 +190,66 @@ body {
 
 /* Projects
 -------------------------------------------------- */
-.projects {
+.project {
+    margin: 0 0 6em;
 
-    .project {
-        margin: 0 0 6em;
-
-        &.collapsed {
-
-        }
-
-        &.expanded {
-
-        }
-
-        ul {
-            list-style: none;
-
-            @media screen and (--medium-viewport) {
-                display: flex;
-                flex-wrap: wrap;
-                margin: -0.4em;
-            }
-
-            @media screen and (--large-viewport) {
-                margin: -0.3em;
-            }
-        }
-
-        li {
-            width: 100%;
-            padding-bottom: 0.5em;
-            transition: 0.08s transform ease;
-            will-change: transform;
-            box-sizing: border-box;
-
-            &:nth-child(5) {
-                position: relative;
-                z-index: 5;
-            }
-
-            @media screen and (--medium-viewport) {
-                width: 50%;
-                padding: 0.4em;
-            }
-
-            @media screen and (--large-viewport) {
-                width: 33.333%;
-                padding: 0.3em;
-            }
-        }
-
-        .description {
-            margin: 0 auto;
-            max-width: 32em;
+    &.collapsed {
+        li:nth-child(5) {
+            transform: scale(1.1);
         }
     }
+
+    &.expanded {
+
+    }
+
+    ul {
+        list-style: none;
+
+        @media screen and (--medium-viewport) {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -0.4em;
+        }
+
+        @media screen and (--large-viewport) {
+            margin: -0.3em;
+        }
+    }
+
+    li {
+        width: 100%;
+        padding-bottom: 0.5em;
+        transition: 0.08s transform ease;
+        will-change: transform;
+        box-sizing: border-box;
+
+        &:nth-child(5) {
+            position: relative;
+            z-index: 5;
+
+            &.collapsed & {
+                transform: scale(1.5);
+            }
+        }
+
+        @media screen and (--medium-viewport) {
+            width: 50%;
+            padding: 0.4em;
+        }
+
+        @media screen and (--large-viewport) {
+            width: 33.333%;
+            padding: 0.3em;
+        }
+    }
+
+    .description {
+        margin: 0 auto;
+        max-width: 32em;
+    }
 }
+
 
 
 

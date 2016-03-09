@@ -39,7 +39,7 @@ var toggleCollapsedProject = function (e) {
         switch (index) {
             case 0:
                 posX = getCoords(10, 45);
-                posY = getCoords(10, 45);
+                posY = getCoords(20, 45);
                 break;
             case 1:
                 posX = getCoords(-5, -15);
@@ -76,7 +76,9 @@ var toggleCollapsedProject = function (e) {
         }
 
         utils.requestAnimFrame.call(window, function ( ) {
-            image.style.webkitTransform = 'translate3d(' + posX + 'px, ' + posY + 'px, 0)';
+            if (index !== 4) {
+                image.style.webkitTransform = 'translate3d(' + posX + 'px, ' + posY + 'px, 0)';
+            }
         });
     });
 };
