@@ -25,14 +25,58 @@ var toggleExpandedProject = function (e) {
 
 var toggleCollapsedProject = function (e) {
     var project = e.delegateTarget || e;
-
     project.classList.remove('expanded');
     project.classList.add('collapsed');
 
-    var images = project.querySelectorAll('.images li');
-    utils.forEach(images, function (index, image) {
+    function getCoords (min, max) {
+        return Math.floor(Math.random() * max) + min;
+    }
+
+    utils.forEach(project.querySelectorAll('.images li'), function (index, image) {
+        var posX = 0;
+        var posY = 0;
+
+        switch (index) {
+            case 0:
+                posX = getCoords(10, 45);
+                posY = getCoords(10, 45);
+                break;
+            case 1:
+                posX = getCoords(-5, -15);
+                posY = getCoords(5, 45);
+                break;
+            case 2:
+                posX = getCoords(-15, -45);
+                posY = getCoords(15, 50);
+                break;
+            case 3:
+                posX = getCoords(15, 55);
+                posY = getCoords(5, 20);
+                break;
+            case 4:
+                posX = 0;
+                posY = 0;
+                break;
+            case 5:
+                posX = getCoords(-15, -55);
+                posY = getCoords(5, 20);
+                break;
+            case 6:
+                posX = getCoords(10, 45);
+                posY = getCoords(-15, -50);
+                break;
+            case 7:
+                posX = getCoords(-5, -15);
+                posY = getCoords(-5, -35);
+                break;
+            case 8:
+                posX = getCoords(-20, -45);
+                posY = getCoords(-15, -50);
+                break;
+        }
+
         utils.requestAnimFrame.call(window, function ( ) {
-            image.style.webkitTransform = 'translate3d(-' + (Math.floor(Math.random() * 30) + 1) + 'px, -' + (Math.floor(Math.random() * 30) + 4) + 'px, 0)';
+            image.style.webkitTransform = 'translate3d(' + posX + 'px, ' + posY + 'px, 0)';
         });
     });
 };
