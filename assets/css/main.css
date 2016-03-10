@@ -148,7 +148,7 @@ body {
     a:hover,
     a:focus {
         background-color: red;
-        mix-blend-mode-isolation: isolate;
+        isolation: isolate;
     }
 
     h1 {
