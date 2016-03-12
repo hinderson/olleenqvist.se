@@ -77,7 +77,7 @@ var toggleCollapsedProject = function (e) {
 
         utils.requestAnimFrame.call(window, function ( ) {
             if (index !== 4) {
-                image.style.webkitTransform = 'translate3d(' + posX + 'px, ' + posY + 'px, 0)';
+                image.style.webkitTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
             }
         });
     });
