@@ -12,7 +12,7 @@ var projectElems = document.querySelectorAll('.project');
 var viewToggler = document.querySelector('.view-toggler button');
 
 // Event listeners
-viewToggler.addEventListener('click', toggleProjectView);
+viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
 
 var toggleExpandedProject = function (e) {
     var project = e.target || e;
