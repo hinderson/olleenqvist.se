@@ -7,7 +7,7 @@
     <div class="group">
         <div class="group-inner">
             <?php foreach(page('projects')->children()->visible() as $project): ?>
-                <div class="project <?php echo $project->uid() ?>">
+                <div class="project <?php echo strtolower($project->uid()) ?>">
                     <ul class="images">
                         <?php foreach($project->images()->limit(9)->sortBy('sort', 'asc') as $image): ?>
                             <li>

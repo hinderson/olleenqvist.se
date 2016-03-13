@@ -13,7 +13,7 @@
 </head>
 <body>
     <header class="header cf" role="banner">
-        <a href="<?php echo url() ?>" class="logo visuallyhidden">
+        <a href="<?php echo url() ?>" class="visuallyhidden">
             <h1>Olle Enqvist</h1>
         </a>
 
