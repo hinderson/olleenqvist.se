@@ -162,6 +162,7 @@ body {
     button:focus {
         background: #ff0000;
         fill: #ff0000;
+        isolation: isolate;
         mix-blend-mode-isolation: isolate;
     }
 }
