@@ -128,43 +128,58 @@ body {
 @import "typography.css";
 
 
-/* Header
+/* Main navigation
 -------------------------------------------------- */
-.header {
-    margin-bottom: 1em;
-    padding: 3em 0 1em;
-    position: fixed;
-    z-index: 10;
-    width: 100%;
-    mix-blend-mode: difference;
+.nav-main {
+    button {
+        position: relative;
+        fill: #fff;
+        background: #fff;
+        border: 0;
+        margin: 0 1.03em;
+        padding: 0.7em 0.65em;
 
-    a {
-        padding: 0.4em 0.8em 0.5em;
-        border-radius: 500px;
-        margin: 0 -0.85em;
-        background-color: white;
+        .chard-left svg,
+        .chard-right svg {
+            position: absolute;
+            top: 0;
+            width: auto;
+            height: 100%;
+        }
+
+        .chard-left svg {
+            left: 0;
+            transform: translateX(-99%);
+        }
+
+        .chard-right svg {
+            right: 0;
+            transform: translateX(99%);
+        }
     }
 
-    a:hover,
-    a:focus {
-        background-color: red;
+    button:hover,
+    button:focus {
+        background: #ff0000;
+        fill: #ff0000;
         mix-blend-mode-isolation: isolate;
     }
+}
 
-    h1 {
-        margin: 0;
+
+/* Info toggler
+-------------------------------------------------- */
+.info-toggler {
+    position: fixed;
+    top: 3em;
+    right: calc((100vw - 100rem) / 2);
+    z-index: 10;
+    mix-blend-mode: difference;
+
+    button {
         font-size: 2rem;
-    }
-
-    @media screen and (--medium-viewport) {
-        margin-bottom: 2.5em;
-        text-align: inherit;
-
-        .group-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        margin: 0 0.77em;
+        padding: 0.53em 0.65em;
     }
 }
 
@@ -172,18 +187,17 @@ body {
 /* View toggler
 -------------------------------------------------- */
 .view-toggler {
-    display: none;
+    position: fixed;
+    top: 3em;
+    left: calc((100vw - 100rem) / 2);
+    z-index: 10;
+    mix-blend-mode: difference;
 
-    a {
-        display: none;
-
-        &.is-selected {
-            display: block;
-        }
-    }
-
-    @media screen and (--medium-viewport) {
-        display: block;
+    button {
+        font-size: inherit;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
     }
 }
 
@@ -201,6 +215,10 @@ body {
 
     &.expanded {
 
+    }
+
+    a {
+        cursor: zoom-in;
     }
 
     ul {
@@ -256,6 +274,7 @@ body {
 /* Main
 -------------------------------------------------- */
 .main {
+    padding-top: 7.5em;
     padding-bottom: 1.5em;
 }
 
