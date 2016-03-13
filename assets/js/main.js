@@ -4,13 +4,18 @@
 var utils = require('./utils.js');
 var Flickity = require('flickity-imagesloaded');
 
-var viewToggler = document.querySelector('.view-toggler');
-viewToggler.addEventListener('click', function (e) {
-    e.preventDefault();
-});
+// States
+var collageState = false;
+
+// Elements
+var projectElems = document.querySelectorAll('.project');
+var viewToggler = document.querySelector('.view-toggler button');
+
+// Event listeners
+viewToggler.addEventListener('click', toggleProjectView);
 
 var toggleExpandedProject = function (e) {
-    var project = e.delegateTarget || e;
+    var project = e.target || e;
 
     project.classList.remove('collapsed');
     project.classList.add('expanded');
@@ -24,7 +29,7 @@ var toggleExpandedProject = function (e) {
 };
 
 var toggleCollapsedProject = function (e) {
-    var project = e.delegateTarget || e;
+    var project = e.target || e;
     project.classList.remove('expanded');
     project.classList.add('collapsed');
 
@@ -83,8 +88,51 @@ var toggleCollapsedProject = function (e) {
     });
 };
 
-utils.forEach(document.querySelectorAll('.project'), function (index, project) {
-    toggleCollapsedProject(project);
-    project.addEventListener('mouseover', utils.delegate(utils.criteria.hasClass('project'), toggleExpandedProject));
-    project.addEventListener('mouseout', utils.delegate(utils.criteria.hasClass('project'), toggleCollapsedProject));
-});
+function toggleProjectView ( ) {
+    viewToggler.querySelector('.label').innerHTML = !collageState ? 'Collage view' : 'List view';
+
+    utils.forEach(projectElems, function (index, project) {
+        if (!collageState) {
+            document.documentElement.classList.remove('view-list');
+            document.documentElement.classList.add('view-collage');
+
+            toggleCollapsedProject(project);
+            project.addEventListener('mouseenter', toggleExpandedProject);
+            project.addEventListener('mouseleave', toggleCollapsedProject);
+
+            if (project.flkty) {
+                project.flkty.destroy();
+            }
+        } else {
+            toggleExpandedProject(project);
+            project.removeEventListener('mouseenter', toggleExpandedProject);
+            project.removeEventListener('mouseleave', toggleCollapsedProject);
+
+            setTimeout(function ( ) {
+                project.flkty = new Flickity(project.querySelector('.images'), {
+                    cellAlign: 'center',
+                    wrapAround:true,
+                    contain: true,
+                    percentPosition: true,
+                    prevNextButtons: false,
+                    pageDots: false,
+                    initialIndex: 4, // Always center on the featured image
+                    imagesLoaded: true,
+                });
+
+                document.documentElement.classList.remove('view-collage');
+                document.documentElement.classList.add('view-list');
+            }, 250);
+        }
+    });
+
+    collageState = !collageState;
+}
+
+toggleProjectView();
+
+/*
+
+
+
+*/
