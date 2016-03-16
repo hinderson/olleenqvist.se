@@ -1,0 +1,151 @@
+/* General project styling */
+.projects {
+    overflow-x: hidden;
+}
+
+.project {
+    padding-bottom: 5em;
+
+    &:first-child {
+        padding-top: 3em;
+    }
+
+    @media screen and (--medium-viewport) {
+        padding-bottom: 6em;
+
+        &:first-child {
+            padding-top: 8em;
+        }
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    li {
+        width: 100%;
+        padding-bottom: 0.5em;
+        box-sizing: border-box;
+
+        @media screen and (--medium-viewport) {
+            width: 33.333%;
+            padding: 0.4em;
+        }
+
+        @media screen and (--large-viewport) {
+            padding: 0.3em;
+        }
+    }
+
+    a {
+        display: inherit;
+    }
+
+    .description {
+        margin: 0 auto;
+        max-width: 32em;
+    }
+}
+
+/* Zoom-in */
+.zoom-overlay-open {
+	position: relative;
+    overflow-y: hidden;
+}
+
+.project a {
+    cursor: zoom-in;
+}
+
+img.hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.img-zoom-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+    z-index: 100;
+	cursor: zoom-out;
+	background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s;
+    will-change: background-color;
+
+	.zoom-overlay-open & {
+		background-color: rgba(255, 255, 255, 0.9);
+	}
+
+    img {
+        position: absolute;
+        max-width: none;
+        z-index: 100;
+        transition: transform 0.18s;
+        will-change: transform;
+        cursor: zoom-out;
+    }
+}
+
+/* Flickty specific styling */
+.project {
+    .flickity-enabled:focus {
+        outline: none;
+    }
+
+    .flickity-viewport {
+        position: relative;
+        height: 100%;
+    }
+
+    .flickity-slider {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        &.is-dragging a {
+            pointer-events: none;
+        }
+    }
+
+    .is-pointer-down a {
+        cursor: grabbing;
+    }
+}
+
+/* Collage specific styling */
+.view-collage .project {
+    .collapsed {
+        li:nth-child(5) {
+            transform: scale(1.1);
+        }
+    }
+
+    ul {
+        @media screen and (--medium-viewport) {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -0.4em;
+        }
+
+        @media screen and (--large-viewport) {
+            margin: -0.3em;
+        }
+    }
+
+    li {
+        transition: 0.08s transform ease;
+        will-change: transform;
+
+        &:nth-child(5) {
+            position: relative;
+            z-index: 5;
+
+            .collapsed & {
+                transform: scale(1.5);
+            }
+        }
+    }
+}

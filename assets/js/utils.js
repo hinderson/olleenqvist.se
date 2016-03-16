@@ -89,6 +89,101 @@ utils = {
         };
     },
 
+    scrollToPosition: function (destination, duration, callback) {
+    	var start = window.pageYOffset;
+    	var startTime = 0;
+    	var delta = destination - start;
+
+    	// Default easing function
+    	function easing (t, b, c, d) {
+    		t /= d / 2;
+    		if (t < 1) {
+    			return c / 2 * t * t * t + b;
+    		}
+    		t -= 2;
+    		return c / 2 * (t * t * t + 2) + b;
+    	}
+
+    	function loop (time) {
+    		startTime || (startTime = time); // jshint ignore:line
+    		var runTime = time - startTime;
+
+    		if (duration > runTime) {
+    			utils.requestAnimFrame.call(window, loop);
+    			window.scrollTo(0, easing(runTime, start, delta, duration));
+    		} else {
+    			if (destination !== delta + start) {
+    				window.scrollTo(0, delta + start);
+    			}
+    			if (typeof callback === 'function') {
+    				callback(+new Date());
+    			}
+    		}
+    	}
+
+    	utils.requestAnimFrame.call(window, loop);
+    },
+
+    scrollToElement: function (element, duration, offset) {
+        offset = offset || 0;
+    	var rect = element.getBoundingClientRect();
+    	var offsetTop = rect.top + window.pageYOffset - offset;
+
+    	utils.scrollToPosition(offsetTop, duration || 500);
+    },
+
+    whichTransitionEvent: function ( ) {
+        var t, el = document.createElement('fakeelement');
+
+        var transitions = {
+            'transition'      : 'transitionend',
+            'OTransition'     : 'oTransitionEnd',
+            'MozTransition'   : 'transitionend',
+            'WebkitTransition': 'webkitTransitionEnd'
+        };
+
+        for (t in transitions){
+            if (el.style[t] !== undefined){
+              return transitions[t];
+            }
+        }
+    },
+
+    getClosest: function (elem, selector) {
+        var firstChar = selector.charAt(0);
+
+        // Get closest match
+        for (; elem && elem !== document; elem = elem.parentNode) {
+            // If selector is a class
+            if (firstChar === '.') {
+                if (elem.classList.contains( selector.substr(1))) {
+                    return elem;
+                }
+            }
+
+            // If selector is an ID
+            if (firstChar === '#') {
+                if (elem.id === selector.substr(1)) {
+                    return elem;
+                }
+            }
+
+            // If selector is a data attribute
+            if (firstChar === '[') {
+                if (elem.hasAttribute( selector.substr(1, selector.length - 2))) {
+                    return elem;
+                }
+            }
+
+            // If selector is a tag
+            if (elem.tagName.toLowerCase() === selector) {
+                return elem;
+            }
+        }
+
+        return false;
+    },
+
 };
 
 module.exports = utils;

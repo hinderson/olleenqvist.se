@@ -11,13 +11,13 @@
                     <ul class="images">
                         <?php foreach($project->images()->limit(9)->sortBy('sort', 'asc') as $image): ?>
                             <li>
-                                <a href="<?php echo $image->url() ?>">
-                                    <?php
-                                        $thumbGigantic = thumb($image, array('width' => 1500, 'quality' => 100));
-                                        $thumbLarge = thumb($image, array('width' => 980, 'height' => 653, 'crop' => true, 'quality' => 100));
-                                        $thumbMedium = thumb($image, array('width' => 860, 'height' => 573, 'crop' => true, 'quality' => 90));
-                                        $thumbSmall = thumb($image, array('width' => 440, 'height' => 293, 'crop' => true, 'quality' => 85));
-                                    ?>
+                                <?php
+                                    $thumbGigantic = thumb($image, array('width' => 1500, 'quality' => 100));
+                                    $thumbLarge = thumb($image, array('width' => 980, 'height' => 653, 'crop' => true, 'quality' => 100));
+                                    $thumbMedium = thumb($image, array('width' => 860, 'height' => 573, 'crop' => true, 'quality' => 90));
+                                    $thumbSmall = thumb($image, array('width' => 440, 'height' => 293, 'crop' => true, 'quality' => 85));
+                                ?>
+                                <a href="<?php echo $thumbGigantic->url() ?>" data-width="<?php echo $thumbGigantic->width() ?>" data-height="<?php echo $thumbGigantic->height() ?>">
                                     <img src="<?php echo $thumbSmall->url() ?>" srcset="<?php echo $thumbLarge->url() ?> <?php echo $thumbLarge->width() ?>w, <?php echo $thumbMedium->url() ?> <?php echo $thumbMedium->width() ?>w, <?php echo $thumbSmall->url() ?> <?php echo $thumbSmall->width() ?>w" sizes="100vw" alt="<?php echo $project->title()->html() ?>">
                                 </a>
                             </li>

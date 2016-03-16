@@ -2,25 +2,95 @@
 
 // Requires
 var utils = require('./utils.js');
+var pubsub = require('./pubsub.js');
+var imagesLoaded = require('imagesloaded');
 var Flickity = require('flickity-imagesloaded');
+var imageZoom = require('./zoom-image.js');
 
 // States
 var collageState = false;
+var collapseDisabled = false;
+
+// Cache variables
+var cache = {
+    ticking: false,
+    lastScrollY: null,
+    viewportWidth: window.innerWidth,
+	viewportHeight: window.innerHeight
+};
+
+// Store all breakpoints and fetch the current one
+var breakpoint = {
+    update: function ( ) {
+        this.value = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '');
+    }
+};
+breakpoint.update();
+
+// Touch action loader
+if ('touchAction' in document.body.style) {
+    document.body.style.touchAction = 'manipulation';
+} else {
+    require.ensure(['fastclick'], function (require) {
+        var FastClick = require('fastclick');
+
+        window.addEventListener('load', function ( ) {
+            FastClick.attach(document.body);
+        });
+    }, 'fastclick');
+}
 
 // Elements
 var projectElems = document.querySelectorAll('.project');
 var viewToggler = document.querySelector('.view-toggler button');
+var infoToggler = document.querySelector('.info-toggler button');
+
+// Document events
+var resizeEvent = utils.debounce(function ( ) {
+	cache.viewportWidth = window.innerWidth;
+	cache.viewportHeight = window.innerHeight;
+    cache.lastScrollY = window.pageYOffset;
+    breakpoint.update();
+
+    // Collage state isn't available in mobile view
+    if (collageState && breakpoint.value === 'small-viewport') {
+        toggleProjectView();
+    }
+
+    console.log('Resized');
+
+    pubsub.publish('resize', { width: cache.viewportWidth, height: cache.viewportHeight });
+}, 250);
+
+var scrollEvent = function ( ) {
+	var requestTick = function ( ) {
+        cache.lastScrollY = window.pageYOffset;
+        pubsub.publish('scroll', cache.lastScrollY);
+
+		// Stop ticking
+		cache.ticking = false;
+	};
+
+	if (!cache.ticking) {
+		utils.requestAnimFrame.call(window, requestTick);
+		cache.ticking = true;
+	}
+};
 
 // Event listeners
+window.addEventListener('resize', resizeEvent);
+window.addEventListener('scroll', scrollEvent);
 viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
 
 var toggleExpandedProject = function (e) {
+    if (collapseDisabled) { return; }
+
     var project = e.target || e;
 
     project.classList.remove('collapsed');
     project.classList.add('expanded');
 
-    var images = project.querySelectorAll('.images li');
+    var images = project.querySelectorAll('li');
     utils.forEach(images, function (index, image) {
         utils.requestAnimFrame.call(window, function ( ) {
             image.style.webkitTransform = '';
@@ -29,7 +99,10 @@ var toggleExpandedProject = function (e) {
 };
 
 var toggleCollapsedProject = function (e) {
+    if (collapseDisabled) { return; }
+
     var project = e.target || e;
+
     project.classList.remove('expanded');
     project.classList.add('collapsed');
 
@@ -37,7 +110,7 @@ var toggleCollapsedProject = function (e) {
         return Math.random() * (max - min + 1) + min;
     }
 
-    utils.forEach(project.querySelectorAll('.images li'), function (index, image) {
+    utils.forEach(project.querySelectorAll('li'), function (index, image) {
         var posX = 0;
         var posY = 0;
 
@@ -88,31 +161,37 @@ var toggleCollapsedProject = function (e) {
     });
 };
 
-function toggleProjectView ( ) {
+function toggleProjectView (e) {
     viewToggler.querySelector('.label').innerHTML = !collageState ? 'Collage view' : 'List view';
 
+    // Coordinate variables
+    var distSum = 0;
+    var closest;
+    var closestDist;
+    var closestElement;
+
     utils.forEach(projectElems, function (index, project) {
-        if (!collageState) {
-            document.documentElement.classList.remove('view-list');
-            document.documentElement.classList.add('view-collage');
+        var projectImages = project.querySelector('.images');
 
-            toggleCollapsedProject(project);
-            project.addEventListener('mouseenter', toggleExpandedProject);
-            project.addEventListener('mouseleave', toggleCollapsedProject);
-
+        if (!collageState && breakpoint.value !== 'small-viewport') {
+            // Init collage view
             if (project.flkty) {
                 project.flkty.destroy();
             }
+
+            toggleCollapsedProject(projectImages);
+            projectImages.addEventListener('mouseenter', toggleExpandedProject);
+            projectImages.addEventListener('mouseleave', toggleCollapsedProject);
         } else {
-            toggleExpandedProject(project);
-            project.removeEventListener('mouseenter', toggleExpandedProject);
-            project.removeEventListener('mouseleave', toggleCollapsedProject);
+            // Init list view
+            toggleExpandedProject(projectImages);
+            projectImages.removeEventListener('mouseenter', toggleExpandedProject);
+            projectImages.removeEventListener('mouseleave', toggleCollapsedProject);
 
             setTimeout(function ( ) {
-                project.flkty = new Flickity(project.querySelector('.images'), {
+                var flkty = project.flkty = new Flickity(projectImages, {
                     cellAlign: 'center',
-                    wrapAround:true,
-                    contain: true,
+                    wrapAround: true,
                     percentPosition: true,
                     prevNextButtons: false,
                     pageDots: false,
@@ -120,19 +199,55 @@ function toggleProjectView ( ) {
                     imagesLoaded: true,
                 });
 
-                document.documentElement.classList.remove('view-collage');
-                document.documentElement.classList.add('view-list');
-            }, 250);
+                flkty.on('dragStart', function (e) {
+                    flkty.slider.classList.add('is-dragging');
+                });
+
+                flkty.on('dragEnd', function (e) {
+                    flkty.slider.classList.remove('is-dragging');
+                });
+            }, 300);
         }
+
+        // Save coordinates
+        var rect = project.getBoundingClientRect();
+        var distance = Math.abs(rect.top);
+        if (!closest || closestDist > distance) {
+            closest = project;
+            closestDist = distance;
+            closestElement = project;
+        }
+        distSum += (rect.height / 2); // Aim for the middle of section
     });
+
+    if (!collageState) {
+        document.documentElement.classList.remove('view-list');
+        document.documentElement.classList.add('view-collage');
+    } else {
+        setTimeout(function ( ) {
+            document.documentElement.classList.remove('view-collage');
+            document.documentElement.classList.add('view-list');
+
+            // Focus on element
+            setTimeout(function ( ) {
+                utils.scrollToElement(closestElement, 200, cache.viewportHeight * 0.3);
+            }, 100);
+        }, 305);
+    }
 
     collageState = !collageState;
 }
 
+// Initiate collapsed view
 toggleProjectView();
 
-/*
+// Activate zoom functionality
+imageZoom(document.querySelectorAll('.projects .images a'));
 
+pubsub.subscribe('zoomedIn', function ( ) {
+    collapseDisabled = true;
+});
 
-
-*/
+pubsub.subscribe('zoomedOut', function (element) {
+    collapseDisabled = false;
+});

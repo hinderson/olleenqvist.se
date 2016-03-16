@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js page-<?php echo $page->template() ?>">
+<html lang="en-US" class="no-js page-<?php echo $page->template() ?>">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
