@@ -5,7 +5,7 @@ var utils = require('./utils.js');
 var pubsub = require('./pubsub.js');
 var imagesLoaded = require('imagesloaded');
 var Flickity = require('flickity-imagesloaded');
-var imageZoom = require('./zoom-image.js');
+var ImageZoom = require('./zoom-image.js');
 
 // States
 var collageState = false;
@@ -56,8 +56,6 @@ var resizeEvent = utils.debounce(function ( ) {
     if (collageState && breakpoint.value === 'small-viewport') {
         toggleProjectView();
     }
-
-    console.log('Resized');
 
     pubsub.publish('resize', { width: cache.viewportWidth, height: cache.viewportHeight });
 }, 250);
@@ -241,13 +239,15 @@ function toggleProjectView (e) {
 // Initiate collapsed view
 toggleProjectView();
 
-// Activate zoom functionality
-imageZoom(document.querySelectorAll('.projects .images a'));
+// Zoomable images
+var imgZoom = new ImageZoom(document.querySelectorAll('.projects .images a'), {
+    offset: 60
+});
 
-pubsub.subscribe('zoomedIn', function ( ) {
+imgZoom.on('zoomInStart', function ( ) {
     collapseDisabled = true;
 });
 
-pubsub.subscribe('zoomedOut', function (element) {
+imgZoom.on('zoomOutStart', function ( ) {
     collapseDisabled = false;
 });

@@ -149,12 +149,12 @@ body {
         }
 
         .chard-left svg {
-            left: 0.01em;
+            left: 0;
             transform: translateX(-100%);
         }
 
         .chard-right svg {
-            right: 0.01em;
+            right: 0;
             transform: translateX(100%);
         }
     }
