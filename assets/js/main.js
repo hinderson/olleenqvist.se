@@ -5,7 +5,7 @@ var utils = require('./utils.js');
 var pubsub = require('./pubsub.js');
 var imagesLoaded = require('imagesloaded');
 var Flickity = require('flickity-imagesloaded');
-var ImageZoom = require('./zoom-image.js');
+var ImageZoom = require('image-zoom');
 
 // States
 var collageState = false;
