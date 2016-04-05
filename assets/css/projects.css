@@ -83,8 +83,9 @@
 
 	img,
 	video {
-		transition: transform 0.18s;
+		transition: transform 0.16s;
 	    will-change: transform;
+        transform: translateZ(0);
 	}
 
 	&.is-zoomed,
