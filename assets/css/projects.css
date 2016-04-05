@@ -48,46 +48,58 @@
 }
 
 /* Zoom-in */
-.zoom-overlay-open {
+.zoom-overlay-active {
 	position: relative;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
-.project a {
-    cursor: zoom-in;
-}
+[data-zoomable] {
+	cursor: zoom-in;
 
-img.hidden {
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-}
+	&.is-active {
+		img,
+		video {
+			position: relative;
+			z-index: 100;
+		}
 
-.img-zoom-container {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-    z-index: 100;
-	cursor: zoom-out;
-	background-color: rgba(255, 255, 255, 0.1);
-    transition: background-color 0.2s;
-    will-change: background-color;
-
-	.zoom-overlay-open & {
-		background-color: rgba(255, 255, 255, 0.9);
+		&::before {
+			content: "";
+			position: absolute;
+			top: -100vh;
+			left: -100vw;
+			width: 100%;
+			height: 100%;
+			padding: 100vh 100vw;
+			background-color: rgba(255, 255, 255, 0.85);
+			z-index: 99;
+			visibility: hidden;
+			opacity: 0;
+			transition: visibility 0s linear 0.22s, opacity 0.22s 0s;
+			will-change: visibility, opacity;
+			transform: translateZ(0);
+		}
 	}
 
-    img {
-        position: absolute;
-        max-width: none;
-        z-index: 100;
-        transition: transform 0.18s;
-        will-change: transform;
-        cursor: zoom-out;
-    }
+	img,
+	video {
+		transition: transform 0.18s;
+	    will-change: transform;
+	}
+
+	&.is-zoomed,
+	&.is-zooming {
+		cursor: zoom-out;
+
+		&::before {
+			visibility: visible;
+			opacity: 1;
+			transition: visibility 0s linear 0s, opacity 0.4s 0s;
+		}
+	}
 }
+
+
 
 /* Flickty specific styling */
 .project {
