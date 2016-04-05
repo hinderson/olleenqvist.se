@@ -3,7 +3,27 @@
  *  License: MIT
  */
 
-(function(window, document, undefined) {
+(function (window, factory) {
+    'use strict';
+
+    if (typeof define == 'function' && define.amd) {
+        // AMD
+        define([
+            './utils',
+            './pubsub'
+        ], function(utils, pubsub) {
+            return factory(window, utils, pubsub);
+        });
+    } else if (typeof exports == 'object') {
+        // CommonJS
+        module.exports = factory(
+            window,
+            require('./utils'),
+            require('./pubsub')
+        );
+    }
+
+}(window, function factory (window, utils, pubsub) {
     'use strict';
 
     // Constants
@@ -17,79 +37,8 @@
         viewportHeight: window.innerHeight
     };
 
-
-    // Event emitter
-    var eventContainer = {};
-
-    function on (event, callback) {
-        if (!eventContainer.hasOwnProperty(event)) {
-            eventContainer[event] = [];
-        }
-        eventContainer[event].push(callback);
-    }
-
-    function emit (event, data) {
-        if (eventContainer.hasOwnProperty(event)) {
-            eventContainer[event].forEach(function(callback) {
-                return data ? callback(data) : callback();
-            });
-        }
-    }
-
-
-    // UTILITIES
-    var forEach = function (array, callback, scope) {
-		for (var i = 0, len = array.length; i < len; i++) {
-			callback.call(scope, i, array[i]);
-		}
-	};
-
-    var whichTransitionEvent = function ( ) {
-        var t, el = document.createElement('fakeelement');
-
-        var transitions = {
-            'transition'      : 'transitionend',
-            'OTransition'     : 'oTransitionEnd',
-            'MozTransition'   : 'transitionend',
-            'WebkitTransition': 'webkitTransitionEnd'
-        };
-
-        for (t in transitions){
-            if (el.style[t] !== undefined){
-              return transitions[t];
-            }
-        }
-    };
-
-    var requestAnimFrame = (
-		window.requestAnimationFrame        ||
-		window.webkitRequestAnimationFrame  ||
-		window.mozRequestAnimationFrame     ||
-		window.oRequestAnimationFrame       ||
-		window.msRequestAnimationFrame      ||
-		function (callback) {
-			window.setTimeout(callback, 1000 / 60);
-		}
-	);
-
-    var debounce = function (func, wait, immediate) {
-		var timeout;
-		return function() {
-			var context = this, args = arguments;
-			var later = function() {
-				timeout = null;
-				if (!immediate) func.apply(context, args);
-			};
-			var callNow = immediate && !timeout;
-			clearTimeout(timeout);
-			timeout = window.setTimeout(later, wait);
-			if (callNow) func.apply(context, args);
-		};
-	};
-
-
-    // Document events
-    var resizeEvent = debounce(function ( ) {
+    // Window events
+    var resizeEvent = utils.debounce(function ( ) {
     	cache.viewportWidth = window.innerWidth;
     	cache.viewportHeight = window.innerHeight;
         cache.lastScrollY = window.pageYOffset;
@@ -104,7 +53,7 @@
     	};
 
     	if (!cache.ticking) {
-    		requestAnimFrame.call(window, requestTick);
+    		utils.requestAnimFrame.call(window, requestTick);
     		cache.ticking = true;
     	}
     };
@@ -143,13 +92,13 @@
         var image = (e && e.target.nodeName === 'IMG') ? e.target : document.querySelector('.img-zoom-container img');
         if (!image) { return; }
 
-        emit('zoomOutStart', thumb);
+        pubsub.publish('zoomOutStart', thumb);
 
-        var transitionEvent = whichTransitionEvent();
+        var transitionEvent = utils.whichTransitionEvent();
         var thumb = document.querySelector('.hidden');
 
         // Reset transforms
-        requestAnimFrame.call(window, function ( ) {
+        utils.requestAnimFrame.call(window, function ( ) {
             document.body.classList.remove('zoom-overlay-open');
             image.style.msTransform = '';
             image.style.webkitTransform = '';
@@ -164,14 +113,14 @@
             var container = image.parentNode;
             container.parentNode.removeChild(container);
 
-            emit('zoomOutEnd', thumb);
+            pubsub.publish('zoomOutEnd', thumb);
         });
     }
 
     function zoomIn (e) {
         e.preventDefault();
 
-        var transitionEvent = whichTransitionEvent();
+        var transitionEvent = utils.whichTransitionEvent();
         var thumb = e.target;
         var thumbLink = e.target.parentNode;
         var thumbRect = thumb.getBoundingClientRect();
@@ -181,17 +130,15 @@
         };
         var clone = thumb.cloneNode(true);
 
-        emit('zoomInStart', thumb);
+        pubsub.publish('zoomInStart', thumb);
 
         // Set initial size and placement of clone and remove unneccesary attributes
-        requestAnimFrame.call(window, function ( ) {
-            clone.removeAttribute('srcset');
-            clone.removeAttribute('sizes');
-            clone.style.top = (cache.lastScrollY + thumbRect.top) + 'px';
-            clone.style.left = thumbRect.left + 'px';
-            clone.style.width = thumbRect.width + 'px';
-            clone.style.height = thumbRect.height + 'px';
-        });
+        clone.removeAttribute('srcset');
+        clone.removeAttribute('sizes');
+        clone.style.top = (cache.lastScrollY + thumbRect.top) + 'px';
+        clone.style.left = thumbRect.left + 'px';
+        clone.style.width = thumbRect.width + 'px';
+        clone.style.height = thumbRect.height + 'px';
 
         // Append the clone to a container
         var container = document.createElement('DIV');
@@ -218,7 +165,7 @@
         var scale = 'scale(' + calculateZoom(imageRect, thumbRect) + ')';
 
         // Apply transforms
-        requestAnimFrame.call(window, function ( ) {
+        utils.requestAnimFrame.call(window, function ( ) {
             document.body.classList.add('zoom-overlay-open');
             clone.style.msTransform = translate + ' ' + scale;
             clone.style.webkitTransform = translate + ' ' + scale;
@@ -242,29 +189,26 @@
         // Wait for transition to end
         clone.addEventListener(transitionEvent, function activateImage ( ) {
             clone.removeEventListener(transitionEvent, activateImage);
-            emit('zoomInEnd', thumb);
+            pubsub.publish('zoomInEnd', thumb);
         });
     }
 
-    function ImageZoom (elems, opts) {
+    function ImageZoom (elems, options) {
         if (!elems) return;
 
         // Update default options
-        if (opts) {
-            OFFSET = opts.offset;
+        if (options) {
+            OFFSET = options.offset;
         }
 
         // Export event emitter
-        this.on = on;
+        this.on = pubsub.subscribe;
 
         // Attach click event listeners to all provided elems
-        forEach(elems, function (index, link) {
+        utils.forEach(elems, function (index, link) {
             link.addEventListener('click', zoomIn);
         });
     }
-
-    // Expose to interface
-	window.ImageZoom = ImageZoom;
 
 	// Expose to interface
 	if (typeof module === 'object' && typeof module.exports === 'object') {
@@ -272,7 +216,7 @@
 		module.exports = ImageZoom;
 	} else if (typeof define === 'function' && define.amd) {
 		// AMD support
-		define('ImageZoom', function() { return ImageZoom; } );
+		define('ImageZoom', function ( ) { return ImageZoom; } );
 	}
 
-})(window, document);
+}));
