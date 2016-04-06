@@ -1,5 +1,3 @@
-<h2 class="visuallyhidden">Latest projects</h2>
-
 <section class="projects">
     <header>
         <h2 class="visuallyhidden">Projects</h2>

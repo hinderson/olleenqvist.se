@@ -10,6 +10,7 @@ var ImageZoom = require('image-zoom');
 // States
 var collageState = false;
 var collapseDisabled = false;
+var aboutState = false;
 
 // Cache variables
 var cache = {
@@ -42,6 +43,7 @@ if ('touchAction' in document.body.style) {
 
 // Elements
 var projectElems = document.querySelectorAll('.project');
+var aboutElem = document.querySelector('section.about');
 var viewToggler = document.querySelector('.view-toggler button');
 var infoToggler = document.querySelector('.info-toggler button');
 
@@ -79,6 +81,7 @@ var scrollEvent = function ( ) {
 window.addEventListener('resize', resizeEvent);
 window.addEventListener('scroll', scrollEvent);
 viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
+infoToggler.addEventListener('click', utils.throttle(toggleInfoView, 300));
 
 var toggleExpandedProject = function (e) {
     if (collapseDisabled) { return; }
@@ -236,18 +239,34 @@ function toggleProjectView (e) {
     collageState = !collageState;
 }
 
+function toggleInfoView ( ) {
+    if (!aboutState) {
+        aboutElem.setAttribute('aria-hidden', false);
+        setTimeout(function ( ) {
+            document.body.classList.add('overlay-open');
+        }, 5);
+    } else {
+        aboutElem.setAttribute('aria-hidden', true);
+        document.body.classList.remove('overlay-open');
+    }
+
+    aboutState = !aboutState;
+}
+
 // Initiate collapsed view
 toggleProjectView();
 
-// Zoomable images
+// Initiate zoomable images
 var imgZoom = new ImageZoom(document.querySelectorAll('.projects .images a'), {
     offset: 60
 });
 
 imgZoom.on('zoomInStart', function ( ) {
     collapseDisabled = true;
+    document.body.classList.add('overlay-open');
 });
 
 imgZoom.on('zoomOutStart', function ( ) {
     collapseDisabled = false;
+    document.body.classList.remove('overlay-open');
 });

@@ -37,70 +37,11 @@
         }
     }
 
-    a {
-        display: inherit;
-    }
-
     .description {
         margin: 0 auto;
         max-width: 32em;
     }
 }
-
-/* Zoom-in */
-.zoom-overlay-active {
-	position: relative;
-    overflow: hidden;
-}
-
-[data-zoomable] {
-	cursor: zoom-in;
-
-	&.is-active {
-		img,
-		video {
-			position: relative;
-			z-index: 100;
-		}
-
-		&::before {
-			content: "";
-			position: absolute;
-			top: -100vh;
-			left: -100vw;
-			width: 100%;
-			height: 100%;
-			padding: 100vh 100vw;
-			background-color: rgba(255, 255, 255, 0.85);
-			z-index: 99;
-			visibility: hidden;
-			opacity: 0;
-			transition: visibility 0s linear 0.22s, opacity 0.22s 0s;
-			will-change: visibility, opacity;
-			transform: translateZ(0);
-		}
-	}
-
-	img,
-	video {
-		transition: transform 0.16s;
-	    will-change: transform;
-        transform: translateZ(0);
-	}
-
-	&.is-zoomed,
-	&.is-zooming {
-		cursor: zoom-out;
-
-		&::before {
-			visibility: visible;
-			opacity: 1;
-			transition: visibility 0s linear 0s, opacity 0.4s 0s;
-		}
-	}
-}
-
-
 
 /* Flickty specific styling */
 .project {
@@ -150,7 +91,6 @@
 
     li {
         transition: 0.08s transform ease;
-        will-change: transform;
 
         &:nth-child(5) {
             position: relative;
@@ -161,4 +101,70 @@
             }
         }
     }
+}
+
+/*
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    background: rgba(255, 255, 255, 0.85);
+    transition: visibility 0s linear 0.22s, opacity 0.22s 0s;
+    transform: translateZ(0);
+}
+
+.zoom-overlay-active::after {
+    opacity: 1;
+    visibility: visible;
+    transition: visibility 0s linear 0s, opacity 0.4s 0s;
+}
+*/
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    background: rgba(255, 255, 255, 0.9);
+    transition: visibility 0s linear 0.22s, opacity 0.22s 0s;
+    transform: translateZ(0);
+}
+
+.overlay-open {
+    position: relative;
+    overflow: hidden;
+
+    .overlay {
+        opacity: 1;
+        visibility: visible;
+        transition: visibility 0s linear 0s, opacity 0.25s 0s;
+    }
+}
+
+/* Zoom-in */
+[data-zoomable] {
+    display: block;
+	cursor: zoom-in;
+
+	&.is-active {
+        display: block;
+		position: relative;
+		z-index: 100;
+        transition: transform 0.16s;
+	}
+
+	&.is-zoomed,
+	&.is-zooming {
+		cursor: zoom-out;
+	}
 }
