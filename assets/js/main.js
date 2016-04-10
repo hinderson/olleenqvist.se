@@ -6,6 +6,7 @@ var pubsub = require('./pubsub.js');
 var imagesLoaded = require('imagesloaded');
 var Flickity = require('flickity-imagesloaded');
 var ImageZoom = require('image-zoom');
+var LazyBlur = require('lazyblur');
 
 // States
 var collageState = false;
@@ -155,7 +156,11 @@ var toggleCollapsedProject = function (e) {
         }
 
         utils.requestAnimFrame.call(window, function ( ) {
-            if (index !== 4) {
+            if (index === 4) {
+                image.style.webkitTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0) scale(1.1)';
+                image.style.position = 'relative';
+                image.style.zIndex = 5;
+            } else {
                 image.style.webkitTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
             }
         });
@@ -270,3 +275,6 @@ imgZoom.on('zoomOutStart', function ( ) {
     collapseDisabled = false;
     document.body.classList.remove('overlay-open');
 });
+
+// Initiate progressive media lazyloader
+var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'));

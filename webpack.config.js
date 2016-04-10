@@ -8,7 +8,7 @@ module.exports = {
 	output: {
 		filename: 'main.js',
 		path: './dist/js',
-		publicPath: '/js/'
+		publicPath: '/dist/js/'
 	},
 	plugins: [],
 	resolve: {

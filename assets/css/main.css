@@ -33,7 +33,8 @@ body::before {
 
 /* Pix
 -------------------------------------------------- */
-img {
+img,
+video {
     display: block;
     max-width: 100%;
     height: auto;
@@ -262,7 +263,7 @@ body {
     .overlay-open & {
         visibility: visible;
         opacity: 1;
-        transition: opacity 0.135s ease-out, visibility 0s linear;
+        transition: opacity 0.3s cubic-bezier(.2,0,.2,1), visibility 0s cubic-bezier(.2,0,.2,1);
     }
 
     .content {

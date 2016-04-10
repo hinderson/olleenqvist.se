@@ -71,12 +71,6 @@
 
 /* Collage specific styling */
 .view-collage .project {
-    .collapsed {
-        li:nth-child(5) {
-            transform: scale(1.1);
-        }
-    }
-
     ul {
         @media screen and (--medium-viewport) {
             display: flex;
@@ -91,15 +85,6 @@
 
     li {
         transition: 0.08s transform ease;
-
-        &:nth-child(5) {
-            position: relative;
-            z-index: 5;
-
-            .collapsed & {
-                transform: scale(1.5);
-            }
-        }
     }
 }
 
@@ -167,4 +152,54 @@ body::after {
 	&.is-zooming {
 		cursor: zoom-out;
 	}
+}
+
+
+/* Progressive media
+-------------------------------------------------- */
+.progressive-media {
+    position: relative;
+    overflow: hidden;
+
+    canvas {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .thumb {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .media {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        visibility: hidden;
+        opacity: 0;
+        backface-visibility: hidden;
+    }
+
+    &.media-loaded {
+        canvas {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s linear .5s,opacity .1s .4s;
+        }
+
+        .media {
+            visibility: visible;
+            opacity: 1;
+            transition: visibility 0s linear 0s, opacity .4s 0s;
+        }
+    }
 }

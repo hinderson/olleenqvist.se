@@ -32,6 +32,7 @@
     "image-zoom": "github:hinderson/image-zoom",
     "imagemin-jpegtran": "^4.3.2",
     "imports-loader": "^0.6.5",
+    "lazyblur": "github:hinderson/lazyblur",
     "normalize.css": "^3.0.3",
     "postcss": "~5.0.12",
     "postcss-custom-media": "^5.0.1",
