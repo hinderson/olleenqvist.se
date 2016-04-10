@@ -277,4 +277,6 @@ imgZoom.on('zoomOutStart', function ( ) {
 });
 
 // Initiate progressive media lazyloader
-var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'));
+var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
+    blur: 24
+});
