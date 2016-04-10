@@ -22,6 +22,24 @@
         list-style: none;
     }
 
+    html:not(.view-list) & {
+        ul {
+            @media screen and (--medium-viewport) {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -0.4em;
+            }
+
+            @media screen and (--large-viewport) {
+                margin: -0.3em;
+            }
+        }
+
+        li {
+            transition: 0.08s transform ease;
+        }
+    }
+
     li {
         width: 100%;
         padding-bottom: 0.5em;
@@ -66,25 +84,6 @@
 
     .is-pointer-down a {
         cursor: grabbing;
-    }
-}
-
-/* Collage specific styling */
-.view-collage .project {
-    ul {
-        @media screen and (--medium-viewport) {
-            display: flex;
-            flex-wrap: wrap;
-            margin: -0.4em;
-        }
-
-        @media screen and (--large-viewport) {
-            margin: -0.3em;
-        }
-    }
-
-    li {
-        transition: 0.08s transform ease;
     }
 }
 
@@ -160,6 +159,7 @@ body::after {
 .progressive-media {
     position: relative;
     overflow: hidden;
+    background: #dedede;
 
     canvas {
         display: block;
@@ -190,6 +190,8 @@ body::after {
     }
 
     &.media-loaded {
+        background: none;
+
         canvas {
             visibility: hidden;
             opacity: 0;
