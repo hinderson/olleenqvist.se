@@ -258,9 +258,6 @@ function toggleInfoView ( ) {
     aboutState = !aboutState;
 }
 
-// Initiate collapsed view
-toggleProjectView();
-
 // Initiate zoomable images
 var imgZoom = new ImageZoom(document.querySelectorAll('.projects .images a'), {
     offset: 60
@@ -280,3 +277,6 @@ imgZoom.on('zoomOutStart', function ( ) {
 var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
     blur: 24
 });
+
+// Initiate collapsed view
+toggleProjectView();

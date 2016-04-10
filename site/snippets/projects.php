@@ -18,15 +18,18 @@
 
                                 <?php else: ?>
                                     <?php
+                                        $thumbWidth = 328;
+                                        $thumbHeight = 219;
                                         $original = thumb($media, array('width' => 1500, 'quality' => 100));
-                                        $thumb = thumb($media, array('width' => 288, 'height' => 190, 'quality' => 90));
-                                        $retina = thumb($media, array('width' => 576, 'height' => 380, 'quality' => 90));
+                                        $thumb = thumb($media, array('width' => $thumbWidth, 'height' => $thumbHeight, 'quality' => 90, 'crop' => true));
+                                        $retina = thumb($media, array('width' => ($thumbWidth * 2), 'height' => ($thumbHeight * 2), 'quality' => 90, 'crop' => true));
                                         $micro = thumb($media, array('width' => 50, 'quality' => 100));
                                     ?>
                                     <a href="<?php echo $original->url() ?>" data-zoomable data-width="<?php echo $original->width() ?>" data-height="<?php echo $original->height() ?>">
                                         <div class="progressive-media" data-attributes='{ "src" : "<?php echo $thumb->url() ?>", "srcset": "<?php echo $thumb->url() ?> 1x, <?php echo $retina->url() ?> 2x", "width": "<?php echo $thumb->width() ?>", "height" : "<?php echo $thumb->height() ?>", "alt": "<?php echo $project->title()->html() ?>"}'>
-                                            <img src="<?php echo $micro->url() ?>" width="<?php echo $thumb->width() ?>" height="<?php echo $thumb->height() ?>" crossorigin="anonymous" class="thumb" alt="">
-                                            <canvas width="<?php echo $thumb->width() ?>" height="<?php echo $thumb->height() ?>"></canvas>
+                                            <div class="aspect-ratio" style="padding-bottom: <?php echo ($thumbHeight / $thumbWidth) * 100 ?>%;"></div>
+                                            <img src="<?php echo $micro->url() ?>" crossorigin="anonymous" class="thumb" alt="">
+                                            <canvas width="<?php echo $thumbWidth ?>" height="<?php echo $thumbHeight ?>"></canvas>
                                             <noscript>
                                                 <img src="<?php echo $thumb->url() ?>" srcset="<?php echo $thumb->url() ?> 1x, <?php echo $retina->url() ?> 2x" width="<?php echo $thumb->width() ?>" height="<?php echo $thumb->height() ?>" alt="<?php echo $project->title()->html() ?>">
                                             </noscript>
