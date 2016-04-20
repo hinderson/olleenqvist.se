@@ -40,7 +40,7 @@
                         <?php endforeach ?>
                     </ul>
                     <div class="description">
-                        <h3><a href="<?php echo $project->url() ?>"><?php echo $project->title()->html() ?></a></h3>
+                        <h3><?php echo $project->title()->html() ?></h3>
                         <h4><?php echo $project->subtitle()->html() ?></h4>
                         <p><?php echo $project->description()->excerpt(270) ?></p>
                     </div>
