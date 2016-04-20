@@ -138,7 +138,7 @@ body {
         background: #fff;
         border: 0;
         margin: 0 1.03em;
-        padding: 0.7em 0.65em;
+        padding: .53em 0.2em .6em;
         outline: 0;
 
         .chard-left svg,
@@ -189,10 +189,13 @@ body {
         right: calc((100vw - 100rem) / 2);
     }
 
+    @media screen and (min-width: 1200px) {
+        right: calc((100vw - 131rem) / 2);
+    }
+
     button {
         font-size: 2rem;
         margin: 0 0.77em;
-        padding: 0.53em 0.65em;
     }
 }
 
@@ -215,6 +218,10 @@ body {
 
     @media screen and (min-width: 1000px) {
         left: calc((100vw - 100rem) / 2);
+    }
+
+    @media screen and (min-width: 1200px) {
+        left: calc((100vw - 131rem) / 2);
     }
 
     button {
