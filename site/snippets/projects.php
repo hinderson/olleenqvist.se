@@ -41,7 +41,9 @@
                     </ul>
                     <div class="description">
                         <h3><?php echo $project->title()->html() ?></h3>
-                        <h4><?php echo $project->subtitle()->html() ?></h4>
+                        <?php if ($project->subtitle()->isNotEmpty()) {
+                            echo '<h4>' . $project->subtitle()->html() . '</h4>';
+                        } ?>
                         <p><?php echo $project->description()->excerpt(270) ?></p>
                     </div>
                 </div>
