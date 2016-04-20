@@ -156,11 +156,7 @@ var toggleCollapsedProject = function (e) {
         }
 
         utils.requestAnimFrame.call(window, function ( ) {
-            if (index === 4) {
-                image.style.webkitTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0) scale(1.1)';
-                image.style.position = 'relative';
-                image.style.zIndex = 5;
-            } else {
+            if (index !== 4) {
                 image.style.webkitTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
             }
         });
@@ -275,7 +271,7 @@ imgZoom.on('zoomOutStart', function ( ) {
 
 // Initiate progressive media lazyloader
 var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
-    blur: 24
+    blur: 10
 });
 
 // Initiate collapsed view

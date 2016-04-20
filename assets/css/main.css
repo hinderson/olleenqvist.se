@@ -165,8 +165,6 @@ body {
         color: #fff;
         background: #ff0000;
         fill: #ff0000;
-        isolation: isolate;
-        mix-blend-mode-isolation: isolate;
     }
 }
 
@@ -174,7 +172,6 @@ body {
 /* Info toggler
 -------------------------------------------------- */
 .info-toggler {
-    mix-blend-mode: difference;
     text-align: center;
 
     @media screen and (--medium-viewport) {
@@ -208,7 +205,6 @@ body {
     top: 3em;
     left: 0;
     z-index: 9;
-    mix-blend-mode: difference;
 
     @media screen and (--medium-viewport) {
         .js & {
@@ -289,7 +285,7 @@ body {
 
         p {
             max-width: none;
-            font-size: 2.7rem;
+            font-size: 2rem;
         }
     }
 }
