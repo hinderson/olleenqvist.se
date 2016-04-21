@@ -108,7 +108,7 @@ body {
 
 .group {
     box-sizing: border-box;
-    padding: 0 1.5rem;
+    padding: 0 2.5rem;
 
     @media screen and (--large-viewport) {
         padding: 0 3rem;
