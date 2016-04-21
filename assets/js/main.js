@@ -164,7 +164,7 @@ var toggleCollapsedProject = function (e) {
 };
 
 function toggleProjectView (e) {
-    viewToggler.querySelector('.label').innerHTML = !collageState ? 'Stack view' : 'Strip view';
+    viewToggler.querySelector('.label').innerHTML = !collageState ? 'Strip view' : 'Stack view';
 
     // Coordinate variables
     var distSum = 0;
