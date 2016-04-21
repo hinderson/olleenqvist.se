@@ -190,13 +190,16 @@ body {
     button {
         font-size: 1.7rem;
         margin: 0 0.77em;
+        cursor: help;
 
         @media screen and (--medium-viewport) {
             font-size: 2rem;
         }
-
     }
+}
 
+.overlay-open .info-toggler button {
+    cursor: nw-resize;
 }
 
 
