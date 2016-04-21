@@ -221,13 +221,10 @@ body {
         text-transform: uppercase;
         font-weight: 600;
         letter-spacing: 1px;
+        width: 100px;
     }
 }
 
-html:not(.view-collage) .view-toggler button {
-    width: 90px;
-    transition: width .1s;
-}
 
 
 /* Projects

@@ -22,7 +22,7 @@
                 <button>
                     <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
                     <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
-                    <span class="label">Collage view</span>
+                    <span class="label">Stack view</span>
                 </button>
             </div>
             <div class="info-toggler">
