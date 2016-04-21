@@ -223,8 +223,8 @@ body {
         font-size: inherit;
         text-transform: uppercase;
         font-weight: 600;
-        letter-spacing: 1px;
-        width: 100px;
+        letter-spacing: 0.07em;
+        width: 104px;
     }
 }
 
