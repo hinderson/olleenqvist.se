@@ -295,7 +295,7 @@ keyboard.on('arrowRight', function (event) {
     event.preventDefault();
 
     // Toggle previous slide when in strip view
-    if (!stackState) {
+    if (!stackState && !collapseDisabled) {
         var focusedProject = document.querySelector('.is-visible');
         focusedProject.flkty.next();
     }
@@ -305,7 +305,7 @@ keyboard.on('arrowLeft', function (event) {
     event.preventDefault();
 
     // Toggle next slide when in strip view
-    if (!stackState) {
+    if (!stackState && !collapseDisabled) {
         var focusedProject = document.querySelector('.is-visible');
         focusedProject.flkty.previous();
     }
