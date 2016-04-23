@@ -222,6 +222,9 @@ function toggleProjectView (e) {
 
                 flkty.on('dragEnd', function (e) {
                     flkty.slider.classList.remove('is-dragging');
+                });
+
+                flkty.on('cellSelect', function ( ) {
                     lazyBlur.check();
                 });
             }, 300);
@@ -266,7 +269,7 @@ function toggleInfoView ( ) {
 }
 
 function highlightVisibleProject (lastScrollY) {
-    var viewportHeightPercentage = cache.viewportHeight * 0.3;
+    var viewportHeightPercentage = cache.viewportHeight * 0.5;
     var offset = lastScrollY + viewportHeightPercentage;
     var visibleSections = [];
 
