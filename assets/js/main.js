@@ -3,13 +3,14 @@
 // Requires
 var utils = require('./utils.js');
 var pubsub = require('./pubsub.js');
+var keyboard = require('./keyboard-commands.js');
 var imagesLoaded = require('imagesloaded');
 var Flickity = require('flickity-imagesloaded');
 var ImageZoom = require('image-zoom');
 var LazyBlur = require('lazyblur');
 
 // States
-var collageState = false;
+var stackState = false;
 var collapseDisabled = false;
 var aboutState = false;
 
@@ -19,8 +20,15 @@ var cache = {
     lastScrollY: null,
     viewportWidth: window.innerWidth,
 	viewportHeight: window.innerHeight,
-    projectPositions: []
+    projectPositions: [],
+    closestProject: ''
 };
+
+// Elements
+var projectElems = document.querySelectorAll('.project');
+var aboutElem = document.querySelector('section.about');
+var viewToggler = document.querySelector('.view-toggler button');
+var infoToggler = document.querySelector('.info-toggler button');
 
 // Store all breakpoints and fetch the current one
 var breakpoint = {
@@ -28,7 +36,16 @@ var breakpoint = {
         this.value = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '');
     }
 };
-breakpoint.update();
+
+// Store project positions
+var storeProjectPositions = function ( ) {
+    cache.projectPositions.length = 0;
+    utils.forEach(projectElems, function (index, project) {
+        var top = Math.floor(project.getBoundingClientRect().top + (cache.lastScrollY || window.pageYOffset));
+        cache.projectPositions.push(top);
+    });
+    highlightVisibleProject(cache.lastScrollY);
+};
 
 // Touch action loader
 if ('touchAction' in document.body.style) {
@@ -43,12 +60,6 @@ if ('touchAction' in document.body.style) {
     }, 'fastclick');
 }
 
-// Elements
-var projectElems = document.querySelectorAll('.project');
-var aboutElem = document.querySelector('section.about');
-var viewToggler = document.querySelector('.view-toggler button');
-var infoToggler = document.querySelector('.info-toggler button');
-
 // Document events
 var resizeEvent = utils.debounce(function ( ) {
 	cache.viewportWidth = window.innerWidth;
@@ -57,7 +68,7 @@ var resizeEvent = utils.debounce(function ( ) {
     breakpoint.update();
 
     // Collage state isn't available in mobile view
-    if (collageState && breakpoint.value === 'small-viewport') {
+    if (stackState && breakpoint.value === 'small-viewport') {
         toggleProjectView();
     }
 
@@ -81,15 +92,6 @@ var scrollEvent = function ( ) {
 		cache.ticking = true;
 	}
 };
-
-// Store project positions
-var storeProjectPositions = function ( ) {
-    utils.forEach(projectElems, function (index, project) {
-        var top = Math.floor(project.getBoundingClientRect().top + (cache.lastScrollY || window.pageYOffset));
-        cache.projectPositions.push(top);
-    });
-};
-storeProjectPositions();
 
 // Initiate progressive media lazyloader
 var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
@@ -182,18 +184,12 @@ var toggleCollapsedProject = function (e) {
 };
 
 function toggleProjectView (e) {
-    viewToggler.querySelector('.label').innerHTML = !collageState ? 'Strip view' : 'Stack view';
-
-    // Coordinate variables
-    var distSum = 0;
-    var closest;
-    var closestDist;
-    var closestElement;
+    viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
     utils.forEach(projectElems, function (index, project) {
         var projectImages = project.querySelector('.images');
 
-        if (!collageState && breakpoint.value !== 'small-viewport') {
+        if (!stackState && breakpoint.value !== 'small-viewport') {
             // Init collage view
             if (project.flkty) {
                 project.flkty.destroy();
@@ -230,40 +226,29 @@ function toggleProjectView (e) {
                 });
             }, 300);
         }
-
-        // Save coordinates
-        var rect = project.getBoundingClientRect();
-        var distance = Math.abs(rect.top);
-        if (!closest || closestDist > distance) {
-            closest = project;
-            closestDist = distance;
-            closestElement = project;
-        }
-        distSum += (rect.height / 2); // Aim for the middle of section
     });
 
-    if (!collageState) {
+    var closestProject = cache.closestProject;
+    if (!stackState) {
         document.documentElement.classList.remove('view-list');
         document.documentElement.classList.add('view-collage');
 
-        // Lazyload images
         lazyBlur.check();
+        storeProjectPositions();
     } else {
         setTimeout(function ( ) {
             document.documentElement.classList.remove('view-collage');
             document.documentElement.classList.add('view-list');
 
-            // Focus on element
             setTimeout(function ( ) {
-                utils.scrollToElement(closestElement, 200, cache.viewportHeight * 0.3);
-
-                // Lazyload images
                 lazyBlur.check();
+                storeProjectPositions();
+                utils.scrollToElement(closestProject, 200, cache.viewportHeight * 0.3);
             }, 100);
         }, 305);
     }
 
-    collageState = !collageState;
+    stackState = !stackState;
 }
 
 function toggleInfoView ( ) {
@@ -299,9 +284,27 @@ function highlightVisibleProject (lastScrollY) {
 
     var currentIndex = visibleSections[visibleSections.length - 1];
     projectElems[currentIndex].classList.add('is-visible');
+    cache.closestProject = projectElems[currentIndex];
 }
 
-highlightVisibleProject(cache.lastScrollY);
+// Navigate slideshow with keyboard
+keyboard.on('arrowRight', function (event) {
+    event.preventDefault();
+
+    if (!stackState) {
+        var focusedProject = document.querySelector('.is-visible');
+        console.log('right', focusedProject.flkty.next());
+    }
+});
+
+keyboard.on('arrowLeft', function (event) {
+    event.preventDefault();
+
+    if (!stackState) {
+        var focusedProject = document.querySelector('.is-visible');
+        console.log('left', focusedProject.flkty.previous());
+    }
+});
 
 // Initiate zoomable images
 if (breakpoint.value !== 'small-viewport') {
@@ -324,5 +327,6 @@ if (breakpoint.value !== 'small-viewport') {
     // DESTROY
 }
 
-// Initiate collapsed view
+breakpoint.update();
+storeProjectPositions();
 toggleProjectView();
