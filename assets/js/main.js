@@ -11,7 +11,7 @@ var LazyBlur = require('lazyblur');
 
 // States
 var stackState = false;
-var collapseDisabled = false;
+var uiDisabled = false;
 var aboutState = false;
 
 // Cache variables
@@ -105,7 +105,7 @@ viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
 infoToggler.addEventListener('click', utils.throttle(toggleInfoView, 300));
 
 var toggleExpandedProject = function (e) {
-    if (collapseDisabled) { return; }
+    if (uiDisabled) { return; }
 
     var project = e.target || e;
 
@@ -121,7 +121,7 @@ var toggleExpandedProject = function (e) {
 };
 
 var toggleCollapsedProject = function (e) {
-    if (collapseDisabled) { return; }
+    if (uiDisabled) { return; }
 
     var project = e.target || e;
 
@@ -183,7 +183,7 @@ var toggleCollapsedProject = function (e) {
     });
 };
 
-function toggleProjectView (e) {
+function toggleProjectView ( ) {
     viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
     utils.forEach(projectElems, function (index, project) {
@@ -224,7 +224,7 @@ function toggleProjectView (e) {
                     flkty.slider.classList.remove('is-dragging');
                 });
 
-                flkty.on('cellSelect', function ( ) {
+                flkty.on('settle', function ( ) {
                     lazyBlur.check();
                 });
             }, 300);
@@ -254,17 +254,36 @@ function toggleProjectView (e) {
     stackState = !stackState;
 }
 
+var keysCloseInfoView = function (e) {
+    e = e || window.event;
+
+    if (e.which === 27 || e.keyCode === 27) {
+        toggleInfoView();
+    }
+};
+
+var clickOutsideInfo = function (e) {
+    if (e.target.classList.contains('about')) {
+        toggleInfoView();
+    }
+};
+
 function toggleInfoView ( ) {
     if (!aboutState) {
+        window.addEventListener('keydown', keysCloseInfoView);
+        aboutElem.addEventListener('click', clickOutsideInfo);
         aboutElem.setAttribute('aria-hidden', false);
         setTimeout(function ( ) {
             document.body.classList.add('overlay-open');
         }, 5);
     } else {
+        window.removeEventListener('keydown', keysCloseInfoView);
+        aboutElem.removeEventListener('click', clickOutsideInfo);
         aboutElem.setAttribute('aria-hidden', true);
         document.body.classList.remove('overlay-open');
     }
 
+    uiDisabled = !uiDisabled;
     aboutState = !aboutState;
 }
 
@@ -295,7 +314,7 @@ keyboard.on('arrowRight', function (event) {
     event.preventDefault();
 
     // Toggle previous slide when in strip view
-    if (!stackState && !collapseDisabled) {
+    if (!stackState && !uiDisabled) {
         var focusedProject = document.querySelector('.is-visible');
         focusedProject.flkty.next();
     }
@@ -305,7 +324,7 @@ keyboard.on('arrowLeft', function (event) {
     event.preventDefault();
 
     // Toggle next slide when in strip view
-    if (!stackState && !collapseDisabled) {
+    if (!stackState && !uiDisabled) {
         var focusedProject = document.querySelector('.is-visible');
         focusedProject.flkty.previous();
     }
@@ -319,12 +338,12 @@ if (breakpoint.value !== 'small-viewport') {
         });
 
         imgZoom.on('zoomInStart', function ( ) {
-            collapseDisabled = true;
+            uiDisabled = true;
             document.body.classList.add('overlay-open');
         });
 
         imgZoom.on('zoomOutStart', function ( ) {
-            collapseDisabled = false;
+            uiDisabled = false;
             document.body.classList.remove('overlay-open');
         });
     });
