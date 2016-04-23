@@ -41,10 +41,12 @@
             &:nth-child(5) {
                 position: relative;
                 z-index: 5;
+            }
+        }
 
-                .collapsed & {
-                    transform: scale(1.5);
-                }
+        ul.collapsed {
+            li:nth-child(5) {
+                transform: scale(1.08);
             }
         }
     }
