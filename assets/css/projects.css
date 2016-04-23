@@ -103,7 +103,10 @@
 /* Zoom-in */
 [data-zoomable] {
     display: block;
-	cursor: zoom-in;
+
+    @media screen and (--medium-viewport) {
+        cursor: zoom-in;
+    }
 
 	&.is-active {
         display: block;

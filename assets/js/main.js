@@ -212,6 +212,7 @@ function toggleProjectView (e) {
 
                 flkty.on('dragEnd', function (e) {
                     flkty.slider.classList.remove('is-dragging');
+                    lazyBlur.check();
                 });
             }, 300);
         }
@@ -266,21 +267,25 @@ function toggleInfoView ( ) {
 }
 
 // Initiate zoomable images
-utils.forEach(document.querySelectorAll('.projects .images'), function (index, item) {
-    var imgZoom = new ImageZoom(item.querySelectorAll('a'), {
-        offset: 60
-    });
+if (breakpoint.value !== 'small-viewport') {
+    utils.forEach(document.querySelectorAll('.projects .images'), function (index, item) {
+        var imgZoom = new ImageZoom(item.querySelectorAll('a'), {
+            offset: 60
+        });
 
-    imgZoom.on('zoomInStart', function ( ) {
-        collapseDisabled = true;
-        document.body.classList.add('overlay-open');
-    });
+        imgZoom.on('zoomInStart', function ( ) {
+            collapseDisabled = true;
+            document.body.classList.add('overlay-open');
+        });
 
-    imgZoom.on('zoomOutStart', function ( ) {
-        collapseDisabled = false;
-        document.body.classList.remove('overlay-open');
+        imgZoom.on('zoomOutStart', function ( ) {
+            collapseDisabled = false;
+            document.body.classList.remove('overlay-open');
+        });
     });
-});
+} else {
+    // DESTROY
+}
 
 // Initiate collapsed view
 toggleProjectView();
