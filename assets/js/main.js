@@ -78,6 +78,11 @@ var scrollEvent = function ( ) {
 	}
 };
 
+// Initiate progressive media lazyloader
+var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
+    blur: 10
+});
+
 // Event listeners
 window.addEventListener('resize', resizeEvent);
 window.addEventListener('scroll', scrollEvent);
@@ -225,6 +230,9 @@ function toggleProjectView (e) {
     if (!collageState) {
         document.documentElement.classList.remove('view-list');
         document.documentElement.classList.add('view-collage');
+
+        // Lazyload images
+        lazyBlur.check();
     } else {
         setTimeout(function ( ) {
             document.documentElement.classList.remove('view-collage');
@@ -233,6 +241,9 @@ function toggleProjectView (e) {
             // Focus on element
             setTimeout(function ( ) {
                 utils.scrollToElement(closestElement, 200, cache.viewportHeight * 0.3);
+
+                // Lazyload images
+                lazyBlur.check();
             }, 100);
         }, 305);
     }
@@ -255,23 +266,20 @@ function toggleInfoView ( ) {
 }
 
 // Initiate zoomable images
-var imgZoom = new ImageZoom(document.querySelectorAll('.projects .images a'), {
-    offset: 60
-});
+utils.forEach(document.querySelectorAll('.projects .images'), function (index, item) {
+    var imgZoom = new ImageZoom(item.querySelectorAll('a'), {
+        offset: 60
+    });
 
-imgZoom.on('zoomInStart', function ( ) {
-    collapseDisabled = true;
-    document.body.classList.add('overlay-open');
-});
+    imgZoom.on('zoomInStart', function ( ) {
+        collapseDisabled = true;
+        document.body.classList.add('overlay-open');
+    });
 
-imgZoom.on('zoomOutStart', function ( ) {
-    collapseDisabled = false;
-    document.body.classList.remove('overlay-open');
-});
-
-// Initiate progressive media lazyloader
-var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
-    blur: 10
+    imgZoom.on('zoomOutStart', function ( ) {
+        collapseDisabled = false;
+        document.body.classList.remove('overlay-open');
+    });
 });
 
 // Initiate collapsed view
