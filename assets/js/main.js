@@ -18,7 +18,8 @@ var cache = {
     ticking: false,
     lastScrollY: null,
     viewportWidth: window.innerWidth,
-	viewportHeight: window.innerHeight
+	viewportHeight: window.innerHeight,
+    projectPositions: []
 };
 
 // Store all breakpoints and fetch the current one
@@ -60,12 +61,15 @@ var resizeEvent = utils.debounce(function ( ) {
         toggleProjectView();
     }
 
+    storeProjectPositions();
+
     pubsub.publish('resize', { width: cache.viewportWidth, height: cache.viewportHeight });
 }, 250);
 
 var scrollEvent = function ( ) {
 	var requestTick = function ( ) {
         cache.lastScrollY = window.pageYOffset;
+        highlightVisibleProject(cache.lastScrollY);
         pubsub.publish('scroll', cache.lastScrollY);
 
 		// Stop ticking
@@ -77,6 +81,15 @@ var scrollEvent = function ( ) {
 		cache.ticking = true;
 	}
 };
+
+// Store project positions
+var storeProjectPositions = function ( ) {
+    utils.forEach(projectElems, function (index, project) {
+        var top = Math.floor(project.getBoundingClientRect().top + (cache.lastScrollY || window.pageYOffset));
+        cache.projectPositions.push(top);
+    });
+};
+storeProjectPositions();
 
 // Initiate progressive media lazyloader
 var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
@@ -204,6 +217,7 @@ function toggleProjectView (e) {
                     pageDots: false,
                     initialIndex: 4, // Always center on the featured image
                     imagesLoaded: true,
+                    accessibility: false
                 });
 
                 flkty.on('dragStart', function (e) {
@@ -265,6 +279,29 @@ function toggleInfoView ( ) {
 
     aboutState = !aboutState;
 }
+
+function highlightVisibleProject (lastScrollY) {
+    var viewportHeightPercentage = cache.viewportHeight * 0.3;
+    var offset = lastScrollY + viewportHeightPercentage;
+    var visibleSections = [];
+
+    cache.projectPositions.forEach(function (pos, index) {
+        if (!projectElems[index]) { return; }
+
+        projectElems[index].classList.remove('is-visible');
+        if (offset >= pos) {
+            visibleSections.push(index);
+        }
+        if (index > 0) {
+            projectElems[index - 1].classList.remove('active');
+        }
+    });
+
+    var currentIndex = visibleSections[visibleSections.length - 1];
+    projectElems[currentIndex].classList.add('is-visible');
+}
+
+highlightVisibleProject(cache.lastScrollY);
 
 // Initiate zoomable images
 if (breakpoint.value !== 'small-viewport') {
