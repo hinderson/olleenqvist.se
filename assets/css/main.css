@@ -130,6 +130,21 @@ body {
     margin: 0 auto;
 }
 
+::-webkit-scrollbar-track {background-color: #FFF;}
+
+::-webkit-scrollbar-thumb {background-color: #;}
+
+::-webkit-scrollbar {
+    width: 7px;
+    background-color: #FFF;
+}
+
+::selection {
+    color: white;
+    background-color: black;
+}
+
+
 @import "fonts.css";
 @import "typography.css";
 
