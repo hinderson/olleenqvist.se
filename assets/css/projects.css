@@ -137,6 +137,7 @@
 	&.is-zoomed,
 	&.is-zooming {
 		cursor: zoom-out;
+        position: relative;
 
         &::before {
 			visibility: visible;
@@ -144,7 +145,22 @@
 			transition: visibility 0s linear 0s, opacity 0.4s 0s;
 		}
 	}
+    &.is-zoomed::after {
+        content: '← Use arrows or swipe to browse →';
+        text-align: center;
+        color: black;
+        width: 100%;
+        display: block;
+        position: absolute;
+        bottom: -1.2em;
+        font-size: 3.6px;
+        -webkit-font-smoothing: antialiased;
+        text-shadow: 1px 1px white;
+        font-weight: 400;
+        line-height: 0;
+    }
 }
+
 
 
 /* Progressive media
