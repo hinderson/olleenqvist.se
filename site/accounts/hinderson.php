@@ -7,4 +7,5 @@ password: >
 language: en
 role: admin
 history:
+  - projects/bob-hund
   - about
