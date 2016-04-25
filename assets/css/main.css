@@ -41,7 +41,6 @@ video {
 }
 
 
-
 /* Links
 -------------------------------------------------- */
 a {
@@ -114,15 +113,15 @@ body {
     box-sizing: border-box;
     padding: 0 2.5rem;
 
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
     @media screen and (--large-viewport) {
         padding: 0 3rem;
     }
-}
-
-.group::after {
-    content: "";
-    display: table;
-    clear: both;
 }
 
 .group-inner {
@@ -130,7 +129,9 @@ body {
     margin: 0 auto;
 }
 
-::-webkit-scrollbar-track {background-color: #FFF;}
+::-webkit-scrollbar-track {
+    background-color: #fff;
+}
 
 ::-webkit-scrollbar-thumb {
     background-color: #000;
@@ -138,12 +139,12 @@ body {
 
 ::-webkit-scrollbar {
     width: 7px;
-    background-color: #FFF;
+    background-color: #fff;
 }
 
 ::selection {
     color: white;
-    background-color: black;
+    background-color: #000;
 }
 
 

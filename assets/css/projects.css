@@ -25,8 +25,6 @@
     html:not(.view-list) & {
         ul {
             @media screen and (--medium-viewport) {
-                display: flex;
-                flex-wrap: wrap;
                 margin: -0.4em;
             }
 
@@ -36,11 +34,15 @@
         }
 
         li {
+            position: relative;
             transition: 0.08s transform ease;
 
             &:nth-child(5) {
-                position: relative;
                 z-index: 5;
+            }
+
+            @media screen and (--medium-viewport) {
+                float: left;
             }
         }
 
@@ -72,9 +74,13 @@
         padding: 0 0.5em;
     }
 
-    /* Flickty specific styling */
-    .flickity-enabled:focus {
-        outline: none;
+    /* Flickity specific styling */
+    .flickity-enabled {
+        position: relative;
+
+        &:focus {
+            outline: none;
+        }
     }
 
     .flickity-viewport {
@@ -129,7 +135,6 @@
 			visibility: hidden;
 			opacity: 0;
 			transition: visibility 0s linear 0.14s, opacity 0.14s 0s;
-			will-change: visibility, opacity;
 			transform: translateZ(0);
 		}
 	}

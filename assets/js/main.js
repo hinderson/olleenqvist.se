@@ -4,8 +4,7 @@
 var utils = require('./utils.js');
 var pubsub = require('./pubsub.js');
 var keyboard = require('./keyboard-commands.js');
-var imagesLoaded = require('imagesloaded');
-var Flickity = require('flickity-imagesloaded');
+var Flickity = require('flickity');
 var ImageZoom = require('image-zoom');
 var LazyBlur = require('lazyblur');
 var FontFaceObserver = require('fontfaceobserver');
@@ -123,9 +122,9 @@ var toggleExpandedProject = function (e) {
 
     var images = project.querySelectorAll('li');
     utils.forEach(images, function (index, image) {
-        utils.requestAnimFrame.call(window, function ( ) {
-            image.style.webkitTransform = '';
-        });
+        image.style.msTransform = '';
+        image.style.webkitTransform = '';
+        image.style.transform = '';
     });
 };
 
@@ -186,7 +185,9 @@ var toggleCollapsedProject = function (e) {
 
         utils.requestAnimFrame.call(window, function ( ) {
             if (index !== 4) {
+                image.style.msTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
                 image.style.webkitTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
+                image.style.transform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
             }
         });
     });
@@ -213,30 +214,27 @@ function toggleProjectView ( ) {
             projectImages.removeEventListener('mouseenter', toggleExpandedProject);
             projectImages.removeEventListener('mouseleave', toggleCollapsedProject);
 
-            setTimeout(function ( ) {
-                var flkty = project.flkty = new Flickity(projectImages, {
-                    cellAlign: 'center',
-                    wrapAround: true,
-                    percentPosition: true,
-                    prevNextButtons: false,
-                    pageDots: false,
-                    initialIndex: 4, // Always center on the featured image
-                    imagesLoaded: true,
-                    accessibility: false
-                });
+            var flkty = project.flkty = new Flickity(projectImages, {
+                cellAlign: 'center',
+                wrapAround: true,
+                percentPosition: true,
+                prevNextButtons: false,
+                pageDots: false,
+                initialIndex: 4, // Always center on the featured image
+                accessibility: false // Turn off native keyboard navigation
+            });
 
-                flkty.on('dragStart', function (e) {
-                    flkty.slider.classList.add('is-dragging');
-                });
+            flkty.on('dragStart', function (e) {
+                flkty.slider.classList.add('is-dragging');
+            });
 
-                flkty.on('dragEnd', function (e) {
-                    flkty.slider.classList.remove('is-dragging');
-                });
+            flkty.on('dragEnd', function (e) {
+                flkty.slider.classList.remove('is-dragging');
+            });
 
-                flkty.on('settle', function ( ) {
-                    lazyBlur.check();
-                });
-            }, 300);
+            flkty.on('cellSelect', function ( ) {
+                lazyBlur.check();
+            });
         }
     });
 
@@ -248,16 +246,12 @@ function toggleProjectView ( ) {
         lazyBlur.check();
         storeProjectPositions();
     } else {
-        setTimeout(function ( ) {
-            document.documentElement.classList.remove('view-collage');
-            document.documentElement.classList.add('view-list');
+        document.documentElement.classList.remove('view-collage');
+        document.documentElement.classList.add('view-list');
 
-            setTimeout(function ( ) {
-                lazyBlur.check();
-                storeProjectPositions();
-                utils.scrollToElement(closestProject, 200, cache.viewportHeight * 0.3);
-            }, 100);
-        }, 305);
+        lazyBlur.check();
+        storeProjectPositions();
+        utils.scrollToElement(closestProject, 200, cache.viewportHeight * 0.3);
     }
 
     stackState = !stackState;

@@ -8,4 +8,5 @@ language: en
 role: admin
 history:
   - projects/bob-hund
+  - projects/Oatly
   - about
