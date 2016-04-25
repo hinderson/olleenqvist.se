@@ -8,6 +8,7 @@ var imagesLoaded = require('imagesloaded');
 var Flickity = require('flickity-imagesloaded');
 var ImageZoom = require('image-zoom');
 var LazyBlur = require('lazyblur');
+var FontFaceObserver = require('font-face-observer');
 
 // States
 var stackState = false;
@@ -59,6 +60,12 @@ if ('touchAction' in document.body.style) {
         });
     }, 'fastclick');
 }
+
+// Wait for fonts to really load to avoid FOIT
+var cineType = new FontFaceObserver('GT Cinetype', { weight: 400 });
+cineType.load().then(function () {
+    document.documentElement.className += ' fonts-loaded';
+});
 
 // Document events
 var resizeEvent = utils.debounce(function ( ) {

@@ -94,9 +94,13 @@ a:focus {
 
 html {
     height: 101%;
-    font-family: 'GT Cinetype', sans-serif;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+
+    &.fonts-loaded {
+        font-family: "GT Cinetype";
+    }
 }
 
 body {
@@ -126,6 +130,7 @@ body {
     margin: 0 auto;
 }
 
+@import "fonts.css";
 @import "typography.css";
 
 

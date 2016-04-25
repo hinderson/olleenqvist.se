@@ -1,0 +1,7 @@
+@font-face {
+    font-family: "GT Cinetype";
+    src: url("../fonts/GT-Cinetype-Regular.woff2") format("woff2"),
+         url("../fonts/GT-Cinetype-Regular.woff") format("woff");
+    font-style: normal;
+    font-weight: 400;
+}
