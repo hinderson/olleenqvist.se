@@ -139,17 +139,12 @@ body {
 }
 
 ::-webkit-scrollbar {
-<<<<<<< Updated upstream
     width: 7px;
     background-color: #fff;
-=======
-    width: 5px;
-    background-color: #FFF;
->>>>>>> Stashed changes
 }
 
 ::selection {
-    color: white;
+    color: #fff;
     background-color: #000;
 }
 
