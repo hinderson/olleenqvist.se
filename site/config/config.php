@@ -28,3 +28,9 @@ make Kirby work. For more fine-grained configuration
 of the system, please check out http://getkirby.com/docs/advanced/options
 
 */
+
+// Activate debug
+c::set('debug', true);
+
+// Deactivate cache
+c::set('cache', false);

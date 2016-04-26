@@ -26,6 +26,7 @@ var cache = {
 
 // Elements
 var projectElems = document.querySelectorAll('.project');
+var projectItems = document.querySelectorAll('.project .images');
 var aboutElem = document.querySelector('section.about');
 var viewToggler = document.querySelector('.view-toggler button');
 var infoToggler = document.querySelector('.info-toggler button');
@@ -75,9 +76,16 @@ var resizeEvent = utils.debounce(function ( ) {
     cache.lastScrollY = window.pageYOffset;
     breakpoint.update();
 
-    // Collage state isn't available in mobile view
-    if (stackState && breakpoint.value === 'small-viewport') {
-        toggleProjectView();
+    if (breakpoint.value === 'small-viewport') {
+        // Turn off zoomable items
+        utils.forEach(projectItems, function (index, item) {
+            item.imageZoom.destroy();
+        });
+
+        // Collage state isn't available in mobile view
+        if (stackState) {
+            toggleProjectView();
+        }
     }
 
     storeProjectPositions();
@@ -101,9 +109,43 @@ var scrollEvent = function ( ) {
 	}
 };
 
+function parseVideo (url) {
+    var type = '';
+    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+
+    if (RegExp.$3.indexOf('youtu') > -1) {
+        type = 'youtube';
+    } else if (RegExp.$3.indexOf('vimeo') > -1) {
+        type = 'vimeo';
+    }
+
+    return {
+        type: type,
+        id: RegExp.$6
+    };
+}
+
+function makeVideoEmbed (vendor, id) {
+    var videoEmbed = document.createElement('IFRAME');
+    if (vendor === 'youtube') {
+        videoEmbed.setAttribute('src', 'https://www.youtube.com/embed/' + id + '?autoplay=1&showinfo=0&controls=0&rel=0&showinfo=0');
+    } else if (vendor === 'vimeo') {
+        videoEmbed.setAttribute('src', 'https://player.vimeo.com/video/' + id + '?autoplay=true&title=0&byline=0&portrait=0');
+    } else {
+        return;
+    }
+
+    videoEmbed.setAttribute('webkitallowfullscreen', '');
+    videoEmbed.setAttribute('mozallowfullscreen', '');
+    videoEmbed.setAttribute('allowfullscreen', '');
+    videoEmbed.setAttribute('frameborder', 0);
+
+    return videoEmbed;
+}
+
 // Initiate progressive media lazyloader
 var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
-    blur: 10
+    blur: 30
 });
 
 // Event listeners
@@ -235,6 +277,11 @@ function toggleProjectView ( ) {
             flkty.on('cellSelect', function ( ) {
                 lazyBlur.check();
             });
+
+            // Bug fix: Force all videos to play again
+            utils.forEach(document.querySelectorAll('.project video'), function (index, video) {
+                video.play();
+            });
         }
     });
 
@@ -335,23 +382,32 @@ keyboard.on('arrowLeft', function (event) {
 
 // Initiate zoomable images
 if (breakpoint.value !== 'small-viewport') {
-    utils.forEach(document.querySelectorAll('.projects .images'), function (index, item) {
-        var imgZoom = new ImageZoom(item.querySelectorAll('a'), {
-            offset: 60
-        });
-
-        imgZoom.on('zoomInStart', function ( ) {
-            uiDisabled = true;
-            document.body.classList.add('overlay-open');
-        });
-
-        imgZoom.on('zoomOutStart', function ( ) {
-            uiDisabled = false;
-            document.body.classList.remove('overlay-open');
-        });
+    var imgZoom = new ImageZoom(document.querySelectorAll('.project .images a'), {
+        offset: 60
     });
-} else {
-    // DESTROY
+
+    imgZoom.on('zoomInStart', function ( ) {
+        uiDisabled = true;
+        document.body.classList.add('overlay-open');
+    });
+
+    imgZoom.on('zoomInEnd', function (media) {
+        if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
+            var video = parseVideo(media.getAttribute('href'));
+            var videoEmbed = makeVideoEmbed(video.type, video.id);
+            media.appendChild(videoEmbed);
+        }
+    });
+
+    imgZoom.on('zoomOutStart', function (media) {
+        uiDisabled = false;
+        document.body.classList.remove('overlay-open');
+
+        if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
+            var videoEmbed = media.querySelector('iframe');
+            videoEmbed.parentNode.removeChild(videoEmbed);
+        }
+    });
 }
 
 breakpoint.update();

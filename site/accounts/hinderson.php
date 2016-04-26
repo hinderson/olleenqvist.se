@@ -7,6 +7,7 @@ password: >
 language: en
 role: admin
 history:
-  - projects/bob-hund
   - projects/Oatly
-  - about
+  - projects/go-get-it
+  - projects/femtastic
+  - projects/bob-hund

@@ -9,6 +9,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var webpackConfig = require('./webpack.config.js');
 var imagemin = require('gulp-imagemin');
 var imageminJpegtran = require('imagemin-jpegtran');
+var glob = require('glob');
+var ffmpeg = require('fluent-ffmpeg');
 
 // PostCSS tasks
 var postCssProcessors = [
@@ -58,10 +60,34 @@ gulp.task('optimize-thumbs', function ( ) {
         .pipe(gulp.dest('./thumbs'));
 });
 
+gulp.task('generate-video-thumbs', function (src) {
+	return glob('./content/**/*.mp4', function (err, files) {
+		function generateThumb (file) {
+			var command = ffmpeg(file)
+				.on('end', function (file) {
+					console.log('screenshots were saved as ' + file);
+				})
+				.on('error', function (err) {
+					console.log('an error happened: ' + err.message);
+				})
+				.screenshots({
+					timestamps: [0],
+					folder: './assets/thumbs',
+					filename: '%b.jpg'
+				});
+		}
+
+		for (var i = 0; i < files.length; i++) {
+			generateThumb(files[i]);
+		}
+	});
+});
+
 gulp.task('watch', function ( ) {
     gulp.watch('./thumbs/*.jpg', ['optimize-thumbs']);
 	gulp.watch('./assets/css/*.css', ['css:dev']);
     gulp.watch(['./assets/js/**/*'], ['webpack:dev']);
+    gulp.watch(['./content/**/*.mp4'], ['generate-video-thumbs']);
 });
 
 gulp.task('default', ['optimize-thumbs', 'css:dev', 'webpack:dev', 'assets:dev']);
