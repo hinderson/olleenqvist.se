@@ -277,11 +277,6 @@ function toggleProjectView ( ) {
             flkty.on('cellSelect', function ( ) {
                 lazyBlur.check();
             });
-
-            // Bug fix: Force all videos to play again
-            utils.forEach(document.querySelectorAll('.project video'), function (index, video) {
-                video.play();
-            });
         }
     });
 
@@ -300,6 +295,11 @@ function toggleProjectView ( ) {
         storeProjectPositions();
         utils.scrollToElement(closestProject, 200, cache.viewportHeight * 0.3);
     }
+
+    // Bug fix: Force all videos to play again
+    utils.forEach(document.querySelectorAll('.project video'), function (index, video) {
+        video.play();
+    });
 
     stackState = !stackState;
 }
