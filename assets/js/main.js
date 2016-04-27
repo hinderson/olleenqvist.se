@@ -14,6 +14,9 @@ var stackState = false;
 var uiDisabled = false;
 var aboutState = false;
 
+// Saved constructors
+var imgZoom;
+
 // Cache variables
 var cache = {
     ticking: false,
@@ -27,6 +30,7 @@ var cache = {
 // Elements
 var projectElems = document.querySelectorAll('.project');
 var projectItems = document.querySelectorAll('.project .images');
+var projectLinks = document.querySelectorAll('.project .images a');
 var aboutElem = document.querySelector('section.about');
 var viewToggler = document.querySelector('.view-toggler button');
 var infoToggler = document.querySelector('.info-toggler button');
@@ -77,14 +81,23 @@ var resizeEvent = utils.debounce(function ( ) {
     breakpoint.update();
 
     if (breakpoint.value === 'small-viewport') {
-        // Turn off zoomable items
-        utils.forEach(projectItems, function (index, item) {
-            item.imageZoom.destroy();
-        });
+        if (imgZoom) {
+            imgZoom.destroy();
+            imgZoom = '';
+            utils.forEach(projectLinks, function (index, elem) {
+                elem.addEventListener('click', function (e) {
+                    e.preventDefault();
+                });
+            });
+        }
 
         // Collage state isn't available in mobile view
         if (stackState) {
             toggleProjectView();
+        }
+    } else {
+        if (!imgZoom) {
+            initZoomableMedia();
         }
     }
 
@@ -297,9 +310,12 @@ function toggleProjectView ( ) {
     }
 
     // Bug fix: Force all videos to play again
-    utils.forEach(document.querySelectorAll('.project video'), function (index, video) {
-        video.play();
-    });
+    var videos = document.querySelectorAll('.project video');
+    if (videos.length) {
+        utils.forEach(document.querySelectorAll('.project video'), function (index, video) {
+            video.play();
+        });
+    }
 
     stackState = !stackState;
 }
@@ -359,30 +375,8 @@ function highlightVisibleProject (lastScrollY) {
     cache.closestProject = projectElems[currentIndex];
 }
 
-// Navigate slideshow with keyboard
-keyboard.on('arrowRight', function (event) {
-    event.preventDefault();
-
-    // Toggle previous slide when in strip view
-    if (!stackState && !uiDisabled) {
-        var focusedProject = document.querySelector('.is-visible');
-        focusedProject.flkty.next();
-    }
-});
-
-keyboard.on('arrowLeft', function (event) {
-    event.preventDefault();
-
-    // Toggle next slide when in strip view
-    if (!stackState && !uiDisabled) {
-        var focusedProject = document.querySelector('.is-visible');
-        focusedProject.flkty.previous();
-    }
-});
-
-// Initiate zoomable images
-if (breakpoint.value !== 'small-viewport') {
-    var imgZoom = new ImageZoom(document.querySelectorAll('.project .images a'), {
+function initZoomableMedia ( ) {
+    imgZoom = new ImageZoom(projectLinks, {
         offset: 60
     });
 
@@ -410,6 +404,33 @@ if (breakpoint.value !== 'small-viewport') {
     });
 }
 
+// Navigate slideshow with keyboard
+keyboard.on('arrowRight', function (event) {
+    event.preventDefault();
+
+    // Toggle previous slide when in strip view
+    if (!stackState && !uiDisabled) {
+        var focusedProject = document.querySelector('.is-visible');
+        focusedProject.flkty.next();
+    }
+});
+
+keyboard.on('arrowLeft', function (event) {
+    event.preventDefault();
+
+    // Toggle next slide when in strip view
+    if (!stackState && !uiDisabled) {
+        var focusedProject = document.querySelector('.is-visible');
+        focusedProject.flkty.previous();
+    }
+});
+
 breakpoint.update();
 storeProjectPositions();
+
 toggleProjectView();
+
+// Initiate zoomable images
+if (breakpoint.value !== 'small-viewport') {
+    initZoomableMedia();
+}
