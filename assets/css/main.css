@@ -299,7 +299,6 @@ body {
         left: 50%;
         transform: translateY(-50%) translateX(-50%);
         width: 100%;
-        padding: 4rem 2rem;
         max-width: 80rem;
 
         img {

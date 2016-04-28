@@ -187,62 +187,76 @@ var toggleCollapsedProject = function (e) {
     if (uiDisabled) { return; }
 
     var project = e.target || e;
+    var projectListItems = project.querySelectorAll('li');
+    var length = projectListItems.length;
 
     project.classList.remove('expanded');
     project.classList.add('collapsed');
 
-    function getCoords (min, max) {
+    function getRandomCoords (min, max) {
         return Math.random() * (max - min + 1) + min;
     }
 
-    utils.forEach(project.querySelectorAll('li'), function (index, image) {
-        var posX = 0;
-        var posY = 0;
-
-        switch (index) {
-            case 0:
-                posX = getCoords(10, 45);
-                posY = getCoords(20, 45);
-                break;
-            case 1:
-                posX = getCoords(-5, -15);
-                posY = getCoords(5, 45);
-                break;
-            case 2:
-                posX = getCoords(-15, -45);
-                posY = getCoords(15, 50);
-                break;
-            case 3:
-                posX = getCoords(15, 55);
-                posY = getCoords(5, 20);
-                break;
-            case 4:
-                posX = 0;
-                posY = 0;
-                break;
-            case 5:
-                posX = getCoords(-15, -55);
-                posY = getCoords(5, 20);
-                break;
-            case 6:
-                posX = getCoords(10, 45);
-                posY = getCoords(-15, -50);
-                break;
-            case 7:
-                posX = getCoords(-5, -15);
-                posY = getCoords(-5, -35);
-                break;
-            case 8:
-                posX = getCoords(-20, -45);
-                posY = getCoords(-15, -50);
-                break;
+    var getRows = function (length) {
+        if (length > 3 && length < 6) {
+            return 2;
+        } else if (length > 6) {
+            return 3;
         }
+        return 1;
+    };
+
+    var getPositions = function (index, length) {
+        var rows = getRows(length);
+
+        return {
+            0: {
+                posX: getRandomCoords(10, 45),
+                posY: rows === 1 ? getRandomCoords(-15, -20) : getRandomCoords(20, 45),
+            },
+            1: {
+                posX: getRandomCoords(-5, -15),
+                posY: rows === 1 ? getRandomCoords(-5, -15) : getRandomCoords(5, 45),
+            },
+            2: {
+                posX: getRandomCoords(-15, -45),
+                posY: rows === 1 ? getRandomCoords(-15, -20) : getRandomCoords(15, 50),
+            },
+            3: {
+                posX: getRandomCoords(15, 55),
+                posY: getRandomCoords(5, 20),
+            },
+            4: {
+                posX: 0,
+                posY: 0,
+            },
+            5: {
+                posX: getRandomCoords(-15, -55),
+                posY: getRandomCoords(5, 20),
+            },
+            6: {
+                posX: getRandomCoords(10, 45),
+                posY: getRandomCoords(-15, -50),
+            },
+            7: {
+                posX: getRandomCoords(-5, -15),
+                posY: getRandomCoords(-5, -35),
+            },
+            8: {
+                posX: getRandomCoords(-20, -45),
+                posY: getRandomCoords(-15, -50),
+            },
+      }[index];
+    };
+
+    utils.forEach(projectListItems, function (index, image) {
+        var positions = getPositions(index, length);
 
         utils.requestAnimFrame.call(window, function ( ) {
             if (index !== 4) {
-                image.style.msTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
-                image.style.webkitTransform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
-                image.style.transform = 'translate3d(' + posX + '%, ' + posY + '%, 0)';
+                image.style.msTransform = 'translate3d(' + positions.posX + '%, ' + positions.posY + '%, 0)';
+                image.style.webkitTransform = 'translate3d(' + positions.posX + '%, ' + positions.posY + '%, 0)';
+                image.style.transform = 'translate3d(' + positions.posX + '%, ' + positions.posY + '%, 0)';
             }
         });
     });
