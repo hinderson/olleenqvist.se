@@ -251,12 +251,13 @@ var toggleCollapsedProject = function (e) {
 
     utils.forEach(projectListItems, function (index, image) {
         var positions = getPositions(index, length);
+        var transform = 'translate3d(' + positions.posX + '%, ' + positions.posY + '%, 0)';
 
         utils.requestAnimFrame.call(window, function ( ) {
             if (index !== 4) {
-                image.style.msTransform = 'translate3d(' + positions.posX + '%, ' + positions.posY + '%, 0)';
-                image.style.webkitTransform = 'translate3d(' + positions.posX + '%, ' + positions.posY + '%, 0)';
-                image.style.transform = 'translate3d(' + positions.posX + '%, ' + positions.posY + '%, 0)';
+                image.style.msTransform = transform;
+                image.style.webkitTransform = transform;
+                image.style.transform = transform;
             }
         });
     });

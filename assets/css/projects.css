@@ -53,6 +53,12 @@
         }
     }
 
+    html:not(.view-list) .overlay-open & {
+        li:nth-child(5) {
+            z-index: 10;
+        }
+    }
+
     li {
         width: 100%;
         padding: 0 0.5em 0.5em;
