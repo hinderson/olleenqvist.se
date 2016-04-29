@@ -170,16 +170,6 @@
         text-align: center;
         -webkit-font-smoothing: antialiased;
     }
-
-    iframe {
-		position: absolute;
-	    overflow: hidden;
-	    top: -0.5%;
-	    left: -0.5%;
-	    width: 101%;
-	    height: 101%;
-		z-index: 1;
-	}
 }
 
 
@@ -232,4 +222,28 @@
             transition: visibility 0s linear 0s, opacity .4s 0s;
         }
     }
+}
+
+.zoomed-video {
+	position: fixed;
+    top: 0;
+    left: 0;
+	z-index: 101;
+    width: 100%;
+
+	iframe {
+		position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	}
+
+	&::before {
+		content: "";
+		display: block;
+		padding-bottom: 66.768292682927%;
+		position: relative;
+		height: 0;
+	}
 }

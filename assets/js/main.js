@@ -139,6 +139,7 @@ function parseVideo (url) {
 }
 
 function makeVideoEmbed (vendor, id) {
+    var container = document.createElement('DIV');
     var videoEmbed = document.createElement('IFRAME');
     if (vendor === 'youtube') {
         videoEmbed.setAttribute('src', 'https://www.youtube.com/embed/' + id + '?autoplay=1&showinfo=0&controls=0&rel=0&showinfo=0');
@@ -152,8 +153,9 @@ function makeVideoEmbed (vendor, id) {
     videoEmbed.setAttribute('mozallowfullscreen', '');
     videoEmbed.setAttribute('allowfullscreen', '');
     videoEmbed.setAttribute('frameborder', 0);
+    container.appendChild(videoEmbed);
 
-    return videoEmbed;
+    return container;
 }
 
 // Initiate progressive media lazyloader
@@ -400,11 +402,26 @@ function initZoomableMedia ( ) {
         document.body.classList.add('overlay-open');
     });
 
+    function setVideoDimensions (videoEmbed, media) {
+        var mediaRect = media.getBoundingClientRect();
+        videoEmbed.style.top = mediaRect.top + 'px';
+        videoEmbed.style.left = mediaRect.left + 'px';
+        videoEmbed.style.width = mediaRect.width + 'px';
+    }
+
     imgZoom.on('zoomInEnd', function (media) {
         if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
+            var mediaRect = media.getBoundingClientRect();
             var video = parseVideo(media.getAttribute('href'));
+
             var videoEmbed = makeVideoEmbed(video.type, video.id);
-            media.appendChild(videoEmbed);
+            videoEmbed.className = 'zoomed-video';
+            setVideoDimensions(videoEmbed, media);
+
+            media.videoResizeEvent = setVideoDimensions.bind(null, videoEmbed, media);
+            window.addEventListener('resize', utils.debounce(media.videoResizeEvent), 300);
+
+            document.documentElement.appendChild(videoEmbed);
         }
     });
 
@@ -413,8 +430,11 @@ function initZoomableMedia ( ) {
         document.body.classList.remove('overlay-open');
 
         if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
-            var videoEmbed = media.querySelector('iframe');
+            var videoEmbed = document.querySelector('.zoomed-video');
             videoEmbed.parentNode.removeChild(videoEmbed);
+
+            window.removeEventListener('resize', media.videoResizeEvent);
+            delete media.videoResize;
         }
     });
 }
