@@ -270,6 +270,8 @@ function toggleProjectView ( ) {
 
     utils.forEach(projectElems, function (index, project) {
         var projectImages = project.querySelector('.images');
+        var projectListItems = project.querySelectorAll('li');
+        var length = projectListItems.length;
 
         if (!stackState && breakpoint.value !== 'small-viewport') {
             // Init collage view
@@ -288,12 +290,13 @@ function toggleProjectView ( ) {
 
             var flkty = project.flkty = new Flickity(projectImages, {
                 cellAlign: 'center',
-                wrapAround: true,
+                wrapAround: length > 3 ? true : false,
+                contain: length > 3 ? false : true,
                 percentPosition: true,
                 prevNextButtons: false,
                 pageDots: false,
                 setGallerySize: false,
-                initialIndex: 4, // Always center on the featured image
+                initialIndex: length > 3 ? 4 : 1, // Always center on the featured image
                 accessibility: false // Turn off native keyboard navigation
             });
 
