@@ -292,6 +292,7 @@ function toggleProjectView ( ) {
                 percentPosition: true,
                 prevNextButtons: false,
                 pageDots: false,
+                setGallerySize: false,
                 initialIndex: 4, // Always center on the featured image
                 accessibility: false // Turn off native keyboard navigation
             });

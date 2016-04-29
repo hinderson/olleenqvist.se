@@ -83,6 +83,7 @@
     /* Flickity specific styling */
     .flickity-enabled {
         position: relative;
+        padding-bottom: 22.15%; /* Sets height of flickity container */
 
         &:focus {
             outline: none;

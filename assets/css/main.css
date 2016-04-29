@@ -127,6 +127,10 @@ body {
 .group-inner {
     max-width: 100rem;
     margin: 0 auto;
+
+    .view-list & {
+        max-width: none;
+    }
 }
 
 ::-webkit-scrollbar-track {
