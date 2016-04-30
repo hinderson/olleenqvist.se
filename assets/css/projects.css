@@ -83,10 +83,16 @@
     /* Flickity specific styling */
     .flickity-enabled {
         position: relative;
-        padding-bottom: 22.15%; /* Sets height of flickity container */
+        padding-bottom: 21.25%; /* Sets height of flickity container */
 
         &:focus {
             outline: none;
+        }
+
+        li {
+            @media screen and (--medium-viewport) {
+                width: 32%;
+            }
         }
     }
 
