@@ -362,12 +362,14 @@ function toggleInfoView ( ) {
         aboutElem.setAttribute('aria-hidden', false);
         setTimeout(function ( ) {
             document.body.classList.add('overlay-open');
+            document.body.classList.add('about');
         }, 5);
     } else {
         window.removeEventListener('keydown', keysCloseInfoView);
         aboutElem.removeEventListener('click', clickOutsideInfo);
         aboutElem.setAttribute('aria-hidden', true);
         document.body.classList.remove('overlay-open');
+        document.body.classList.remove('about');
     }
 
     uiDisabled = !uiDisabled;

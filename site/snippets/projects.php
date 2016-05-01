@@ -6,7 +6,7 @@
         <div class="group-inner">
             <?php foreach(page('projects')->children()->visible() as $project): ?>
                 <div class="project <?php echo strtolower($project->uid()) ?>">
-                    <ul class="images">
+                    <ul class="images cf">
                         <?php foreach($project->media()->limit(9)->toStructure() as $media): ?>
                             <li>
                                 <?php

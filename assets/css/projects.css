@@ -116,11 +116,6 @@
     }
 }
 
-.overlay-open {
-    position: relative;
-    overflow: hidden;
-}
-
 /* Zoom-in */
 [data-zoomable] {
     display: block;
@@ -137,7 +132,7 @@
 
         &::before {
 			content: "";
-			position: absolute;
+			position: fixed;
 			top: -100vh;
 			left: -100vw;
 			width: 100%;
