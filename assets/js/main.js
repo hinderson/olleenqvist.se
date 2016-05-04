@@ -7,6 +7,7 @@ var keyboard = require('./keyboard-commands.js');
 var Flickity = require('flickity');
 var ImageZoom = require('image-zoom');
 var LazyBlur = require('lazyblur');
+var Promise = window.Promise = require('promise-polyfill'); // Polyfill promises
 var FontFaceObserver = require('fontfaceobserver');
 
 // States
@@ -297,7 +298,9 @@ function toggleProjectView ( ) {
                 pageDots: false,
                 setGallerySize: false,
                 initialIndex: length > 3 ? 4 : 1, // Always center on the featured image
-                accessibility: false // Turn off native keyboard navigation
+                accessibility: false, // Turn off native keyboard navigation
+                selectedAttraction: 0.2,
+                friction: 0.8,
             });
 
             flkty.on('dragStart', function (e) {

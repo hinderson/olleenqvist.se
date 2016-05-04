@@ -1,5 +1,4 @@
 var webpack = require('webpack');
-var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 
 module.exports = {
 	entry: {
@@ -10,7 +9,6 @@ module.exports = {
 		path: './dist/js',
 		publicPath: '/dist/js/'
 	},
-	plugins: [],
 	resolve: {
 	    extensions: ['', '.js', '.json', '.coffee'],
 		alias: {
