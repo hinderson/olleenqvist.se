@@ -444,10 +444,7 @@ function initZoomableMedia ( ) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, prevItem));
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
-                project.flkty.on('settle', function prev ( ) {
-                    imgZoom.zoomIn(prevItem);
-                    project.flkty.off('settle', prev);
-                });
+                project.flkty.once('settle', imgZoom.zoomIn.bind(null, prevItem));
                 project.flkty.previous();
             }
         }
@@ -458,10 +455,7 @@ function initZoomableMedia ( ) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, nextItem));
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
-                project.flkty.on('settle', function next ( ) {
-                    imgZoom.zoomIn(nextItem);
-                    project.flkty.off('settle', next);
-                });
+                project.flkty.once('settle', imgZoom.zoomIn.bind(null, nextItem));
                 project.flkty.next();
             }
         }
