@@ -441,9 +441,9 @@ function initZoomableMedia ( ) {
             if (stackState || currentIndex > project.flkty.selectedIndex) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, prevItem));
             } else {
-                var stepsBackward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 imgZoom.zoomOut(currentlyZoomedIn);
                 project.flkty.once('settle', imgZoom.zoomIn.bind(null, prevItem));
+                var stepsBackward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 project.flkty.select(project.flkty.selectedIndex - stepsBackward);
             }
         }
@@ -455,9 +455,9 @@ function initZoomableMedia ( ) {
             if (stackState || currentIndex < project.flkty.selectedIndex) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, nextItem));
             } else {
-                var stepsForward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 imgZoom.zoomOut(currentlyZoomedIn);
                 project.flkty.once('settle', imgZoom.zoomIn.bind(null, nextItem));
+                var stepsForward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 project.flkty.select(project.flkty.selectedIndex + stepsForward);
             }
         }
@@ -470,6 +470,11 @@ function initZoomableMedia ( ) {
             uiDisabled = true;
             document.body.classList.add('overlay-open');
             currentlyZoomedIn = media;
+
+            // Disable Flickity dragging while zoomed in
+            if (!stackState) {
+                project.flkty.unbindDrag();
+            }
 
             // Events
             window.addEventListener('keydown', keysPressed);
@@ -495,6 +500,11 @@ function initZoomableMedia ( ) {
             uiDisabled = false;
             document.body.classList.remove('overlay-open');
             currentlyZoomedIn = '';
+
+            // Re-enable Flickity dragging
+            if (!stackState) {
+                project.flkty.bindDrag();
+            }
 
             // Remove keyboard commands
             window.removeEventListener('keydown', keysPressed);
