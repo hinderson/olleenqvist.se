@@ -16,7 +16,7 @@ var uiDisabled = false;
 var aboutState = false;
 
 // Saved constructors
-var imgZoom;
+var imgZooms = [];
 
 // Cache variables
 var cache = {
@@ -82,9 +82,13 @@ var resizeEvent = utils.debounce(function ( ) {
     breakpoint.update();
 
     if (breakpoint.value === 'small-viewport') {
-        if (imgZoom) {
-            imgZoom.destroy();
-            imgZoom = '';
+        if (imgZooms.length) {
+            utils.forEach(imgZooms, function (index, imgZoom) {
+                imgZoom.destroy();
+                imgZoom = '';
+            });
+            imgZooms.length = 0;
+
             utils.forEach(projectLinks, function (index, elem) {
                 elem.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -97,7 +101,7 @@ var resizeEvent = utils.debounce(function ( ) {
             toggleProjectView();
         }
     } else {
-        if (!imgZoom) {
+        if (!imgZooms.length) {
             initZoomableMedia();
         }
     }
@@ -402,49 +406,52 @@ function highlightVisibleProject (lastScrollY) {
 }
 
 function initZoomableMedia ( ) {
-    imgZoom = new ImageZoom(projectLinks, {
-        offset: 60
-    });
+    utils.forEach(projectElems, function (index, item) {
+        var imgZoom = new ImageZoom(item.querySelectorAll('.images a'), {
+            offset: 60
+        });
+        imgZooms.push(imgZoom);
 
-    imgZoom.on('zoomInStart', function ( ) {
-        uiDisabled = true;
-        document.body.classList.add('overlay-open');
-    });
+        imgZoom.on('zoomInStart', function ( ) {
+            uiDisabled = true;
+            document.body.classList.add('overlay-open');
+        });
 
-    function setVideoDimensions (videoEmbed, media) {
-        var mediaRect = media.getBoundingClientRect();
-        videoEmbed.style.top = mediaRect.top + 'px';
-        videoEmbed.style.left = mediaRect.left + 'px';
-        videoEmbed.style.width = mediaRect.width + 'px';
-    }
-
-    imgZoom.on('zoomInEnd', function (media) {
-        if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
+        function setVideoDimensions (videoEmbed, media) {
             var mediaRect = media.getBoundingClientRect();
-            var video = parseVideo(media.getAttribute('href'));
-
-            var videoEmbed = makeVideoEmbed(video.type, video.id);
-            videoEmbed.className = 'zoomed-video';
-            setVideoDimensions(videoEmbed, media);
-
-            media.videoResizeEvent = setVideoDimensions.bind(null, videoEmbed, media);
-            window.addEventListener('resize', utils.debounce(media.videoResizeEvent), 300);
-
-            document.documentElement.appendChild(videoEmbed);
+            videoEmbed.style.top = mediaRect.top + 'px';
+            videoEmbed.style.left = mediaRect.left + 'px';
+            videoEmbed.style.width = mediaRect.width + 'px';
         }
-    });
 
-    imgZoom.on('zoomOutStart', function (media) {
-        uiDisabled = false;
-        document.body.classList.remove('overlay-open');
+        imgZoom.on('zoomInEnd', function (media) {
+            if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
+                var mediaRect = media.getBoundingClientRect();
+                var video = parseVideo(media.getAttribute('href'));
 
-        if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
-            var videoEmbed = document.querySelector('.zoomed-video');
-            videoEmbed.parentNode.removeChild(videoEmbed);
+                var videoEmbed = makeVideoEmbed(video.type, video.id);
+                videoEmbed.className = 'zoomed-video';
+                setVideoDimensions(videoEmbed, media);
 
-            window.removeEventListener('resize', media.videoResizeEvent);
-            delete media.videoResize;
-        }
+                media.videoResizeEvent = setVideoDimensions.bind(null, videoEmbed, media);
+                window.addEventListener('resize', utils.debounce(media.videoResizeEvent), 300);
+
+                document.documentElement.appendChild(videoEmbed);
+            }
+        });
+
+        imgZoom.on('zoomOutStart', function (media) {
+            uiDisabled = false;
+            document.body.classList.remove('overlay-open');
+
+            if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
+                var videoEmbed = document.querySelector('.zoomed-video');
+                videoEmbed.parentNode.removeChild(videoEmbed);
+
+                window.removeEventListener('resize', media.videoResizeEvent);
+                delete media.videoResize;
+            }
+        });
     });
 }
 

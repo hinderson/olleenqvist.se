@@ -47,6 +47,11 @@ utils = {
 				return utils.criteria.isAnElement(e) && e.classList.contains(cls);
 			};
 		},
+        hasAttribute: function (attribute) {
+            return function (e) {
+                return utils.criteria.isAnElement(e) && e.hasAttribute(attribute);
+            };
+        },
 		hasTagName: function (tag) {
 			return function (e) {
 				return utils.criteria.isAnElement(e) && e.nodeName === tag.toUpperCase();
@@ -182,6 +187,15 @@ utils = {
         }
 
         return false;
+    },
+
+    isNodeList: function (nodes) {
+        var stringRepr = Object.prototype.toString.call(nodes);
+
+        return typeof nodes === 'object' &&
+            /^\[object (HTMLCollection|NodeList|Object)\]$/.test(stringRepr) &&
+            (typeof nodes.length === 'number') &&
+            (nodes.length === 0 || (typeof nodes[0] === 'object' && nodes[0].nodeType > 0));
     },
 
 };

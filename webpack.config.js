@@ -9,6 +9,7 @@ module.exports = {
 		path: './dist/js',
 		publicPath: '/dist/js/'
 	},
+	plugins: [ ],
 	resolve: {
 	    extensions: ['', '.js', '.json', '.coffee'],
 		alias: {
