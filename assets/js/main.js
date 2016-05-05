@@ -85,15 +85,8 @@ var resizeEvent = utils.debounce(function ( ) {
         if (imgZooms.length) {
             utils.forEach(imgZooms, function (index, imgZoom) {
                 imgZoom.destroy();
-                imgZoom = '';
             });
             imgZooms.length = 0;
-
-            utils.forEach(projectLinks, function (index, elem) {
-                elem.addEventListener('click', function (e) {
-                    e.preventDefault();
-                });
-            });
         }
 
         // Collage state isn't available in mobile view
@@ -413,6 +406,10 @@ function initZoomableMedia ( ) {
         videoEmbed.style.width = mediaRect.width + 'px';
     }
 
+    function difference (a, b) {
+        return Math.abs(a - b);
+    }
+
     utils.forEach(projectElems, function (index, project) {
         var currentlyZoomedIn;
         var items = project.querySelectorAll('.images a');
@@ -438,25 +435,30 @@ function initZoomableMedia ( ) {
         }
 
         function togglePrevItem ( ) {
-            var prevItem = items[Array.prototype.indexOf.call(items, currentlyZoomedIn) - 1] || items[items.length - 1];
+            var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
+            var prevItem = items[currentIndex - 1] || items[items.length - 1];
 
-            if (stackState) {
+            if (stackState || currentIndex > project.flkty.selectedIndex) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, prevItem));
             } else {
+                var stepsBackward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 imgZoom.zoomOut(currentlyZoomedIn);
                 project.flkty.once('settle', imgZoom.zoomIn.bind(null, prevItem));
-                project.flkty.previous();
+                project.flkty.select(project.flkty.selectedIndex - stepsBackward);
             }
         }
 
         function toggleNextItem ( ) {
-            var nextItem = items[Array.prototype.indexOf.call(items, currentlyZoomedIn) + 1] || items[0];
-            if (stackState) {
+            var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
+            var nextItem = items[currentIndex + 1] || items[0];
+
+            if (stackState || currentIndex < project.flkty.selectedIndex) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, nextItem));
             } else {
+                var stepsForward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 imgZoom.zoomOut(currentlyZoomedIn);
                 project.flkty.once('settle', imgZoom.zoomIn.bind(null, nextItem));
-                project.flkty.next();
+                project.flkty.select(project.flkty.selectedIndex + stepsForward);
             }
         }
 
@@ -535,6 +537,13 @@ breakpoint.update();
 storeProjectPositions();
 
 toggleProjectView();
+
+// Remove default action on zoomable images links
+utils.forEach(projectLinks, function (index, elem) {
+    elem.addEventListener('click', function (e) {
+        e.preventDefault();
+    });
+});
 
 // Initiate zoomable images
 if (breakpoint.value !== 'small-viewport') {
