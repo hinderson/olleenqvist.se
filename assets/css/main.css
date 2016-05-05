@@ -124,7 +124,7 @@ body {
     margin: 0 auto;
 
     .view-list & {
-        max-width: none;
+        max-width: 160rem;
     }
 }
 

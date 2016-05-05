@@ -4,10 +4,10 @@
 }
 
 .project {
-    padding-bottom: 5em;
+    padding-bottom: 3em;
 
     &:first-child {
-        padding-top: 3em;
+        padding-top: 4.5em;
     }
 
     @media screen and (--medium-viewport) {
@@ -61,12 +61,12 @@
 
     li {
         width: 100%;
-        padding: 0 0.5em 0.5em;
+        padding: 0 0.2em 0.2em;
         box-sizing: border-box;
 
         @media screen and (--medium-viewport) {
             width: 33.333%;
-            padding: 0.4em;
+            padding: 0.25em;
         }
 
         @media screen and (--large-viewport) {
@@ -77,20 +77,38 @@
     .description {
         margin: 0 auto;
         max-width: 32em;
-        padding: 0 0.5em;
+        padding: 0 1.5em;
+
+        @media screen and (--medium-viewport) {
+            padding: 0 0.5em;
+        }
     }
 
     /* Flickity specific styling */
     .flickity-enabled {
         position: relative;
-        padding-bottom: 21.25%; /* Sets height of flickity container */
+        padding-bottom: 59.2%; /* Sets height of flickity container */
+
+        @media screen and (--medium-viewport) {
+            padding-bottom: 36.4%; /* Sets height of flickity container */
+        }
+
+        @media screen and (--large-viewport) {
+            padding-bottom: 21.25%; /* Sets height of flickity container */
+        }
 
         &:focus {
             outline: none;
         }
 
         li {
+            width: 90%;
+
             @media screen and (--medium-viewport) {
+                width: 55%;
+            }
+
+            @media screen and (--large-viewport) {
                 width: 32%;
             }
         }
