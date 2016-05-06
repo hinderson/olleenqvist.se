@@ -14,6 +14,7 @@ var FontFaceObserver = require('fontfaceobserver');
 var stackState = false;
 var uiDisabled = false;
 var aboutState = false;
+var isTransitioning = false;
 
 // Saved constructors
 var imgZooms = [];
@@ -25,7 +26,7 @@ var cache = {
     viewportWidth: window.innerWidth,
 	viewportHeight: window.innerHeight,
     projectPositions: [],
-    closestProject: ''
+    closestProject: undefined
 };
 
 // Elements
@@ -119,6 +120,10 @@ var scrollEvent = function ( ) {
 		cache.ticking = true;
 	}
 };
+
+function toggleUiTransitiongState ( ) {
+    isTransitioning = !isTransitioning;
+}
 
 function parseVideo (url) {
     var type = '';
@@ -435,28 +440,40 @@ function initZoomableMedia ( ) {
         }
 
         function togglePrevItem ( ) {
+            if (isTransitioning) {
+                return;
+            }
+
+            toggleUiTransitiongState();
+
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
             var prevItem = items[currentIndex - 1] || items[items.length - 1];
 
             if (stackState || currentIndex > project.flkty.selectedIndex) {
-                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, prevItem));
+                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, prevItem, toggleUiTransitiongState));
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
-                project.flkty.once('settle', imgZoom.zoomIn.bind(null, prevItem));
+                project.flkty.once('settle', imgZoom.zoomIn.bind(null, prevItem, toggleUiTransitiongState));
                 var stepsBackward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 project.flkty.select(project.flkty.selectedIndex - stepsBackward);
             }
         }
 
         function toggleNextItem ( ) {
+            if (isTransitioning) {
+                return;
+            }
+
+            toggleUiTransitiongState();
+
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
             var nextItem = items[currentIndex + 1] || items[0];
 
             if (stackState || currentIndex < project.flkty.selectedIndex) {
-                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, nextItem));
+                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, nextItem, toggleUiTransitiongState));
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
-                project.flkty.once('settle', imgZoom.zoomIn.bind(null, nextItem));
+                project.flkty.once('settle', imgZoom.zoomIn.bind(null, nextItem, toggleUiTransitiongState));
                 var stepsForward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 project.flkty.select(project.flkty.selectedIndex + stepsForward);
             }
@@ -481,6 +498,7 @@ function initZoomableMedia ( ) {
         });
 
         imgZoom.on('zoomInEnd', function (media) {
+            // Swap in embedded video when src is not an image
             if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
                 var mediaRect = media.getBoundingClientRect();
                 var video = parseVideo(media.getAttribute('href'));
@@ -509,6 +527,7 @@ function initZoomableMedia ( ) {
             // Remove keyboard commands
             window.removeEventListener('keydown', keysPressed);
 
+            // Remove embedded video when src is not image
             if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
                 var videoEmbed = document.querySelector('.zoomed-video');
                 videoEmbed.parentNode.removeChild(videoEmbed);
@@ -526,6 +545,10 @@ function initZoomableMedia ( ) {
 keyboard.on('arrowRight', function (event) {
     event.preventDefault();
 
+    if (isTransitioning) {
+        return;
+    }
+
     // Toggle previous slide when in strip view
     if (!stackState && !uiDisabled) {
         var focusedProject = document.querySelector('.is-visible');
@@ -535,6 +558,10 @@ keyboard.on('arrowRight', function (event) {
 
 keyboard.on('arrowLeft', function (event) {
     event.preventDefault();
+
+    if (isTransitioning) {
+        return;
+    }
 
     // Toggle next slide when in strip view
     if (!stackState && !uiDisabled) {
