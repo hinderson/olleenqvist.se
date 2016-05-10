@@ -488,8 +488,11 @@ function initZoomableMedia ( ) {
             document.body.classList.add('overlay-open');
             currentlyZoomedIn = media;
 
-            // Disable Flickity dragging while zoomed in
             if (!stackState) {
+                // Add correct z-index stacking order
+                project.querySelector('.flickity-slider').style.zIndex = 100;
+
+                // Disable Flickity dragging while zoomed in
                 project.flkty.unbindDrag();
             }
 
@@ -520,8 +523,11 @@ function initZoomableMedia ( ) {
             document.body.classList.remove('overlay-open');
             currentlyZoomedIn = '';
 
-            // Re-enable Flickity dragging
             if (!stackState) {
+                // Remove z-index stacking order
+                project.querySelector('.flickity-slider').style.zIndex = '';
+
+                // Re-enable Flickity dragging
                 project.flkty.bindDrag();
             }
 
