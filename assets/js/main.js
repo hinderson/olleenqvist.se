@@ -509,6 +509,7 @@ function initZoomableMedia ( ) {
 
                 media.videoResizeEvent = setVideoDimensions.bind(null, videoEmbed, media);
                 window.addEventListener('resize', utils.debounce(media.videoResizeEvent), 300);
+                window.addEventListener('scroll', utils.throttle(media.videoResizeEvent), 50);
 
                 document.documentElement.appendChild(videoEmbed);
             }
@@ -533,6 +534,7 @@ function initZoomableMedia ( ) {
                 videoEmbed.parentNode.removeChild(videoEmbed);
 
                 window.removeEventListener('resize', media.videoResizeEvent);
+                window.removeEventListener('scroll', media.videoResizeEvent);
                 delete media.videoResize;
             }
         });
