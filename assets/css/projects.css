@@ -193,6 +193,39 @@
 }
 
 
+/* Zoomed in navigation
+-------------------------------------------------- */
+.media-nav {
+    button {
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: 0;
+
+        .svg-container {
+            padding-bottom: 213.220%;
+        }
+    }
+
+    .left,
+    .right {
+        position: fixed;
+        top: 50%;
+        z-index: 101;
+        transform: translateY(-50%);
+        width: 3em;
+        padding: 0.5em;
+    }
+
+    .left {
+        left: 1em;
+    }
+
+    .right {
+        right: 1em;
+    }
+}
+
 
 /* Progressive media
 -------------------------------------------------- */

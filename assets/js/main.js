@@ -36,6 +36,7 @@ var projectLinks = document.querySelectorAll('.project .images a');
 var aboutElem = document.querySelector('section.about');
 var viewToggler = document.querySelector('.view-toggler button');
 var infoToggler = document.querySelector('.info-toggler button');
+var mediaNavElem = document.querySelector('.media-nav');
 
 // Store all breakpoints and fetch the current one
 var breakpoint = {
@@ -496,11 +497,17 @@ function initZoomableMedia ( ) {
                 project.flkty.unbindDrag();
             }
 
+            mediaNavElem.setAttribute('aria-hidden', false);
+
             // Events
             window.addEventListener('keydown', keysPressed);
         });
 
         imgZoom.on('zoomInEnd', function (media) {
+            // Events
+            mediaNavElem.querySelector('.left').addEventListener('click', togglePrevItem);
+            mediaNavElem.querySelector('.right').addEventListener('click', toggleNextItem);
+
             // Swap in embedded video when src is not an image
             if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
                 var mediaRect = media.getBoundingClientRect();
@@ -531,7 +538,9 @@ function initZoomableMedia ( ) {
                 project.flkty.bindDrag();
             }
 
-            // Remove keyboard commands
+            // Events
+            mediaNavElem.querySelector('.left').removeEventListener('click', togglePrevItem);
+            mediaNavElem.querySelector('.right').removeEventListener('click', toggleNextItem);
             window.removeEventListener('keydown', keysPressed);
 
             // Remove embedded video when src is not image
@@ -543,6 +552,10 @@ function initZoomableMedia ( ) {
                 window.removeEventListener('scroll', media.videoResizeEvent);
                 delete media.videoResize;
             }
+        });
+
+        imgZoom.on('zoomOutEnd', function ( ) {
+            mediaNavElem.setAttribute('aria-hidden', true);
         });
 
         imgZooms.push(imgZoom);
