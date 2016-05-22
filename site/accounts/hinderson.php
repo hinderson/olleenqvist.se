@@ -7,6 +7,7 @@ password: >
 language: en
 role: admin
 history:
+  - about
   - projects/go-get-it
   - projects/Oatly
   - projects/femtastic
