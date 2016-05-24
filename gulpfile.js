@@ -70,9 +70,9 @@ gulp.task('generate-video-thumbs', function (src) {
 				.on('error', function (err) {
 					console.log('an error happened: ' + err.message);
 				})
-				.screenshots({
+                .screenshots({
 					timestamps: [0],
-					folder: './assets/thumbs',
+					folder: './thumbs',
 					filename: '%b.jpg'
 				});
 		}
@@ -90,4 +90,4 @@ gulp.task('watch', function ( ) {
     gulp.watch(['./content/**/*.mp4'], ['generate-video-thumbs']);
 });
 
-gulp.task('default', ['optimize-thumbs', 'css:dev', 'webpack:dev', 'assets:dev']);
+gulp.task('default', ['generate-video-thumbs', 'optimize-thumbs', 'css:dev', 'webpack:dev', 'assets:dev']);
