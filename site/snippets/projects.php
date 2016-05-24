@@ -14,11 +14,13 @@
 
                                     if ($mediaType == 'video') {
                                         $source = $media->placeholder()->toFile();
-                                        $screenshot = basename($source, '.mp4');
+                                        $screenshotName = basename($source, '.mp4');
                                         $screenshot = new Media(
-                                            kirby()->roots()->assets() . '/thumbs/' . $screenshot . '.jpg'
+                                            kirby()->roots()->thumbs() . '/' . $screenshotName . '.jpg'
                                         );
+
                                         $file = new Media($screenshot);
+                                        $videoSrc = c::get('pathContent') . substr(strstr($source->dir(), '/content'), strlen('/content')) . '/' . $source->filename();
                                     } else {
                                         $source = $media->image()->toFile();
                                         $file = $source;
@@ -32,23 +34,23 @@
                                     $micro = thumb($file, array('width' => 50, 'height' => 33, 'quality' => 20, 'crop' => true));
                                 ?>
 
-                                <a href="<?php echo e($mediaType == 'video', $media->video(), $original->url()) ?>" data-zoomable data-width="<?php echo $original->width() ?>" data-height="<?php echo $original->height() ?>">
+                                <a href="<?php echo e($mediaType == 'video', $media->video(), c::get('pathContent') . '/' . $original->filename()) ?>" data-zoomable data-width="<?php echo $original->width() ?>" data-height="<?php echo $original->height() ?>" data-video-fallback="<?php echo c::get('pathThumbs') . '/' . $screenshotName ?>.jpg">
                                     <?php if ($mediaType == 'video') : ?>
-                                        <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src": "<?php echo $source->url() ?>", "muted" : "", "autoplay": "", "loop": "" }'>
+                                        <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src": "<?php echo $videoSrc ?>", "muted" : "", "autoplay": "", "loop": "", "webkit-playsinline": "" }'>
                                             <div class="aspect-ratio" style="padding-bottom: <?php echo ($thumbHeight / $thumbWidth) * 100 ?>%;"></div>
-                                            <img src="<?php echo $micro->url() ?>" crossorigin="anonymous" aria-hidden="true" class="thumb" alt="">
+                                            <img src="<?php echo c::get('pathThumbs') . '/' . $micro->filename() ?>" crossorigin="anonymous" aria-hidden="true" class="thumb" alt="">
                                             <canvas width="<?php echo $thumbWidth ?>" height="<?php echo $thumbHeight ?>"></canvas>
                                             <noscript>
-                                                <video src="<?php echo $source->url() ?>" muted autoplay loop class="media"></video>
+                                                <video src="<?php echo $videoSrc ?>" muted autoplay loop class="media"></video>
                                             </noscript>
                                         </div>
                                     <?php else : ?>
-                                        <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src" : "<?php echo $thumb->url() ?>", "srcset": "<?php echo $thumb->url() ?> 1x, <?php echo $retina->url() ?> 2x", "width": "<?php echo $thumb->width() ?>", "height" : "<?php echo $thumb->height() ?>", "alt": "<?php echo $project->title()->html() ?>"}'>
+                                        <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src" : "<?php echo c::get('pathThumbs') . '/' . $thumb->filename() ?>", "srcset": "<?php echo c::get('pathThumbs') . '/' . $thumb->filename() ?> 1x, <?php echo c::get('pathThumbs') . '/' . $retina->filename() ?> 2x", "width": "<?php echo $thumb->width() ?>", "height" : "<?php echo $thumb->height() ?>", "alt": "<?php echo $project->title()->html() ?>"}'>
                                             <div class="aspect-ratio" style="padding-bottom: <?php echo ($thumbHeight / $thumbWidth) * 100 ?>%;"></div>
-                                            <img src="<?php echo $micro->url() ?>" crossorigin="anonymous" aria-hidden="true" class="thumb" alt="">
+                                            <img src="<?php echo c::get('pathThumbs') . '/' . $micro->filename() ?>" crossorigin="anonymous" aria-hidden="true" class="thumb" alt="">
                                             <canvas width="<?php echo $thumbWidth ?>" height="<?php echo $thumbHeight ?>"></canvas>
                                             <noscript>
-                                                <img src="<?php echo $thumb->url() ?>" srcset="<?php echo $thumb->url() ?> 1x, <?php echo $retina->url() ?> 2x" width="<?php echo $thumb->width() ?>" height="<?php echo $thumb->height() ?>" alt="<?php echo $project->title()->html() ?>" class="media">
+                                                <img src="<?php echo c::get('pathThumbs') . '/' . $thumb->filename() ?>" srcset="<?php echo c::get('pathThumbs') . '/' . $thumb->filename() ?> 1x, <?php echo c::get('pathThumbs') . '/' . $retina->filename() ?> 2x" width="<?php echo $thumb->width() ?>" height="<?php echo $thumb->height() ?>" alt="<?php echo $project->title()->html() ?>" class="media">
                                             </noscript>
                                         </div>
                                     <?php endif ?>
