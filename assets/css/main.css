@@ -345,6 +345,7 @@ section.about {
                 float: left;
                 width: 44%;
                 margin-right: 3rem;
+                padding-bottom: 0;
             }
         }
 
