@@ -34,7 +34,7 @@
                                     $micro = thumb($file, array('width' => 50, 'height' => 33, 'quality' => 20, 'crop' => true));
                                 ?>
 
-                                <a href="<?php echo e($mediaType == 'video', $media->video(), c::get('pathContent') . '/' . $original->filename()) ?>" data-zoomable data-width="<?php echo $original->width() ?>" data-height="<?php echo $original->height() ?>" data-video-fallback="<?php echo c::get('pathThumbs') . '/' . $screenshotName ?>.jpg">
+                                <a href="<?php echo e($mediaType == 'video', $media->video(), c::get('pathThumbs') . '/' . $original->filename()) ?>" data-zoomable data-width="<?php echo $original->width() ?>" data-height="<?php echo $original->height() ?>"<?php if ($mediaType == 'video') : ?> data-video-fallback="<?php echo c::get('pathThumbs') . '/' . $screenshotName ?>.jpg"<?php endif ?>>
                                     <?php if ($mediaType == 'video') : ?>
                                         <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src": "<?php echo $videoSrc ?>", "muted" : "", "autoplay": "", "loop": "", "webkit-playsinline": "" }'>
                                             <div class="aspect-ratio" style="padding-bottom: <?php echo ($thumbHeight / $thumbWidth) * 100 ?>%;"></div>
