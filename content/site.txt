@@ -14,4 +14,4 @@ Keywords:
 
 ----
 
-Copyright: © (date: Year) Olle Enqvist
+Copyright: 

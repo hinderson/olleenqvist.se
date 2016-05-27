@@ -12,7 +12,8 @@
             $thumbLarge = thumb($about->images()->first(), array('width' => 200, '', 'quality' => 90, 'crop' => true));
         ?>
         <img src="<?php echo $thumbSmall->url() ?>" srcset="<?php echo $thumbLarge->url() ?> <?php echo $thumbLarge->width() ?>w, <?php echo $thumbMedium->url() ?> <?php echo $thumbMedium->width() ?>w, <?php echo $thumbSmall->url() ?> <?php echo $thumbSmall->width() ?>w" sizes="100vw" alt="">
-
-        <?php echo $about->text()->kirbytext() ?>
+        <div class="info">
+            <?php echo $about->text()->kirbytext() ?>
+        </div>
     </div>
 </section>

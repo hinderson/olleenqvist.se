@@ -2,7 +2,7 @@
         <div class="group">
             <div class="group-inner">
                 <div class="copyright">
-                    <?php echo $site->copyright()->kirbytext() ?>
+                    <small>© <?php echo date("Y") ?> Olle Enqvist</small>
                 </div>
             </div>
         </div>
