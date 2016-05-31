@@ -340,27 +340,39 @@ section.about {
             padding: 0;
         }
 
-        img {
-            padding-bottom: 1.5em;
+        .progressive-media {
+            display: block;
+            width: 100%;
+            margin-bottom: 1.5em;
+            flex: 1 1 auto;
+            align-self: auto;
 
             @media screen and (--medium-viewport) {
-                float: left;
-                width: 44%;
+                width: 110rem;
                 margin-right: 4rem;
-                padding-bottom: 0;
+                margin-bottom: 0;
             }
         }
 
-        p {
-            max-width: none;
-            font-size: 1.5rem;
+        .info {
+            flex: 1 1 auto;
+            align-self: auto;
 
-            @media screen and (--medium-viewport) {
-                font-size: 1.65rem;
-            }
+            p {
+                max-width: none;
+                font-size: 1.45rem;
 
-            @media screen and (--large-viewport) {
-                font-size: 1.8rem;
+                @media screen and (--medium-viewport) {
+                    font-size: 1.75rem;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+
+                @media screen and (--large-viewport) {
+                    font-size: 1.85rem;
+                }
             }
         }
     }
