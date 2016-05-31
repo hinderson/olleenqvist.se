@@ -122,10 +122,6 @@ var scrollEvent = function ( ) {
 	}
 };
 
-function toggleUiTransitioningState ( ) {
-    isUiTransitioning = !isUiTransitioning;
-}
-
 function parseVideo (url) {
     var type = '';
     url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
@@ -164,7 +160,7 @@ function makeVideoEmbed (vendor, id) {
 
 // Initiate progressive media lazyloader
 var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
-    blur: 30
+    blur: 50
 });
 
 // Event listeners
@@ -444,17 +440,16 @@ function initZoomableMedia ( ) {
             if (isUiTransitioning) {
                 return;
             }
-
-            toggleUiTransitioningState();
+            isUiTransitioning = true;
 
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
             var prevItem = items[currentIndex - 1] || items[items.length - 1];
 
             if (stackState || currentIndex > project.flkty.selectedIndex) {
-                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, prevItem, toggleUiTransitioningState));
+                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, prevItem, function ( ) { isUiTransitioning = false; }));
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
-                project.flkty.once('settle', imgZoom.zoomIn.bind(null, prevItem, toggleUiTransitioningState));
+                project.flkty.once('settle', imgZoom.zoomIn.bind(null, prevItem, function ( ) { isUiTransitioning = false; }));
                 var stepsBackward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 project.flkty.select(project.flkty.selectedIndex - stepsBackward);
             }
@@ -464,17 +459,16 @@ function initZoomableMedia ( ) {
             if (isUiTransitioning) {
                 return;
             }
-
-            toggleUiTransitioningState();
+            isUiTransitioning = true;
 
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
             var nextItem = items[currentIndex + 1] || items[0];
 
             if (stackState || currentIndex < project.flkty.selectedIndex) {
-                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, nextItem, toggleUiTransitioningState));
+                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, nextItem, function ( ) { isUiTransitioning = false; }));
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
-                project.flkty.once('settle', imgZoom.zoomIn.bind(null, nextItem, toggleUiTransitioningState));
+                project.flkty.once('settle', imgZoom.zoomIn.bind(null, nextItem, function ( ) { isUiTransitioning = false; }));
                 var stepsForward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 project.flkty.select(project.flkty.selectedIndex + stepsForward);
             }
@@ -508,6 +502,22 @@ function initZoomableMedia ( ) {
             mediaNavElem.querySelector('.left').addEventListener('click', togglePrevItem);
             mediaNavElem.querySelector('.right').addEventListener('click', toggleNextItem);
 
+            // Toggle swipeable media
+            utils.onSwipe(media, function (event, dir, phase, swipeType, distance) {
+                if (phase === 'move' && (dir === 'left' || dir === 'right')) {
+                    var totalDist = distance;
+                    media.style.transform = 'translateX(' + Math.min(totalDist, 1 * media.offsetWidth) + 'px)';
+                } else if (phase === 'end') {
+                    media.style.transform = 'translateX(' + (-0 * media.offsetWidth) + 'px)';
+
+                    if (swipeType === 'left') {
+                        toggleNextItem();
+                    } else if (swipeType === 'right') {
+                        togglePrevItem();
+                    }
+                }
+            });
+
             // Swap in embedded video when src is not an image
             if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
                 var mediaRect = media.getBoundingClientRect();
@@ -529,6 +539,9 @@ function initZoomableMedia ( ) {
             uiDisabled = false;
             document.body.classList.remove('overlay-open');
             currentlyZoomedIn = '';
+
+            // Remove swipeable media event listeners
+            utils.onSwipe(media, null, true);
 
             if (!stackState) {
                 // Remove z-index stacking order
