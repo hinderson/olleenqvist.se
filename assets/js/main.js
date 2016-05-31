@@ -365,6 +365,7 @@ function toggleInfoView ( ) {
         setTimeout(function ( ) {
             document.body.classList.add('overlay-open');
             document.body.classList.add('about');
+            lazyBlur.check();
         }, 5);
     } else {
         window.removeEventListener('keydown', keysCloseInfoView);
