@@ -151,7 +151,6 @@ gulp.task('rev-assets', function ( ) {
 		.pipe(gulp.dest('./assets/'));
 });
 
-
 // Amazon S3/Cloudfront tasks
 var headers = {'Cache-Control': 'max-age=315360000, no-transform, public'};
 var aws = require('./config/private/aws.json');
@@ -165,11 +164,43 @@ gulp.task('publish-assets', function ( ) {
 		.pipe(cloudfront(aws));
 });
 
+
+// Use s3cmd for more reliable continuous deployment of content like thumbs and regular images
+var exec = require('child_process').exec;
+
+gulp.task('s3-sync-thumbs', function (cb) {
+	exec('s3cmd sync ./thumbs/ s3://olleenqvist.se/thumbs/ --acl-public --add-header="Cache-Control:max-age=315360000, no-transform, public"', function (err, stdout, stderr) {
+		console.log(stdout);
+		console.log(stderr);
+		cb(err);
+	});
+});
+
+gulp.task('s3-sync-content', function (cb) {
+	exec('s3cmd sync ./content/ s3://olleenqvist.se/content/ --acl-public --add-header="Cache-Control:max-age=315360000, no-transform, public"', function (err, stdout, stderr) {
+		console.log(stdout);
+		console.log(stderr);
+		cb(err);
+	});
+});
+
+gulp.task('watch-thumbs', function (cb) {
+	watch('./thumbs/**/*', function ( ) {
+		gulp.start('s3-sync-thumbs', cb);
+	});
+});
+
+gulp.task('watch-content', function (cb) {
+	watch('./content/**/*', function ( ) {
+		gulp.start('s3-sync-content', cb);
+	});
+});
+
 // Default watch task for use in production in conjunction with a daemon (Forever in our case)
 gulp.task('production', function ( ) {
 	gulp.watch('./content/**/*.mp4', ['generate-video-thumbs']);
-	// gulp.start('watch-content');
-	// gulp.start('watch-thumbs');
+	gulp.start('watch-content');
+	gulp.start('watch-thumbs');
 });
 
 gulp.task('default', ['generate-video-thumbs', 'optimize-thumbs', 'css:dev', 'webpack:dev']);
