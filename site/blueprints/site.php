@@ -9,12 +9,13 @@ fields:
   author:
     label: Author
     type:  text
+  pageTitle:
+    label: Page title
+    type: text
+    help: Used on Facebook and in SEO.
   description:
     label: Description
     type:  textarea
-  keywords:
-    label: Keywords
-    type:  tags
-  copyright:
-    label: Copyright
-    type:  textarea
+    validate:
+      max: 155
+    help: Used on Facebook and in SEO.

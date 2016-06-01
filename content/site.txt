@@ -6,12 +6,8 @@ Author: Hinderson & Hofweber
 
 ----
 
-Description: 
+Description: Olle Enqvist has six years of professional experience under his belt.
 
 ----
 
-Keywords: 
-
-----
-
-Copyright: 
+Pagetitle: Olle Enqvist

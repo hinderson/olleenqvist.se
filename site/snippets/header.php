@@ -9,6 +9,15 @@
 
     <meta name="description" content="<?php echo $site->description()->html() ?>">
 
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="<?php echo $site->pageTitle()->text() ?>" />
+    <meta property="og:description" content="<?php echo $site->description()->html() ?>" />
+    <meta property="og:url" content="https://www.olleenqvist.se/" />
+    <meta property="og:site_name" content="<?php echo $site->pageTitle()->text() ?>" />
+    <?php if ($image = $site->images()->first()) : ?>
+        <meta property="og:image" content="<?php echo c::get('pathThumbs') . '/' . thumb($image, array('width' => 1200, 'height' => 630, 'crop' => true))->filename(); ?>" />
+    <?php endif ?>
+
     <?php echo css('dist/css/main.css') ?>
 </head>
 <body>
