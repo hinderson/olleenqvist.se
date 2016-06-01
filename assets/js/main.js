@@ -55,19 +55,6 @@ var storeProjectPositions = function ( ) {
     highlightVisibleProject(cache.lastScrollY);
 };
 
-// Touch action loader
-if ('touchAction' in document.body.style) {
-    document.body.style.touchAction = 'manipulation';
-} else {
-    require.ensure(['fastclick'], function (require) {
-        var FastClick = require('fastclick');
-
-        window.addEventListener('load', function ( ) {
-            FastClick.attach(document.body);
-        });
-    }, 'fastclick');
-}
-
 // Wait for fonts to really load to avoid FOIT
 var font = new FontFaceObserver('GT Cinetype', {
     weight: 400
