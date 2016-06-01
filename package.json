@@ -49,6 +49,7 @@
     "postcss-sassy-mixins": "^1.0.0",
     "postcss-simple-vars": "^1.1.0",
     "promise-polyfill": "^5.0.0",
+    "run-sequence": "^1.2.1",
     "webpack": "^1.12.9"
   }
 }

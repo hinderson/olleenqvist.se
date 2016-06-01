@@ -15,6 +15,7 @@ var awspublish = require('gulp-awspublish');
 var cloudfront = require('gulp-cloudfront');
 var RevAll = require('gulp-rev-all');
 var path = require('path');
+var runSequence = require('run-sequence');
 
 // PostCSS tasks
 var postCssProcessors = [
@@ -122,13 +123,13 @@ gulp.task('generate-video-thumbs', function (src) {
 	});
 });
 
+// Default dev watch task
 gulp.task('watch', function ( ) {
     gulp.watch('./thumbs/*.jpg', ['optimize-thumbs']);
 	gulp.watch('./assets/css/*.css', ['css:dev']);
     gulp.watch(['./assets/js/**/*'], ['webpack:dev']);
     gulp.watch(['./content/**/*.mp4'], ['generate-video-thumbs']);
 });
-
 
 // Cachebusting
 gulp.task('rev-assets', function ( ) {
@@ -163,6 +164,18 @@ gulp.task('publish-assets', function ( ) {
 		.pipe(awspublish.reporter())
 		.pipe(cloudfront(aws));
 });
+
+
+// Generates rev'd asset files and deploys them to Amazon S3 and Cloudfront
+gulp.task('deploy', function (done) {
+	runSequence(
+		'css:prod',
+        'webpack:prod',
+		'rev-assets',
+		'publish-assets',
+	done);
+});
+
 
 
 // Use s3cmd for more reliable continuous deployment of content like thumbs and regular images
