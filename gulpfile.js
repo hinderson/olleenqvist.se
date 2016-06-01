@@ -11,6 +11,10 @@ var imagemin = require('gulp-imagemin');
 var imageminJpegtran = require('imagemin-jpegtran');
 var glob = require('glob');
 var ffmpeg = require('fluent-ffmpeg');
+var awspublish = require('gulp-awspublish');
+var cloudfront = require('gulp-cloudfront');
+var RevAll = require('gulp-rev-all');
+var path = require('path');
 
 // PostCSS tasks
 var postCssProcessors = [
@@ -23,6 +27,7 @@ var postCssProcessors = [
     require('csswring')
 ];
 
+// Post CSS task for use in development
 gulp.task('css:dev', function ( ) {
     return gulp.src('./assets/css/main.css')
         .pipe(sourcemaps.init())
@@ -31,6 +36,14 @@ gulp.task('css:dev', function ( ) {
         .pipe(gulp.dest('./dist/css'));
 });
 
+// Post CSS task for use in production
+gulp.task('css:prod', function ( ) {
+	return gulp.src('./assets/css/main.css')
+		.pipe(postcss(postCssProcessors))
+		.pipe(gulp.dest('./dist/css'));
+});
+
+// Webpack task for use in development
 gulp.task('webpack:dev', function (callback) {
     // Modify/overwrite some default webpack config options
     var devConfig = Object.create(webpackConfig);
@@ -49,9 +62,35 @@ gulp.task('webpack:dev', function (callback) {
     });
 });
 
-gulp.task('assets:dev', function ( ) {
-    return gulp.src(['./assets/**/*', '!./assets/css/*', '!./assets/js/*'])
-    .pipe(gulp.dest('./dist'));
+// Webpack task for use in production
+gulp.task('webpack:prod', function (callback) {
+	// Modify/overwrite some default webpack config options
+	var prodConfig = Object.create(webpackConfig);
+
+	prodConfig.output = {
+		filename: '[name].js',
+		path: './dist/js',
+		publicPath: '/js/'
+	};
+
+	prodConfig.plugins = prodConfig.plugins.concat(
+		new webpack.optimize.DedupePlugin(),
+		new webpack.optimize.UglifyJsPlugin({
+			'drop_console': true
+		}),
+		new webpack.optimize.OccurenceOrderPlugin(),
+		new webpack.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': '"production"'
+			}
+		})
+	);
+
+	webpack(prodConfig, function (err, stats) {
+		if (err) throw new gutil.PluginError('webpack:prod', err);
+
+		callback();
+	});
 });
 
 gulp.task('optimize-thumbs', function ( ) {
@@ -90,4 +129,47 @@ gulp.task('watch', function ( ) {
     gulp.watch(['./content/**/*.mp4'], ['generate-video-thumbs']);
 });
 
-gulp.task('default', ['generate-video-thumbs', 'optimize-thumbs', 'css:dev', 'webpack:dev', 'assets:dev']);
+
+// Cachebusting
+gulp.task('rev-assets', function ( ) {
+	var revAll = new RevAll({
+		transformFilename: function (file, hash) {
+			var ext = path.extname(file.path);
+			return path.basename(file.path, ext) + '-' + hash.substr(0, 8) + ext;
+		},
+		fileNameManifest: 'rev-manifest.json'
+	});
+
+	// Rev the files and create a manifest with references to them
+	gulp.src([
+			'./dist/css/main.css',
+			'./dist/js/main.js',
+		])
+		.pipe(revAll.revision())
+		.pipe(gulp.dest('./dist/'))
+		.pipe(revAll.manifestFile())
+		.pipe(gulp.dest('./assets/'));
+});
+
+
+// Amazon S3/Cloudfront tasks
+var headers = {'Cache-Control': 'max-age=315360000, no-transform, public'};
+var aws = require('./config/private/aws.json');
+var publisher = awspublish.create(aws);
+
+gulp.task('publish-assets', function ( ) {
+	gulp.src(['./dist/**/*.{js,css,woff2,woff}'], { base: '.' })
+		.pipe(awspublish.gzip())
+		.pipe(publisher.publish(headers))
+		.pipe(awspublish.reporter())
+		.pipe(cloudfront(aws));
+});
+
+// Default watch task for use in production in conjunction with a daemon (Forever in our case)
+gulp.task('production', function ( ) {
+	gulp.watch('./content/**/*.mp4', ['generate-video-thumbs']);
+	// gulp.start('watch-content');
+	// gulp.start('watch-thumbs');
+});
+
+gulp.task('default', ['generate-video-thumbs', 'optimize-thumbs', 'css:dev', 'webpack:dev']);
