@@ -15,6 +15,9 @@ c::set('cdn.assets', 'https://d32x2ylr3hfw2f.cloudfront.net');
 c::set('cdn.content', false);
 c::set('cdn.thumbs', false);
 
+// Force SSL
+c::set('ssl', true);
+
 // CDN paths
 c::set('pathAssets', 'https://d32x2ylr3hfw2f.cloudfront.net/dist');
 c::set('pathThumbs', 'https://d32x2ylr3hfw2f.cloudfront.net/thumbs');
