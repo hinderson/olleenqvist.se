@@ -158,7 +158,7 @@ var aws = require('./config/private/aws.json');
 var publisher = awspublish.create(aws);
 
 gulp.task('publish-assets', function ( ) {
-	gulp.src(['./dist/**/*.{js,css,woff2,woff}'], { base: '.' })
+	gulp.src(['./dist/**/*.{js,css,woff2,woff}'])
 		.pipe(awspublish.gzip())
 		.pipe(publisher.publish(headers))
 		.pipe(awspublish.reporter())
