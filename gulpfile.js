@@ -69,7 +69,7 @@ gulp.task('webpack:prod', function (callback) {
 	var prodConfig = Object.create(webpackConfig);
 
 	prodConfig.output = {
-		filename: '[name].js',
+		filename: 'main.js',
 		path: './dist/js',
 		publicPath: '/js/'
 	};
