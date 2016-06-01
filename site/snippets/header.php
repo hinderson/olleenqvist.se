@@ -27,7 +27,16 @@
         ga('send', 'pageview');
     </script>
 
-    <?php echo css('dist/css/main.css') ?>
+    <?php if (c::get('debug')) : ?>
+        <?php echo css('dist/css/main.css') ?>
+    <?php else : ?>
+        <?php
+            $json = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/assets/rev-manifest.json');
+            $manifest = json_decode($json, true);
+
+            echo css('assets/' . $manifest['css/main.css']);
+        ?>
+    <?php endif; ?>
 </head>
 <body>
     <header class="header cf" role="banner">
