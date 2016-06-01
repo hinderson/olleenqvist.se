@@ -5,3 +5,5 @@ dist
 npm-debug.log
 thumbs
 content
+/config
+.awspublish-olleenqvist.se
