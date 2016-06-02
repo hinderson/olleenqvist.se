@@ -430,13 +430,14 @@ function initZoomableMedia ( ) {
             }
 
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
-            var prevItem = items[currentIndex - 1] || items[items.length - 1];
 
             if (stackState || currentIndex > project.flkty.selectedIndex) {
-                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, prevItem));
+                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, items[currentIndex - 1] || items[items.length - 1]));
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
-                project.flkty.once('settle', imgZoom.zoomIn.bind(null, prevItem));
+                project.flkty.once('settle', function ( ) {
+                    imgZoom.zoomIn(items[project.flkty.selectedIndex]);
+                });
                 var stepsBackward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 project.flkty.select(project.flkty.selectedIndex - stepsBackward);
             }
@@ -448,13 +449,14 @@ function initZoomableMedia ( ) {
             }
 
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
-            var nextItem = items[currentIndex + 1] || items[0];
 
             if (stackState || currentIndex < project.flkty.selectedIndex) {
-                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, nextItem));
+                imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, items[currentIndex + 1] || items[0]));
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
-                project.flkty.once('settle', imgZoom.zoomIn.bind(null, nextItem));
+                project.flkty.once('settle', function ( ) {
+                    imgZoom.zoomIn(items[project.flkty.selectedIndex]);
+                });
                 var stepsForward = difference(project.flkty.selectedIndex, currentIndex) + 1;
                 project.flkty.select(project.flkty.selectedIndex + stepsForward);
             }
@@ -494,6 +496,7 @@ function initZoomableMedia ( ) {
             mediaNavElem.querySelector('.right').addEventListener('click', toggleNextItem);
 
             // Toggle swipeable media
+            /*
             utils.onSwipe(media, function (event, dir, phase, swipeType, distance) {
                 if (phase === 'move' && (dir === 'left' || dir === 'right')) {
                     var totalDist = distance;
@@ -508,6 +511,7 @@ function initZoomableMedia ( ) {
                     }
                 }
             });
+            */
 
             // Swap in embedded video when src is not an image
             if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -534,7 +538,7 @@ function initZoomableMedia ( ) {
             currentlyZoomedIn = '';
 
             // Remove swipeable media event listeners
-            utils.onSwipe(media, null, true);
+            //utils.onSwipe(media, null, true);
 
             if (!stackState) {
                 // Remove z-index stacking order
