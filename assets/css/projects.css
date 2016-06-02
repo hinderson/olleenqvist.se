@@ -244,9 +244,11 @@
         backface-visibility: hidden;
     }
 
-    &.media-loaded {
+    &.placeholder-loaded {
         background: none;
+    }
 
+    &.media-loaded {
         canvas {
             visibility: hidden;
             opacity: 0;
