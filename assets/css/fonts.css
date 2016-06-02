@@ -5,3 +5,11 @@
     font-style: normal;
     font-weight: 400;
 }
+
+@font-face {
+    font-family: "GT Cinetype";
+    src: url("../fonts/GT-Cinetype-Bold.woff2") format("woff2"),
+         url("../fonts/GT-Cinetype-Bold.woff") format("woff");
+    font-style: normal;
+    font-weight: 600;
+}
