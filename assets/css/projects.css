@@ -175,21 +175,6 @@
 			transition: visibility 0s linear 0s, opacity 0.4s 0s;
 		}
 	}
-
-    &.is-zoomed::after {
-        content: "← Use arrows or swipe to browse →";
-        display: block;
-        position: absolute;
-        bottom: -1.2em;
-        width: 100%;
-        color: #000;
-        font-size: 3.6px;
-        text-shadow: 1px 1px white;
-        font-weight: 400;
-        line-height: 0;
-        text-align: center;
-        -webkit-font-smoothing: antialiased;
-    }
 }
 
 
