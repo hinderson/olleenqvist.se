@@ -15,6 +15,7 @@
                                     if ($mediaType == 'video') {
                                         $source = $media->placeholder()->toFile();
                                         $screenshotName = basename($source, '.mp4');
+
                                         $screenshot = new Media(
                                             kirby()->roots()->thumbs() . '/' . $screenshotName . '.jpg'
                                         );
