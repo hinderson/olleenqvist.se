@@ -433,10 +433,11 @@ function initZoomableMedia ( ) {
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
                 project.flkty.once('settle', function ( ) {
-                    imgZoom.zoomIn(items[project.flkty.selectedIndex]);
+                    imgZoom.zoomIn(items[project.flkty.selectedIndex] || items[items.length - 1]);
                 });
-                var stepsBackward = difference(project.flkty.selectedIndex, currentIndex) + 1;
-                project.flkty.select(project.flkty.selectedIndex - stepsBackward);
+                var totalCells = project.flkty.cells.length - 1; // Make the total number of cells 0 index based
+                var selectItem = totalCells < project.flkty.selectedIndex ? (project.flkty.selectedIndex + difference(project.flkty.selectedIndex, currentIndex) + 1) : totalCells;
+                project.flkty.select(selectItem);
             }
         }
 
@@ -451,10 +452,11 @@ function initZoomableMedia ( ) {
             } else {
                 imgZoom.zoomOut(currentlyZoomedIn);
                 project.flkty.once('settle', function ( ) {
-                    imgZoom.zoomIn(items[project.flkty.selectedIndex]);
+                    imgZoom.zoomIn(items[project.flkty.selectedIndex] || items[0]);
                 });
-                var stepsForward = difference(project.flkty.selectedIndex, currentIndex) + 1;
-                project.flkty.select(project.flkty.selectedIndex + stepsForward);
+                var totalCells = project.flkty.cells.length - 1; // Make the total number of cells 0 index based
+                var selectItem = totalCells > project.flkty.selectedIndex ? (project.flkty.selectedIndex + difference(project.flkty.selectedIndex, currentIndex) + 1) : 0;
+                project.flkty.select(selectItem);
             }
         }
 
