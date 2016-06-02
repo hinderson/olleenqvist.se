@@ -56,9 +56,7 @@ var storeProjectPositions = function ( ) {
 };
 
 // Wait for fonts to really load to avoid FOIT
-var font = new FontFaceObserver('GT Cinetype', {
-    weight: 400
-});
+var font = new FontFaceObserver('GT Cinetype');
 font.load().then(function () {
     document.documentElement.className += ' fonts-loaded';
 });
@@ -430,7 +428,6 @@ function initZoomableMedia ( ) {
             }
 
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
-
             if (stackState || currentIndex > project.flkty.selectedIndex) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, items[currentIndex - 1] || items[items.length - 1]));
             } else {
@@ -449,7 +446,6 @@ function initZoomableMedia ( ) {
             }
 
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
-
             if (stackState || currentIndex < project.flkty.selectedIndex) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, items[currentIndex + 1] || items[0]));
             } else {
@@ -496,13 +492,13 @@ function initZoomableMedia ( ) {
             mediaNavElem.querySelector('.right').addEventListener('click', toggleNextItem);
 
             // Toggle swipeable media
-            /*
-            utils.onSwipe(media, function (event, dir, phase, swipeType, distance) {
+            var item = media.firstChild;
+            utils.onSwipe(item, function (event, dir, phase, swipeType, distance) {
                 if (phase === 'move' && (dir === 'left' || dir === 'right')) {
                     var totalDist = distance;
-                    media.style.transform = 'translateX(' + Math.min(totalDist, 1 * media.offsetWidth) + 'px)';
+                    item.style.transform = 'translateX(' + Math.min(totalDist, 1 * item.offsetWidth) + 'px)';
                 } else if (phase === 'end') {
-                    media.style.transform = 'translateX(' + (-0 * media.offsetWidth) + 'px)';
+                    item.style.transform = 'translateX(' + (-0 * item.offsetWidth) + 'px)';
 
                     if (swipeType === 'left') {
                         toggleNextItem();
@@ -511,7 +507,6 @@ function initZoomableMedia ( ) {
                     }
                 }
             });
-            */
 
             // Swap in embedded video when src is not an image
             if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
