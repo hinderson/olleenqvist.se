@@ -435,9 +435,8 @@ function initZoomableMedia ( ) {
                 project.flkty.once('settle', function ( ) {
                     imgZoom.zoomIn(items[project.flkty.selectedIndex] || items[items.length - 1]);
                 });
-                var totalCells = project.flkty.cells.length - 1; // Make the total number of cells 0 index based
-                var selectItem = totalCells < project.flkty.selectedIndex ? (project.flkty.selectedIndex + difference(project.flkty.selectedIndex, currentIndex) + 1) : totalCells;
-                project.flkty.select(selectItem);
+                var selectedIndex = project.flkty.selectedIndex - (difference(project.flkty.selectedIndex, currentIndex) + 1);
+                project.flkty.select(selectedIndex);
             }
         }
 
@@ -454,9 +453,8 @@ function initZoomableMedia ( ) {
                 project.flkty.once('settle', function ( ) {
                     imgZoom.zoomIn(items[project.flkty.selectedIndex] || items[0]);
                 });
-                var totalCells = project.flkty.cells.length - 1; // Make the total number of cells 0 index based
-                var selectItem = totalCells > project.flkty.selectedIndex ? (project.flkty.selectedIndex + difference(project.flkty.selectedIndex, currentIndex) + 1) : 0;
-                project.flkty.select(selectItem);
+                var selectedIndex = project.flkty.selectedIndex + (difference(project.flkty.selectedIndex, currentIndex) + 1);
+                project.flkty.select(selectedIndex);
             }
         }
 
