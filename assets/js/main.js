@@ -493,8 +493,10 @@ function initZoomableMedia ( ) {
 
             // Toggle swipeable media
             var item = media.firstChild;
-            utils.onSwipe(item, function (event, dir, phase, swipeType, distance) {
+            utils.onSwipe(item, function (event, dir, phase, swipeType, distance, removeEventListeners) {
                 if (phase === 'move' && (dir === 'left' || dir === 'right')) {
+                    media.style.pointerEvents = 'none'; // Temporarily disable all other click events
+
                     var totalDist = distance;
                     item.style.transform = 'translateX(' + Math.min(totalDist, 1 * item.offsetWidth) + 'px)';
                 } else if (phase === 'end') {
@@ -505,6 +507,9 @@ function initZoomableMedia ( ) {
                     } else if (swipeType === 'right') {
                         togglePrevItem();
                     }
+
+                    removeEventListeners();
+                    media.style.pointerEvents = ''; // Enable all click events again
                 }
             });
 
@@ -533,7 +538,7 @@ function initZoomableMedia ( ) {
             currentlyZoomedIn = '';
 
             // Remove swipeable media event listeners
-            //utils.onSwipe(media, null, true);
+            utils.onSwipe(media.firstChild, null, true);
 
             if (!stackState) {
                 // Remove z-index stacking order
