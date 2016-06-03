@@ -394,10 +394,6 @@ function initZoomableMedia ( ) {
         videoEmbed.style.width = mediaRect.width + 'px';
     }
 
-    function difference (a, b) {
-        return Math.abs(a - b);
-    }
-
     utils.forEach(projectElems, function (index, project) {
         var currentlyZoomedIn;
         var items = project.querySelectorAll('.images a');
@@ -428,15 +424,14 @@ function initZoomableMedia ( ) {
             }
 
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
-            if (stackState || currentIndex > project.flkty.selectedIndex) {
+            if (stackState) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, items[currentIndex - 1] || items[items.length - 1]));
             } else {
-                imgZoom.zoomOut(currentlyZoomedIn);
                 project.flkty.once('settle', function ( ) {
                     imgZoom.zoomIn(items[project.flkty.selectedIndex] || items[items.length - 1]);
                 });
-                var selectedIndex = project.flkty.selectedIndex - (difference(project.flkty.selectedIndex, currentIndex) + 1);
-                project.flkty.select(selectedIndex);
+                imgZoom.zoomOut(currentlyZoomedIn);
+                project.flkty.previous(true);
             }
         }
 
@@ -446,15 +441,14 @@ function initZoomableMedia ( ) {
             }
 
             var currentIndex = Array.prototype.indexOf.call(items, currentlyZoomedIn);
-            if (stackState || currentIndex < project.flkty.selectedIndex) {
+            if (stackState) {
                 imgZoom.zoomOut(currentlyZoomedIn, imgZoom.zoomIn.bind(null, items[currentIndex + 1] || items[0]));
             } else {
-                imgZoom.zoomOut(currentlyZoomedIn);
                 project.flkty.once('settle', function ( ) {
                     imgZoom.zoomIn(items[project.flkty.selectedIndex] || items[0]);
                 });
-                var selectedIndex = project.flkty.selectedIndex + (difference(project.flkty.selectedIndex, currentIndex) + 1);
-                project.flkty.select(selectedIndex);
+                imgZoom.zoomOut(currentlyZoomedIn);
+                project.flkty.next(true);
             }
         }
 
