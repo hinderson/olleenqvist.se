@@ -77,10 +77,22 @@
     .description {
         margin: 0 auto;
         max-width: 32em;
-        padding: 0 1.5em;
+        padding: 0 0.2em 0.2em;
 
         @media screen and (--medium-viewport) {
             padding: 0 0.5em;
+        }
+
+        .view-list & {
+            width: 90%;
+
+            @media screen and (--medium-viewport) {
+                width: 55%;
+            }
+
+            @media screen and (--large-viewport) {
+                width: 32%;
+            }
         }
     }
 
