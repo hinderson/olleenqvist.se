@@ -302,7 +302,7 @@ function toggleProjectView ( ) {
     });
 
     var closestProject = cache.closestProject;
-    if (!stackState) {
+    if (!stackState && breakpoint.value !== 'small-viewport') {
         document.documentElement.classList.remove('view-list');
         document.documentElement.classList.add('view-collage');
 
