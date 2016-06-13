@@ -7,8 +7,8 @@ password: >
 language: en
 role: admin
 history:
+  - 'projects/Ohlsson-&-Gerthel'
   - about
   - projects/go-get-it
   - projects/Oatly
   - projects/femtastic
-  - projects/bob-hund

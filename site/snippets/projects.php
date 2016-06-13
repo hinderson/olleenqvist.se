@@ -15,13 +15,12 @@
                                     if ($mediaType == 'video') {
                                         $source = $media->placeholder()->toFile();
                                         $screenshotName = basename($source, '.mp4');
+                                        $path = kirby()->roots()->thumbs() . '/' . $screenshotName . '.jpg';
 
-                                        $screenshot = new Media(
-                                            kirby()->roots()->thumbs() . '/' . $screenshotName . '.jpg'
-                                        );
-
-                                        $file = new Media($screenshot);
-                                        $videoSrc = c::get('pathContent') . substr(strstr($source->dir(), '/content'), strlen('/content')) . '/' . $source->filename();
+                                        if (file_exists($path)) {
+                                            $file = new Media($path);
+                                            $videoSrc = c::get('pathContent') . substr(strstr($source->dir(), '/content'), strlen('/content')) . '/' . $source->filename();
+                                        }
                                     } else {
                                         $source = $media->image()->toFile();
                                         $file = $source;
