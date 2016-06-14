@@ -151,7 +151,13 @@
 [data-zoomable] {
     display: block;
 
-    @media screen and (--medium-viewport) {
+    @media (--small-viewport) {
+        &:not([data-type="video"]) {
+            pointer-events: none;
+        }
+    }
+
+    @media (--medium-viewport) {
         cursor: zoom-in;
     }
 

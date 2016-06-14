@@ -16,9 +16,6 @@ var uiDisabled = false;
 var aboutState = false;
 var isUiTransitioning = false;
 
-// Saved constructors
-var imgZooms = [];
-
 // Cache variables
 var cache = {
     ticking: false,
@@ -68,22 +65,9 @@ var resizeEvent = utils.debounce(function ( ) {
     cache.lastScrollY = window.pageYOffset;
     breakpoint.update();
 
-    if (breakpoint.value === 'small-viewport') {
-        if (imgZooms.length) {
-            utils.forEach(imgZooms, function (index, imgZoom) {
-                imgZoom.destroy();
-            });
-            imgZooms.length = 0;
-        }
-
+    if (breakpoint.value === 'small-viewport' && stackState) {
         // Collage state isn't available in mobile view
-        if (stackState) {
-            toggleProjectView();
-        }
-    } else {
-        if (!imgZooms.length) {
-            initZoomableMedia();
-        }
+        toggleProjectView();
     }
 
     storeProjectPositions();
@@ -564,8 +548,6 @@ function initZoomableMedia ( ) {
 
             mediaNavElem.setAttribute('aria-hidden', true);
         });
-
-        imgZooms.push(imgZoom);
     });
 }
 
@@ -601,16 +583,6 @@ keyboard.on('arrowLeft', function (event) {
 breakpoint.update();
 storeProjectPositions();
 
+// Kick it off
 toggleProjectView();
-
-// Remove default action on zoomable images links
-utils.forEach(projectLinks, function (index, elem) {
-    elem.addEventListener('click', function (e) {
-        e.preventDefault();
-    });
-});
-
-// Initiate zoomable images
-if (breakpoint.value !== 'small-viewport') {
-    initZoomableMedia();
-}
+initZoomableMedia();
