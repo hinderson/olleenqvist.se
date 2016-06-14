@@ -200,6 +200,10 @@
 /* Zoomed in navigation
 -------------------------------------------------- */
 .media-nav {
+    @media (--small-viewport) {
+        display: none;
+    }
+
     button {
         margin: 0;
         padding: 0;
@@ -215,7 +219,7 @@
     .right {
         position: fixed;
         top: 50%;
-        z-index: 101;
+        z-index: 102;
         transform: translateY(-50%);
         width: 3em;
         padding: 0.5em;
