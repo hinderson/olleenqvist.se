@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var fileExists = require('file-exists');
 var webpack = require('webpack');
 var watch = require('gulp-watch');
 var postcss = require('gulp-postcss');
@@ -100,12 +101,17 @@ gulp.task('optimize-thumbs', function ( ) {
         .pipe(gulp.dest('./thumbs'));
 });
 
-gulp.task('generate-video-thumbs', function (src) {
+gulp.task('generate-video-thumbs', function ( ) {
 	return glob('./content/**/*.mp4', function (err, files) {
 		function generateThumb (file) {
+            var filename = file.substring(file.lastIndexOf('/'), file.lastIndexOf('.'));
+            if (fileExists('./thumbs/' + filename + '.jpg')) {
+                console.log(filename + ' exists');
+                return;
+            }
 			var command = ffmpeg(file)
 				.on('end', function (file) {
-					console.log('screenshots were saved as ' + file);
+					console.log('screenshots were saved as ' + filename + '.jpg');
 				})
 				.on('error', function (err) {
 					console.log('an error happened: ' + err.message);
@@ -197,21 +203,23 @@ gulp.task('s3-sync-content', function (cb) {
 	});
 });
 
-gulp.task('watch-thumbs', function (cb) {
+gulp.task('watch-thumbs', function ( ) {
 	watch('./thumbs/**/*', function ( ) {
-		gulp.start('s3-sync-thumbs', cb);
+        gulp.start('s3-sync-thumbs');
 	});
 });
 
-gulp.task('watch-content', function (cb) {
+gulp.task('watch-content', function ( ) {
 	watch('./content/**/*', function ( ) {
-		gulp.start('s3-sync-content', cb);
+        runSequence(
+    		'generate-video-thumbs',
+    		's3-sync-content'
+    	);
 	});
 });
 
 // Default watch task for use in production in conjunction with a daemon (Forever in our case)
 gulp.task('production', function ( ) {
-	gulp.watch('./content/**/*.mp4', ['generate-video-thumbs']);
 	gulp.start('watch-content');
 	gulp.start('watch-thumbs');
 });
