@@ -2,9 +2,9 @@
 
 /* Media query variables
 -------------------------------------------------- */
-@custom-media --large-viewport (min-width: 48rem);
-@custom-media --medium-viewport (min-width: 35rem);
-@custom-media --small-viewport (max-width: 35rem);
+@custom-media --large-viewport (min-width: 480px);
+@custom-media --medium-viewport (min-width: 351px);
+@custom-media --small-viewport (max-width: 350px);
 
 body::before {
     content: "small-viewport";
@@ -267,7 +267,6 @@ body {
             display: block;
         }
     }
-
 
     button {
         font-size: inherit;
