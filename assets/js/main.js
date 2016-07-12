@@ -115,7 +115,21 @@ function makeVideoEmbed (vendor, id) {
     if (vendor === 'youtube') {
         videoEmbed.setAttribute('src', 'https://www.youtube.com/embed/' + id + '?autoplay=1&showinfo=0&controls=0&rel=0&showinfo=0');
     } else if (vendor === 'vimeo') {
-        videoEmbed.setAttribute('src', 'https://player.vimeo.com/video/' + id + '?autoplay=true&title=0&byline=0&portrait=0');
+        videoEmbed.setAttribute('src', 'https://player.vimeo.com/video/' + id + '?api=1&title=0&byline=0&portrait=0');
+
+        // Handle autoplay on all devices
+        window.addEventListener('message', function waitForVimeoEmbed (event) {
+            if (!(/^https?:\/\/player.vimeo.com/).test(event.origin)) {
+                return false;
+            }
+
+            var data = JSON.parse(event.data);
+            if (data.event === 'ready') {
+                videoEmbed.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+            }
+
+            window.removeEventListener('message', waitForVimeoEmbed);
+        });
     } else {
         return;
     }

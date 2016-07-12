@@ -317,7 +317,21 @@ utils = {
         touchSurface.addEventListener('mousedown', mouseDown);
         document.body.addEventListener('mousemove', mouseMove);
         document.body.addEventListener('mouseup', mouseUp);
-    }
+    },
+
+    once: function (element, type, listener, useCapture) {
+        function getSelfRemovingHandler (element, type, listener, useCapture) {
+            return function selfRemoving ( ) {
+            	element.removeEventListener(type, listener, useCapture);
+            	element.removeEventListener(type, selfRemoving, useCapture);
+            };
+        }
+
+        var selfRemoving = getSelfRemovingHandler.apply(null, arguments);
+        element.addEventListener(type, listener, useCapture);
+        element.addEventListener(type, selfRemoving, useCapture);
+        return listener;
+    },
 
 };
 
