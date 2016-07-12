@@ -182,6 +182,7 @@ body {
         outline: 0;
         height: 45px;
         width: 122px;
+        touch-action: manipulation;
 
         .chard-left svg,
         .chard-right svg {
