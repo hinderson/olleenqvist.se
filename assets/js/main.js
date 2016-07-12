@@ -11,7 +11,7 @@ var Promise = window.Promise = require('promise-polyfill'); // Polyfill promises
 var FontFaceObserver = require('fontfaceobserver');
 
 // States
-var stackState = false;
+var stackState = true;
 var uiDisabled = false;
 var aboutState = false;
 var isUiTransitioning = false;
