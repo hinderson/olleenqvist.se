@@ -236,6 +236,7 @@ var toggleCollapsedProject = function (e) {
 };
 
 function toggleProjectView ( ) {
+    console.trace('Toggle project view!!');
     viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
     utils.forEach(projectElems, function (index, project) {
