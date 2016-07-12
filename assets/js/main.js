@@ -135,6 +135,7 @@ var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
 // Event listeners
 window.addEventListener('resize', resizeEvent);
 window.addEventListener('scroll', scrollEvent);
+window.addEventListener('orientationchange', resizeEvent);
 viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
 infoToggler.addEventListener('click', utils.throttle(toggleInfoView, 300));
 
