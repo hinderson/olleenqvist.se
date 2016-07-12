@@ -113,7 +113,8 @@ html {
     -ms-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
 
-    &.fonts-loaded {
+    &.fonts-loaded,
+    &.no-js {
         font-family: "GT Cinetype";
     }
 }
@@ -202,11 +203,13 @@ body {
         }
     }
 
-    button:hover,
-    button:focus {
-        color: #fff;
-        background: #ff0000;
-        fill: #ff0000;
+    .js & {
+        button:hover,
+        button:focus {
+            color: #fff;
+            background: #ff0000;
+            fill: #ff0000;
+        }
     }
 }
 

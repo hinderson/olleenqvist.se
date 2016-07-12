@@ -286,6 +286,12 @@
     }
 }
 
+/* No JS fallback */
+.no-js .progressive-media .media {
+    visibility: visible;
+    opacity: 1;
+}
+
 .zoomed-video {
 	position: fixed;
     top: 0;
