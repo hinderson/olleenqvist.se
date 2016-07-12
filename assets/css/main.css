@@ -2,9 +2,9 @@
 
 /* Media query variables
 -------------------------------------------------- */
-@custom-media --large-viewport (min-width: 480px);
-@custom-media --medium-viewport (min-width: 351px);
-@custom-media --small-viewport (max-width: 350px);
+@custom-media --large-viewport (min-width: 768px);
+@custom-media --medium-viewport (min-width: 560px);
+@custom-media --small-viewport (max-width: 560px);
 
 body::before {
     content: "small-viewport";
