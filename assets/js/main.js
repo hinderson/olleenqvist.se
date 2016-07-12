@@ -67,6 +67,8 @@ var resizeEvent = utils.debounce(function ( ) {
 
     if (breakpoint.value === 'small-viewport' && stackState) {
         // Collage state isn't available in mobile view
+        console.trace('Toggle project view!!', stackState, breakpoint.value);
+
         toggleProjectView();
     }
 
@@ -236,7 +238,6 @@ var toggleCollapsedProject = function (e) {
 };
 
 function toggleProjectView ( ) {
-    console.trace('Toggle project view!!');
     viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
     utils.forEach(projectElems, function (index, project) {
