@@ -239,7 +239,7 @@ body {
         margin: 0 0.77em;
         cursor: help;
 
-        @media screen and (--medium-viewport) {
+        @media screen and (--medium-viewport) and (min-height: 400px) {
             font-size: 2rem;
         }
     }
@@ -351,9 +351,12 @@ section.about {
             align-self: auto;
 
             @media screen and (--medium-viewport) {
-                width: 110rem;
                 margin-right: 4rem;
                 margin-bottom: 0;
+            }
+
+            @media screen and (--medium-viewport) and (min-height: 400px) {
+                width: 110rem;
             }
         }
 
@@ -365,7 +368,7 @@ section.about {
                 max-width: none;
                 font-size: 1.45rem;
 
-                @media screen and (--medium-viewport) {
+                @media screen and (--medium-viewport) and (min-height: 400px) {
                     font-size: 1.75rem;
 
                     &:last-child {
