@@ -544,8 +544,10 @@ function initZoomableMedia ( ) {
             mediaNavElem.querySelector('.right').addEventListener('click', toggleNextItem);
 
             // Toggle swipeable media
+            // TODO: Temporarily disabling swipable media until I can avoid conflict with zoomable action
+            /*
             var item = media.firstChild;
-            utils.onSwipe(item, function (event, dir, phase, swipeType, distance, removeEventListeners) {
+            utils.onSwipe(item, function (event, dir, phase, swipeType, distance) {
                 if (phase === 'move' && (dir === 'left' || dir === 'right')) {
                     media.style.pointerEvents = 'none'; // Temporarily disable all other click events
 
@@ -560,10 +562,10 @@ function initZoomableMedia ( ) {
                         togglePrevItem();
                     }
 
-                    removeEventListeners();
                     media.style.pointerEvents = ''; // Enable all click events again
                 }
             });
+            */
 
             // Swap in embedded video when src is not an image
             if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -590,7 +592,7 @@ function initZoomableMedia ( ) {
             currentlyZoomedIn = '';
 
             // Remove swipeable media event listeners
-            utils.onSwipe(media.firstChild, null, true);
+            //utils.onSwipe(media.firstChild, null, true);
 
             if (!stackState) {
                 // Remove z-index stacking order
