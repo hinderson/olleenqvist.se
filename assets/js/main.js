@@ -11,7 +11,7 @@ var Promise = window.Promise = require('promise-polyfill'); // Polyfill promises
 var FontFaceObserver = require('fontfaceobserver');
 
 // States
-var stackState = true;
+var stackState = false;
 var uiDisabled = false;
 var aboutState = false;
 var isUiTransitioning = false;
@@ -255,6 +255,19 @@ var toggleCollapsedProject = function (e) {
     });
 };
 
+function refreshVideos ( ) {
+    // Bug fix: Force all videos to play again
+    var videos = document.querySelectorAll('.project video');
+    if (videos.length) {
+        // Use a small timeout to prevent Chromium bug
+        setTimeout(function ( ) {
+            utils.forEach(document.querySelectorAll('.project video'), function (index, video) {
+                video.play();
+            });
+        }, 50);
+    }
+}
+
 function initFlickity (project, projectImages, options) {
     projectImages = projectImages || project.querySelector('.images');
     var length = project.querySelectorAll('li').length;
@@ -310,6 +323,7 @@ function reloadFlickity (project, options) {
 
     project.flkty.destroy();
     initFlickity(project, null, utils.extend(options, currentOptions));
+    refreshVideos();
 }
 
 function toggleProjectView ( ) {
@@ -367,13 +381,7 @@ function toggleProjectView ( ) {
         utils.scrollToElement(closestProject, 200, cache.viewportHeight * 0.3);
     }
 
-    // Bug fix: Force all videos to play again
-    var videos = document.querySelectorAll('.project video');
-    if (videos.length) {
-        utils.forEach(document.querySelectorAll('.project video'), function (index, video) {
-            video.play();
-        });
-    }
+    refreshVideos();
 
     stackState = !stackState;
 }
@@ -650,5 +658,9 @@ breakpoint.update();
 storeProjectPositions();
 
 // Kick it off
+if (breakpoint.value === 'small-viewport') {
+    // Start at true if we're using a small viewport
+    stackState = true;
+}
 toggleProjectView();
 initZoomableMedia();
