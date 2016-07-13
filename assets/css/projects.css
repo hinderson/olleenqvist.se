@@ -150,6 +150,7 @@
 /* Zoom-in */
 [data-zoomable] {
     display: block;
+    touch-action: manipulation;
 
     @media (--small-viewport) {
         &:not([data-type="video"]) {
