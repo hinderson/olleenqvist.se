@@ -38,7 +38,13 @@ var mediaNavElem = document.querySelector('.media-nav');
 // Store all breakpoints and fetch the current one
 var breakpoint = {
     update: function ( ) {
-        this.value = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '');
+        var previous = this.value;
+        var current = window.getComputedStyle(document.querySelector('body'), ':before').getPropertyValue('content').replace(/\"/g, '');
+        this.value = current;
+
+        if (previous !== current) {
+            pubsub.publish('breakpointChanged', [previous, current]);
+        }
     }
 };
 
@@ -67,8 +73,6 @@ var resizeEvent = utils.debounce(function ( ) {
 
     if (breakpoint.value === 'small-viewport' && stackState) {
         // Collage state isn't available in mobile view
-        console.trace('Toggle project view!!', stackState, breakpoint.value);
-
         toggleProjectView();
     }
 
@@ -251,18 +255,77 @@ var toggleCollapsedProject = function (e) {
     });
 };
 
+function initFlickity (project, projectImages, options) {
+    projectImages = projectImages || project.querySelector('.images');
+    var length = project.querySelectorAll('li').length;
+
+    var defaults = {
+        cellAlign: 'center',
+        wrapAround: true,
+        contain: false,
+        percentPosition: true,
+        prevNextButtons: false,
+        pageDots: false,
+        setGallerySize: false,
+        initialIndex: 4, // Always center on the featured image
+        accessibility: false, // Turn off native keyboard navigation
+        selectedAttraction: 0.2,
+        friction: 0.8,
+    };
+
+    // If there are 3 or less cells, change some options
+    if (length <= 3) {
+        defaults.contain = true;
+        defaults.initialIndex = 1;
+        defaults.wrapAround = false;
+    }
+
+    // Always enable wrapAround on small viewports
+    if (breakpoint.value === 'small-viewport') {
+        defaults.wrapAround = true;
+    }
+
+    // Extend options
+    utils.extend(defaults, options);
+
+    var flkty = project.flkty = new Flickity(projectImages, defaults);
+
+    flkty.on('dragStart', function (e) {
+        flkty.slider.classList.add('is-dragging');
+    });
+
+    flkty.on('dragEnd', function (e) {
+        flkty.slider.classList.remove('is-dragging');
+    });
+
+    flkty.on('cellSelect', function ( ) {
+        lazyBlur.check();
+    });
+}
+
+function reloadFlickity (project, options) {
+    if (!project.flkty) { return; }
+
+    var currentOptions = project.flkty.options;
+
+    project.flkty.destroy();
+    initFlickity(project, null, utils.extend(options, currentOptions));
+}
+
 function toggleProjectView ( ) {
     viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
     utils.forEach(projectElems, function (index, project) {
         var projectImages = project.querySelector('.images');
-        var projectListItems = project.querySelectorAll('li');
-        var length = projectListItems.length;
+        var breakPointChange;
 
         if (!stackState && breakpoint.value !== 'small-viewport') {
             // Init collage view
             if (project.flkty) {
                 project.flkty.destroy();
+                if (breakPointChange) {
+                    breakPointChange.remove();
+                }
             }
 
             toggleCollapsedProject(projectImages);
@@ -274,30 +337,16 @@ function toggleProjectView ( ) {
             projectImages.removeEventListener('mouseenter', toggleExpandedProject);
             projectImages.removeEventListener('mouseleave', toggleCollapsedProject);
 
-            var flkty = project.flkty = new Flickity(projectImages, {
-                cellAlign: 'center',
-                wrapAround: length > 3 ? true : false,
-                contain: length > 3 ? false : true,
-                percentPosition: true,
-                prevNextButtons: false,
-                pageDots: false,
-                setGallerySize: false,
-                initialIndex: length > 3 ? 4 : 1, // Always center on the featured image
-                accessibility: false, // Turn off native keyboard navigation
-                selectedAttraction: 0.2,
-                friction: 0.8,
-            });
+            initFlickity(project, projectImages);
+            breakPointChange = pubsub.subscribe('breakpointChanged', function (values) {
+                var previous = values[0];
+                var current = values[1];
+                var changedFromLarge = (previous === 'medium-viewport' || previous === 'large-viewport') && current === 'small-viewport';
+                var changedFromSmall = previous === 'small-viewport' && (current === 'medium-viewport' || current === 'large-viewport');
 
-            flkty.on('dragStart', function (e) {
-                flkty.slider.classList.add('is-dragging');
-            });
-
-            flkty.on('dragEnd', function (e) {
-                flkty.slider.classList.remove('is-dragging');
-            });
-
-            flkty.on('cellSelect', function ( ) {
-                lazyBlur.check();
+                if (!stackState && (changedFromLarge || changedFromSmall)) {
+                    reloadFlickity(project);
+                }
             });
         }
     });
