@@ -213,7 +213,7 @@ utils = {
         var elapsedTime;
         var startTime;
         var mouseIsDown = false;
-        var handleTouch = callback || function (evt, dir, phase, swipetype, distance, removeEventListeners) { };
+        var handleTouch = callback || function (evt, dir, phase, swipetype, distance) { };
 
         function touchStart (e) {
     		var touchobj = e.changedTouches[0];
@@ -223,7 +223,7 @@ utils = {
     		startX = touchobj.pageX;
     		startY = touchobj.pageY;
     		startTime = new Date().getTime();
-    		handleTouch(e, 'none', 'start', swipeType, 0, removeEventListeners);
+    		handleTouch(e, 'none', 'start', swipeType, 0);
     		e.preventDefault();
     	}
 
@@ -233,10 +233,10 @@ utils = {
     		distY = touchobj.pageY - startY;
     		if (Math.abs(distX) > Math.abs(distY)) {
     			dir = (distX < 0)? 'left' : 'right';
-    			handleTouch(e, dir, 'move', swipeType, distX, removeEventListeners);
+    			handleTouch(e, dir, 'move', swipeType, distX);
     		} else {
     			dir = (distY < 0)? 'up' : 'down';
-    			handleTouch(e, dir, 'move', swipeType, distY, removeEventListeners);
+    			handleTouch(e, dir, 'move', swipeType, distY);
     		}
     		e.preventDefault();
     	}
@@ -251,72 +251,20 @@ utils = {
                     swipeType = dir;
                 }
             }
-            handleTouch(e, dir, 'end', swipeType, (dir =='left' || dir =='right') ? distX : distY, removeEventListeners);
+            handleTouch(e, dir, 'end', swipeType, (dir =='left' || dir =='right') ? distX : distY);
             e.preventDefault();
         }
-
-        function mouseDown (e) {
-    		var touchobj = e;
-    		dir = 'none';
-    		swipeType = 'none';
-    		dist = 0;
-    		startX = touchobj.pageX;
-    		startY = touchobj.pageY;
-    		startTime = new Date().getTime();
-    		handleTouch(e, 'none', 'start', swipeType, 0, removeEventListeners);
-    		mouseIsDown = true;
-    		e.preventDefault();
-    	}
-
-        function mouseMove (e) {
-    		if (mouseIsDown) {
-    			var touchobj = e;
-    			distX = touchobj.pageX - startX;
-    			distY = touchobj.pageY - startY;
-    			if (Math.abs(distX) > Math.abs(distY)) {
-    				dir = (distX < 0)? 'left' : 'right';
-    				handleTouch(e, dir, 'move', swipeType, distX, removeEventListeners);
-    			} else {
-    				dir = (distY < 0)? 'up' : 'down';
-    				handleTouch(e, dir, 'move', swipeType, distY, removeEventListeners);
-    			}
-    			e.preventDefault();
-    		}
-    	}
-
-        function mouseUp (e) {
-    		if (mouseIsDown) {
-    			var touchobj = e;
-    			elapsedTime = new Date().getTime() - startTime;
-    			if (elapsedTime <= allowedTime) {
-    				if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){
-    					swipeType = dir;
-    				} else if (Math.abs(distY) >= threshold  && Math.abs(distX) <= restraint) {
-    					swipeType = dir;
-    				}
-    			}
-    			handleTouch(e, dir, 'end', swipeType, (dir =='left' || dir =='right')? distX : distY, removeEventListeners);
-    			mouseIsDown = false;
-    			e.preventDefault();
-    		}
-    	}
 
         function removeEventListeners (e) {
             touchSurface.removeEventListener('touchstart', touchStart);
             touchSurface.removeEventListener('touchmove', touchMove);
             touchSurface.removeEventListener('touchend', touchEnd);
-            touchSurface.removeEventListener('mousedown', mouseDown);
-            document.body.removeEventListener('mousemove', mouseMove);
-            document.body.removeEventListener('mouseup', mouseUp);
         }
 
         // Events
         touchSurface.addEventListener('touchstart', touchStart);
         touchSurface.addEventListener('touchmove', touchMove);
         touchSurface.addEventListener('touchend', touchEnd);
-        touchSurface.addEventListener('mousedown', mouseDown);
-        document.body.addEventListener('mousemove', mouseMove);
-        document.body.addEventListener('mouseup', mouseUp);
     },
 
     once: function (element, type, listener, useCapture) {
