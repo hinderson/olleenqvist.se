@@ -7,6 +7,9 @@
     <title><?php echo $site->title()->html() ?><?php if (!$page->isHomePage()) { echo " | " . $page->title()->html(); } ?></title>
     <script>document.documentElement.className = document.documentElement.className.replace(/(^|\\\b)no-js(\b|$)/, 'js');if (!("ontouchstart" in document.documentElement)) {document.documentElement.className += " no-touch";}</script>
 
+    <link rel="icon" type="image/png" href="<?php echo $site->url() ?>/assets/images/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="<?php echo $site->url() ?>/assets/images/favicon-16x16.png" sizes="16x16" />
+
     <meta name="description" content="<?php echo $site->description()->html() ?>">
 
     <meta property="og:type" content="website" />
