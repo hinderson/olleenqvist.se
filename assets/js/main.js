@@ -510,7 +510,7 @@ function initZoomableMedia ( ) {
             }
         }
 
-        var imgZoom = new ImageZoom(items, {
+        var imgZoom = new ImageZoom('.images a', {
             offset: 60
         });
 
