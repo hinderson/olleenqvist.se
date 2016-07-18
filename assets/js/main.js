@@ -518,9 +518,10 @@ function initZoomableMedia ( ) {
         imgZoom.on('zoomInStart', function (media) {
             // Cancel current zoom if project isn't expanded and expand the project it immediately
             var projectImages = project.querySelector('.images');
-            if (!projectImages.classList.contains('expanded')) {
+            if (projectImages.classList.contains('collapsed')) {
                 imgZoom.cancelCurrentZoom();
                 toggleExpandedProject(projectImages);
+                return;
             }
 
             // States
