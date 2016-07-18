@@ -75,7 +75,7 @@ class File extends FileAbstract {
     }
 
     // find and cache the content for this language
-    return new Content($this->page, $this->page->root() . DS . $meta, $lang);
+    return new Content($this->page, $this->page->root() . DS . $meta);
 
   }
 
@@ -89,10 +89,6 @@ class File extends FileAbstract {
 
     $filename = $this->createNewFilename($name, $safeName);
     $root     = $this->dir() . DS . $filename;
-
-    if(empty($name)) {
-      throw new Exception('The filename is missing');
-    }
 
     if($root == $this->root()) return $filename;
 
@@ -142,13 +138,6 @@ class File extends FileAbstract {
       throw new Exception('The file data could not be saved');
     }
 
-    // reset the page cache
-    $this->page->reset();
-
-    // reset the file cache
-    $this->cache = array();
-
-    cache::flush();
     return true;
 
   }

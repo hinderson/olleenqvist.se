@@ -23,32 +23,10 @@ class Email extends Obj {
   const ERROR_INVALID_SERVICE = 5;
   const ERROR_DISABLED = 6;
 
-  public static $defaults = array(
-    'service' => 'mail',
-    'options' => array(),
-    'to'      => null,
-    'from'    => null,
-    'replyTo' => null,
-    'subject' => null,
-    'body'    => null
-  );
-
   public static $services = array();
   public static $disabled = false;
 
-  public $error;
-  public $service;
-  public $options;
-  public $to;
-  public $from;
-  public $replyTo;
-  public $subject;
-  public $body;
-
-  public function __construct($params = array()) {
-    $options = a::merge(static::$defaults, $params);
-    parent::__construct($options);
-  }
+  public $error = null;
 
   public function __set($key, $value) {
     $this->$key = $value;
@@ -62,8 +40,8 @@ class Email extends Obj {
     if(!v::email($this->extractAddress($this->to)))      throw new Error('Invalid recipient', static::ERROR_INVALID_RECIPIENT);
     if(!v::email($this->extractAddress($this->from)))    throw new Error('Invalid sender', static::ERROR_INVALID_SENDER);
     if(!v::email($this->extractAddress($this->replyTo))) throw new Error('Invalid reply address', static::ERROR_INVALID_REPLY_TO);
-    if(empty($this->subject))    throw new Error('Missing subject', static::ERROR_INVALID_SUBJECT);
-    if(empty($this->body))       throw new Error('Missing body', static::ERROR_INVALID_BODY);
+    if(!isset($this->subject))    throw new Error('Missing subject', static::ERROR_INVALID_SUBJECT);
+    if(!isset($this->body))       throw new Error('Missing body', static::ERROR_INVALID_BODY);
   }
 
   /**
@@ -101,13 +79,14 @@ class Email extends Obj {
 
       // overwrite already set values
       if(is_array($params) && !empty($params)) {
-        foreach(a::merge($this->toArray(), $params) as $key => $val) {
-          $this->set($key, $val);
-        }
+        if(isset($params['service'])) $this->service = $params['service'];
+        if(isset($params['options'])) $this->options = $params['options'];
+        if(isset($params['to']))      $this->to      = $params['to'];
+        if(isset($params['from']))    $this->from    = $params['from'];
+        if(isset($params['replyTo'])) $this->replyTo = $params['replyTo'];
+        if(isset($params['subject'])) $this->subject = $params['subject'];
+        if(isset($params['body']))    $this->body    = $params['body'];
       }
-
-      // reset all errors  
-      $this->error = null;
 
       // default service
       if(empty($this->service)) $this->service = 'mail';

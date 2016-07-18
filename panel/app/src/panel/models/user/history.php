@@ -9,11 +9,7 @@ class History {
   public $user;
 
   public function __construct($user) {
-    if($user = kirby()->site()->user($user->username())) {
-      $this->user = $user;
-    } else {
-      throw new Exception('The user could not be found');
-    }
+    $this->user = $user;
   }
 
   public function add($id) {

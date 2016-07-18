@@ -3,7 +3,6 @@
 namespace Kirby\Request;
 
 use Obj;
-use Url;
 
 class Params extends Obj {
 
@@ -12,7 +11,7 @@ class Params extends Obj {
     $params = array();
 
     foreach((array)$this as $key => $value) {
-      $params[] = $key . url::paramSeparator() . $value;
+      $params[] = $key . ':' . $value;
     }
 
     return implode('/', $params);

@@ -15,18 +15,6 @@ class Sidebar {
     $this->blueprint = $page->blueprint();
   }
 
-  public function menu() {
-
-    $menu = $this->page->menu('sidebar');
-    $html = $menu->html();
-
-    // check if the menu has items
-    if($menu->isEmpty()) return '';
-
-    return new Snippet('pages/sidebar/menu', array('menu' => $html));
-
-  }
-
   public function subpages() {
 
     if(!$this->page->canShowSubpages()) {
@@ -72,7 +60,7 @@ class Sidebar {
     // create the monster sidebar
     return new Snippet('pages/sidebar', array(
       'page'      => $this->page,
-      'menu'      => $this->menu(),
+      'menu'      => $this->page->menu('sidebar'),
       'subpages'  => $this->subpages(),
       'files'     => $this->files(),
     ));
