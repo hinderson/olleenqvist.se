@@ -27,13 +27,15 @@ var cache = {
 };
 
 // Elements
-var projectElems = document.querySelectorAll('.project');
-var projectItems = document.querySelectorAll('.project .images');
-var projectLinks = document.querySelectorAll('.project .images a');
-var aboutElem = document.querySelector('section.about');
-var viewToggler = document.querySelector('.view-toggler button');
-var infoToggler = document.querySelector('.info-toggler button');
-var mediaNavElem = document.querySelector('.media-nav');
+var elems = {
+    projectElems: document.querySelectorAll('.project'),
+    projectItems: document.querySelectorAll('.project .images'),
+    projectLinks: document.querySelectorAll('.project .images a'),
+    aboutElem: document.querySelector('section.about'),
+    viewToggler: document.querySelector('.view-toggler button'),
+    infoToggler: document.querySelector('.info-toggler button'),
+    mediaNavElem: document.querySelector('.media-nav'),
+};
 
 // Store all breakpoints and fetch the current one
 var breakpoint = {
@@ -51,7 +53,7 @@ var breakpoint = {
 // Store project positions
 var storeProjectPositions = function ( ) {
     cache.projectPositions.length = 0;
-    utils.forEach(projectElems, function (index, project) {
+    utils.forEach(elems.projectElems, function (index, project) {
         var top = Math.floor(project.getBoundingClientRect().top + (cache.lastScrollY || window.pageYOffset));
         cache.projectPositions.push(top);
     });
@@ -156,8 +158,8 @@ var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
 window.addEventListener('resize', resizeEvent);
 window.addEventListener('scroll', scrollEvent);
 window.addEventListener('orientationchange', resizeEvent);
-viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
-infoToggler.addEventListener('click', utils.throttle(toggleInfoView, 300));
+elems.viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
+elems.infoToggler.addEventListener('click', utils.throttle(toggleInfoView, 300));
 
 var toggleExpandedProject = function (e) {
     if (uiDisabled) { return; }
@@ -327,9 +329,9 @@ function reloadFlickity (project, options) {
 }
 
 function toggleProjectView ( ) {
-    viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
+    elems.viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
-    utils.forEach(projectElems, function (index, project) {
+    utils.forEach(elems.projectElems, function (index, project) {
         var projectImages = project.querySelector('.images');
         var breakPointChange;
 
@@ -403,8 +405,8 @@ var clickOutsideInfo = function (e) {
 function toggleInfoView ( ) {
     if (!aboutState) {
         window.addEventListener('keydown', keysCloseInfoView);
-        aboutElem.addEventListener('click', clickOutsideInfo);
-        aboutElem.setAttribute('aria-hidden', false);
+        elems.aboutElem.addEventListener('click', clickOutsideInfo);
+        elems.aboutElem.setAttribute('aria-hidden', false);
         setTimeout(function ( ) {
             document.body.classList.add('overlay-open');
             document.body.classList.add('about');
@@ -412,8 +414,8 @@ function toggleInfoView ( ) {
         }, 5);
     } else {
         window.removeEventListener('keydown', keysCloseInfoView);
-        aboutElem.removeEventListener('click', clickOutsideInfo);
-        aboutElem.setAttribute('aria-hidden', true);
+        elems.aboutElem.removeEventListener('click', clickOutsideInfo);
+        elems.aboutElem.setAttribute('aria-hidden', true);
         document.body.classList.remove('overlay-open');
         document.body.classList.remove('about');
     }
@@ -428,20 +430,20 @@ function highlightVisibleProject (lastScrollY) {
     var visibleSections = [];
 
     cache.projectPositions.forEach(function (pos, index) {
-        if (!projectElems[index]) { return; }
+        if (!elems.projectElems[index]) { return; }
 
-        projectElems[index].classList.remove('is-visible');
+        elems.projectElems[index].classList.remove('is-visible');
         if (offset >= pos) {
             visibleSections.push(index);
         }
         if (index > 0) {
-            projectElems[index - 1].classList.remove('active');
+            elems.projectElems[index - 1].classList.remove('active');
         }
     });
 
     var currentIndex = visibleSections[visibleSections.length - 1];
-    projectElems[currentIndex].classList.add('is-visible');
-    cache.closestProject = projectElems[currentIndex];
+    elems.projectElems[currentIndex].classList.add('is-visible');
+    cache.closestProject = elems.projectElems[currentIndex];
 }
 
 function initZoomableMedia ( ) {
@@ -452,7 +454,7 @@ function initZoomableMedia ( ) {
         videoEmbed.style.width = mediaRect.width + 'px';
     }
 
-    utils.forEach(projectElems, function (index, project) {
+    utils.forEach(elems.projectElems, function (index, project) {
         var currentlyZoomedIn;
         var items = project.querySelectorAll('.images a');
 
@@ -510,7 +512,7 @@ function initZoomableMedia ( ) {
             }
         }
 
-        var imgZoom = new ImageZoom('.images a', {
+        var imgZoom = new ImageZoom(items, {
             offset: 60
         });
 
@@ -529,7 +531,7 @@ function initZoomableMedia ( ) {
                 project.flkty.unbindDrag();
             }
 
-            mediaNavElem.setAttribute('aria-hidden', false);
+            elems.mediaNavElem.setAttribute('aria-hidden', false);
 
             // Events
             window.addEventListener('keydown', keysPressed);
@@ -540,8 +542,8 @@ function initZoomableMedia ( ) {
             isUiTransitioning = false;
 
             // Events
-            mediaNavElem.querySelector('.left').addEventListener('click', togglePrevItem);
-            mediaNavElem.querySelector('.right').addEventListener('click', toggleNextItem);
+            elems.mediaNavElem.querySelector('.left').addEventListener('click', togglePrevItem);
+            elems.mediaNavElem.querySelector('.right').addEventListener('click', toggleNextItem);
 
             // Toggle swipeable media
             // TODO: Temporarily disabling swipable media until I can avoid conflict with zoomable action
@@ -603,8 +605,8 @@ function initZoomableMedia ( ) {
             }
 
             // Events
-            mediaNavElem.querySelector('.left').removeEventListener('click', togglePrevItem);
-            mediaNavElem.querySelector('.right').removeEventListener('click', toggleNextItem);
+            elems.mediaNavElem.querySelector('.left').removeEventListener('click', togglePrevItem);
+            elems.mediaNavElem.querySelector('.right').removeEventListener('click', toggleNextItem);
             window.removeEventListener('keydown', keysPressed);
 
             // Remove embedded video when src is not image
@@ -622,7 +624,7 @@ function initZoomableMedia ( ) {
             // States
             isUiTransitioning = false;
 
-            mediaNavElem.setAttribute('aria-hidden', true);
+            elems.mediaNavElem.setAttribute('aria-hidden', true);
         });
     });
 }
