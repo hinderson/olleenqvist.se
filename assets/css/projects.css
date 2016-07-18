@@ -1,17 +1,13 @@
 /* General project styling */
-.projects {
-    overflow-x: hidden;
-}
-
 .project {
-    padding-bottom: 3em;
+    padding-top: 3em;
 
     &:first-child {
         padding-top: 4.5em;
     }
 
     @media screen and (--medium-viewport) {
-        padding-bottom: 6em;
+        padding-top: 6em;
 
         &:first-child {
             padding-top: 6em;

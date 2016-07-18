@@ -124,6 +124,7 @@ body {
     line-height: 1.5em;
     background: #fff;
     color: #000;
+    overflow-x: hidden;
 }
 
 .group {
@@ -291,7 +292,11 @@ body {
 /* Main
 -------------------------------------------------- */
 .main {
-    padding-bottom: 1.25em;
+    padding-bottom: 1em;
+
+    @media screen and (--medium-viewport) {
+        padding-bottom: 3em;
+    }
 }
 
 .main p,
@@ -388,7 +393,7 @@ section.about {
 /* Footer
 -------------------------------------------------- */
 .footer {
-    padding-bottom: 1.5em;
+    padding-bottom: 2em;
 
     .copyright {
         text-align: center;
