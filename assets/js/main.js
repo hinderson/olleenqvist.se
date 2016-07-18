@@ -161,7 +161,7 @@ window.addEventListener('orientationchange', resizeEvent);
 elems.viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
 elems.infoToggler.addEventListener('click', utils.throttle(toggleInfoView, 300));
 
-var toggleExpandedProject = function (e) {
+var toggleExpandedProject = function (e, callback) {
     if (uiDisabled) { return; }
 
     var project = e.target || e;
@@ -169,8 +169,7 @@ var toggleExpandedProject = function (e) {
     project.classList.remove('collapsed');
     project.classList.add('expanded');
 
-    var images = project.querySelectorAll('li');
-    utils.forEach(images, function (index, image) {
+    utils.forEach(project.querySelectorAll('li'), function (index, image) {
         image.style.msTransform = '';
         image.style.webkitTransform = '';
         image.style.transform = '';
@@ -517,6 +516,13 @@ function initZoomableMedia ( ) {
         });
 
         imgZoom.on('zoomInStart', function (media) {
+            // Cancel current zoom if project isn't expanded and expand the project it immediately
+            var projectImages = project.querySelector('.images');
+            if (!projectImages.classList.contains('expanded')) {
+                imgZoom.cancelCurrentZoom();
+                toggleExpandedProject(projectImages);
+            }
+
             // States
             uiDisabled = true;
             isUiTransitioning = true;
