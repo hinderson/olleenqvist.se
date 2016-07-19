@@ -28,13 +28,13 @@ var cache = {
 
 // Elements
 var elems = {
-    projectElems: document.querySelectorAll('.project'),
+    projects: document.querySelectorAll('.project'),
     projectItems: document.querySelectorAll('.project .images'),
     projectLinks: document.querySelectorAll('.project .images a'),
-    aboutElem: document.querySelector('section.about'),
+    aboutSection: document.querySelector('section.about'),
     viewToggler: document.querySelector('.view-toggler button'),
     infoToggler: document.querySelector('.info-toggler button'),
-    mediaNavElem: document.querySelector('.media-nav'),
+    mediaNav: document.querySelector('.media-nav'),
 };
 
 // Store all breakpoints and fetch the current one
@@ -53,7 +53,7 @@ var breakpoint = {
 // Store project positions
 var storeProjectPositions = function ( ) {
     cache.projectPositions.length = 0;
-    utils.forEach(elems.projectElems, function (index, project) {
+    utils.forEach(elems.projects, function (index, project) {
         var top = Math.floor(project.getBoundingClientRect().top + (cache.lastScrollY || window.pageYOffset));
         cache.projectPositions.push(top);
     });
@@ -330,7 +330,7 @@ function reloadFlickity (project, options) {
 function toggleProjectView ( ) {
     elems.viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
-    utils.forEach(elems.projectElems, function (index, project) {
+    utils.forEach(elems.projects, function (index, project) {
         var projectImages = project.querySelector('.images');
         var breakPointChange;
 
@@ -404,8 +404,8 @@ var clickOutsideInfo = function (e) {
 function toggleInfoView ( ) {
     if (!aboutState) {
         window.addEventListener('keydown', keysCloseInfoView);
-        elems.aboutElem.addEventListener('click', clickOutsideInfo);
-        elems.aboutElem.setAttribute('aria-hidden', false);
+        elems.aboutSectionSection.addEventListener('click', clickOutsideInfo);
+        elems.aboutSectionSection.setAttribute('aria-hidden', false);
         setTimeout(function ( ) {
             document.body.classList.add('overlay-open');
             document.body.classList.add('about');
@@ -413,8 +413,8 @@ function toggleInfoView ( ) {
         }, 5);
     } else {
         window.removeEventListener('keydown', keysCloseInfoView);
-        elems.aboutElem.removeEventListener('click', clickOutsideInfo);
-        elems.aboutElem.setAttribute('aria-hidden', true);
+        elems.aboutSectionSection.removeEventListener('click', clickOutsideInfo);
+        elems.aboutSectionSection.setAttribute('aria-hidden', true);
         document.body.classList.remove('overlay-open');
         document.body.classList.remove('about');
     }
@@ -429,31 +429,31 @@ function highlightVisibleProject (lastScrollY) {
     var visibleSections = [];
 
     cache.projectPositions.forEach(function (pos, index) {
-        if (!elems.projectElems[index]) { return; }
+        if (!elems.projects[index]) { return; }
 
-        elems.projectElems[index].classList.remove('is-visible');
+        elems.projects[index].classList.remove('is-visible');
         if (offset >= pos) {
             visibleSections.push(index);
         }
         if (index > 0) {
-            elems.projectElems[index - 1].classList.remove('active');
+            elems.projects[index - 1].classList.remove('active');
         }
     });
 
     var currentIndex = visibleSections[visibleSections.length - 1];
-    elems.projectElems[currentIndex].classList.add('is-visible');
-    cache.closestProject = elems.projectElems[currentIndex];
+    elems.projects[currentIndex].classList.add('is-visible');
+    cache.closestProject = elems.projects[currentIndex];
+}
+
+function setVideoDimensions (videoEmbed, media) {
+    var mediaRect = media.getBoundingClientRect();
+    videoEmbed.style.top = mediaRect.top + 'px';
+    videoEmbed.style.left = mediaRect.left + 'px';
+    videoEmbed.style.width = mediaRect.width + 'px';
 }
 
 function initZoomableMedia ( ) {
-    function setVideoDimensions (videoEmbed, media) {
-        var mediaRect = media.getBoundingClientRect();
-        videoEmbed.style.top = mediaRect.top + 'px';
-        videoEmbed.style.left = mediaRect.left + 'px';
-        videoEmbed.style.width = mediaRect.width + 'px';
-    }
-
-    utils.forEach(elems.projectElems, function (index, project) {
+    utils.forEach(elems.projects, function (index, project) {
         var currentlyZoomedIn;
         var items = project.querySelectorAll('.images a');
 
@@ -538,7 +538,7 @@ function initZoomableMedia ( ) {
                 project.flkty.unbindDrag();
             }
 
-            elems.mediaNavElem.setAttribute('aria-hidden', false);
+            elems.mediaNav.setAttribute('aria-hidden', false);
 
             // Events
             window.addEventListener('keydown', keysPressed);
@@ -549,8 +549,8 @@ function initZoomableMedia ( ) {
             isUiTransitioning = false;
 
             // Events
-            elems.mediaNavElem.querySelector('.left').addEventListener('click', togglePrevItem);
-            elems.mediaNavElem.querySelector('.right').addEventListener('click', toggleNextItem);
+            elems.mediaNav.querySelector('.left').addEventListener('click', togglePrevItem);
+            elems.mediaNav.querySelector('.right').addEventListener('click', toggleNextItem);
 
             // Toggle swipeable media
             // TODO: Temporarily disabling swipable media until I can avoid conflict with zoomable action
@@ -612,8 +612,8 @@ function initZoomableMedia ( ) {
             }
 
             // Events
-            elems.mediaNavElem.querySelector('.left').removeEventListener('click', togglePrevItem);
-            elems.mediaNavElem.querySelector('.right').removeEventListener('click', toggleNextItem);
+            elems.mediaNav.querySelector('.left').removeEventListener('click', togglePrevItem);
+            elems.mediaNav.querySelector('.right').removeEventListener('click', toggleNextItem);
             window.removeEventListener('keydown', keysPressed);
 
             // Remove embedded video when src is not image
@@ -631,7 +631,7 @@ function initZoomableMedia ( ) {
             // States
             isUiTransitioning = false;
 
-            elems.mediaNavElem.setAttribute('aria-hidden', true);
+            elems.mediaNav.setAttribute('aria-hidden', true);
         });
     });
 }
