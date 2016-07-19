@@ -404,8 +404,8 @@ var clickOutsideInfo = function (e) {
 function toggleInfoView ( ) {
     if (!aboutState) {
         window.addEventListener('keydown', keysCloseInfoView);
-        elems.aboutSectionSection.addEventListener('click', clickOutsideInfo);
-        elems.aboutSectionSection.setAttribute('aria-hidden', false);
+        elems.aboutSection.addEventListener('click', clickOutsideInfo);
+        elems.aboutSection.setAttribute('aria-hidden', false);
         setTimeout(function ( ) {
             document.body.classList.add('overlay-open');
             document.body.classList.add('about');
@@ -413,8 +413,8 @@ function toggleInfoView ( ) {
         }, 5);
     } else {
         window.removeEventListener('keydown', keysCloseInfoView);
-        elems.aboutSectionSection.removeEventListener('click', clickOutsideInfo);
-        elems.aboutSectionSection.setAttribute('aria-hidden', true);
+        elems.aboutSection.removeEventListener('click', clickOutsideInfo);
+        elems.aboutSection.setAttribute('aria-hidden', true);
         document.body.classList.remove('overlay-open');
         document.body.classList.remove('about');
     }
