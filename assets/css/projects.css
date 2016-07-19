@@ -1,12 +1,4 @@
 /* General project styling */
-.projects {
-    overflow-x: hidden;
-
-    @media screen and (--medium-viewport) {
-        overflow-x: visible;
-    }
-}
-
 .project {
     padding-top: 3em;
 
