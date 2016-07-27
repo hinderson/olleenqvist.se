@@ -220,7 +220,7 @@ body {
 -------------------------------------------------- */
 .info-toggler {
     text-align: center;
-    position: fixed;
+    position: absolute;
     top: 1em;
     z-index: 10;
     left: 0;
@@ -231,6 +231,7 @@ body {
     }
 
     @media screen and (--medium-viewport) {
+        position: fixed;
         left: 1em;
         right: initial;
         text-align: left;
@@ -247,8 +248,12 @@ body {
     }
 }
 
-.overlay-open .info-toggler button {
-    cursor: nw-resize;
+.overlay-open .info-toggler {
+    position: fixed;
+
+    button {
+        cursor: nw-resize;
+    }
 }
 
 .overlay-open.about {
