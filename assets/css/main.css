@@ -367,7 +367,7 @@ section.about {
             }
 
             @media screen and (--medium-viewport) and (min-height: 400px) {
-                width: 110rem;
+                width: 140rem;
             }
         }
 
