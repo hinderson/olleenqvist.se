@@ -446,10 +446,12 @@ function highlightVisibleProject (lastScrollY) {
 }
 
 function setVideoDimensions (videoEmbed, media) {
-    var mediaRect = media.getBoundingClientRect();
+    var $image = media.firstChild;
+    var mediaRect = $image.getBoundingClientRect();
     videoEmbed.style.top = mediaRect.top + 'px';
     videoEmbed.style.left = mediaRect.left + 'px';
     videoEmbed.style.width = mediaRect.width + 'px';
+    videoEmbed.style.height = mediaRect.height + 'px';
 }
 
 function initZoomableMedia ( ) {
@@ -512,7 +514,8 @@ function initZoomableMedia ( ) {
         }
 
         var imgZoom = new ImageZoom(items, {
-            offset: 60
+            offset: 60,
+            speed: 160
         });
 
         imgZoom.on('zoomInStart', function (media) {
