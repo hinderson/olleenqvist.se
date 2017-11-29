@@ -1,32 +1,38 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
-    # Box
-    config.vm.box = "precise64"
-    config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+Vagrant.configure(2) do |config|
 
-    # Forwarded Ports
-    config.vm.network :forwarded_port, guest: 80, host: 8080
-    config.vm.network :private_network, ip: "192.168.68.10"
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.provision "shell", path: "vagrant-provision.sh"
 
-    # Shared Folders
-    config.vm.synced_folder "./", "/vagrant",
-    owner: "vagrant",
-    group: "www-data",
-    mount_options: ["dmode=775,fmode=664"]
+  if Vagrant.has_plugin?("vagrant-cachier")
+    # Configure cached packages to be shared between instances of the same base box.
+    # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
+    config.cache.scope = :box
+  end
 
-    # Provisioning
-    config.vm.provision :shell, :inline => "apt-get update --fix-missing"
-    config.vm.provision :shell, :inline => "apt-get install -q -y python-software-properties python"
-    config.vm.provision :shell, :inline => "add-apt-repository ppa:ondrej/php5 && apt-get update"
-    config.vm.provision :shell, :inline => "apt-get install -qy nginx php5-common php5-dev php5-cli php5-fpm curl php5-curl php5-gd php5-mcrypt php5-mysql"
-    config.vm.provision :shell, :inline => "sudo cp /vagrant/.provision/nginx/nginx.conf /etc/nginx/sites-available/site.conf"
-    config.vm.provision :shell, :inline => "sudo chmod 644 /etc/nginx/sites-available/site.conf"
-    config.vm.provision :shell, :inline => "sudo ln -s /etc/nginx/sites-available/site.conf /etc/nginx/sites-enabled/site.conf"
-    config.vm.provision :shell, :inline => "service nginx restart"
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 1
+    vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ] # Disable logging
+  end
 
-    # Change nginx Working Directory
-    config.vm.provision :shell, :inline => "rm -rf /var/www"
-    config.vm.provision :shell, :inline => "ln -fs /vagrant /var/www"
+  # Create a forwarded port mapping which allows access to a specific port
+  config.vm.network "forwarded_port", guest: 80, host: 8040 # Web Server
+  config.vm.network :private_network, ip: "192.168.68.90"
+
+  # This shares the folder and sets very liberal permissions
+  config.vm.synced_folder ".", "/vagrant/",
+  	id: "site",
+  	:nfs => true
+
+  # This shares the global node_modules folder to enable simple npm linking
+  config.vm.synced_folder "/usr/local/lib/node_modules", "/usr/local/lib/node_modules",
+  	id: "node_modules",
+  	:nfs => true
+
+  # Set bash
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
 end
