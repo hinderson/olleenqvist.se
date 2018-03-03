@@ -51,7 +51,7 @@
                             ?>
 
                             <li>
-                                <a href="<?php echo e($mediaType == 'video', $media->video(), $original->url()) ?>" data-zoomable data-width="1500" data-height="100"<?php if ($mediaType == 'video') : ?> data-type="video"<?php endif ?>>
+                                <a href="<?php echo e($mediaType == 'video', $media->video(), $original->url()) ?>" data-zoomable data-width="1500" data-height="1000"<?php if ($mediaType == 'video') : ?> data-type="video"<?php endif ?>>
                                     <?php if ($mediaType == 'video') : ?>
                                         <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src": "<?php echo c::get('pathThumbs') . '/' . $videoFile->filename(); ?>", "muted" : "", "autoplay": "", "loop": "", "playsinline": "" }'<?php if ($mediaType == 'video') : ?> data-video-fallback="<?php echo c::get('pathThumbs') . '/' . $screenshotFilename ?>"<?php endif ?>>
                                             <div class="aspect-ratio" style="padding-bottom: <?php echo ($thumbHeight / $thumbWidth) * 100 ?>%;"></div>
