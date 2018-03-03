@@ -29,8 +29,8 @@ var cache = {
 // Elements
 var elems = {
     projects: document.querySelectorAll('.project'),
-    projectItems: document.querySelectorAll('.project .images'),
-    projectLinks: document.querySelectorAll('.project .images a'),
+    projectItems: document.querySelectorAll('.project .project-items'),
+    projectLinks: document.querySelectorAll('.project .project-items a'),
     aboutSection: document.querySelector('section.about'),
     viewToggler: document.querySelector('.view-toggler'),
     infoToggler: document.querySelector('.info-toggler'),
@@ -270,7 +270,7 @@ function refreshVideos ( ) {
 }
 
 function initFlickity (project, projectImages, options) {
-    projectImages = projectImages || project.querySelector('.images');
+    projectImages = projectImages || project.querySelector('.project-items');
     var length = project.querySelectorAll('li').length;
 
     var defaults = {
@@ -333,7 +333,7 @@ function toggleProjectView (event) {
     elems.viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
     utils.forEach(elems.projects, function (index, project) {
-        var projectImages = project.querySelector('.images');
+        var projectImages = project.querySelector('.project-items');
         var breakPointChange;
 
         if (!stackState && breakpoint.value !== 'small-viewport') {
@@ -461,7 +461,7 @@ function setVideoDimensions (videoEmbed, media) {
 function initZoomableMedia ( ) {
     utils.forEach(elems.projects, function (index, project) {
         var currentlyZoomedIn;
-        var items = project.querySelectorAll('.images a');
+        var items = project.querySelectorAll('.project-items a');
 
         function keysPressed (e) {
             e = e || window.event;
@@ -524,7 +524,7 @@ function initZoomableMedia ( ) {
 
         imgZoom.on('zoomInStart', function (media) {
             // Cancel current zoom if project isn't expanded and expand the project it immediately
-            var projectImages = project.querySelector('.images');
+            var projectImages = project.querySelector('.project-items');
             if (projectImages.classList.contains('collapsed')) {
                 imgZoom.cancelCurrentZoom();
                 toggleExpandedProject(projectImages);
