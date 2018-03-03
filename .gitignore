@@ -1,4 +1,5 @@
 .DS_Thumb
+.DS_Store
 .vagrant
 node_modules
 dist
