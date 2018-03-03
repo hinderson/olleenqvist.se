@@ -13,7 +13,7 @@ apt-get install -y nginx
 
 # Install php-fpm
 add-apt-repository -y ppa:ondrej/php && sudo apt-get update
-apt-get install -y php7.1-cli php7.1-fpm php7.1-mysql php7.1-curl php7.1-gd php-memcached php7.1-dev php7.1-mcrypt php7.1-sqlite3 php7.1-mbstring graphicsmagick php7.1-imagick php-xml
+apt-get install -y php7.1-cli php7.1-fpm php7.1-mysql php7.1-curl php7.1-gd php-memcached php7.1-dev php7.1-mcrypt php7.1-sqlite3 php7.1-mbstring graphicsmagick php7.1-imagick ffmpeg php-xml
 apt-cache search php7.1
 
 # php.ini
