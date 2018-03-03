@@ -17,7 +17,8 @@
                                     $source = $media->placeholder()->toFile();
                                     $screenshotFilename = basename($source, '.mp4') . '.jpg';
                                     $screenshot = kirby()->roots()->thumbs() . '/' . $screenshotFilename;
-                                    $videoThumb = kirby()->roots()->thumbs() . '/' . basename($source, '.mp4') . '.mp4';
+                                    $videoFilename = basename($source, '.mp4') . '.mp4';
+                                    $videoThumb = kirby()->roots()->thumbs() . '/' . $videoFilename;
 
                                     $ffmpeg = '/usr/bin/ffmpeg';
                                     try {
@@ -26,14 +27,12 @@
                                         $cmd1 = "ffmpeg -i $escapedSource -ss 00:00:01.000 -vframes 1 $screenshot";
                                         exec($cmd1);
 
-                                        $thumbFile = new Media($screenshot);
-
                                         // Generate cropped and resized video thumbnail
                                         $cmd2 = "ffmpeg -i $escapedSource -vf 'scale=(iw*sar)*max($thumbWidth/(iw*sar)\,$thumbHeight/ih):ih*max($thumbWidth/(iw*sar)\,$thumbHeight/ih), crop=$thumbWidth:$thumbHeight' $videoThumb";
                                         exec($cmd2);
 
-                                        $videoFile = new Media($videoThumb);
-
+                                        $thumbFile = new Media($screenshot, c::get('pathThumbs') . '/' . $screenshotFilename);
+                                        $videoFile = new Media($videoThumb, c::get('pathThumbs') . '/' . $videoFilename);
                                     } catch (Exception $e) {
                                         var_dump($e->getMessage());
                                     }
@@ -53,12 +52,12 @@
                             <li>
                                 <a href="<?php echo e($mediaType == 'video', $media->video(), $original->url()) ?>" data-zoomable data-width="1500" data-height="1000"<?php if ($mediaType == 'video') : ?> data-type="video"<?php endif ?>>
                                     <?php if ($mediaType == 'video') : ?>
-                                        <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src": "<?php echo c::get('pathThumbs') . '/' . $videoFile->filename(); ?>", "muted" : "", "autoplay": "", "loop": "", "playsinline": "" }'<?php if ($mediaType == 'video') : ?> data-video-fallback="<?php echo c::get('pathThumbs') . '/' . $screenshotFilename ?>"<?php endif ?>>
+                                        <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src": "<?php echo $videoFile->url(); ?>", "muted" : "", "autoplay": "", "loop": "", "playsinline": "" }'<?php if ($mediaType == 'video') : ?> data-video-fallback="<?php echo $thumbFile->url(); ?>"<?php endif ?>>
                                             <div class="aspect-ratio" style="padding-bottom: <?php echo ($thumbHeight / $thumbWidth) * 100 ?>%;"></div>
-                                            <img src="<?php echo c::get('pathThumbs') . '/' . $micro->filename(); ?>" crossorigin="anonymous" aria-hidden="true" class="thumb" alt="">
+                                            <img src="<?php echo $micro->url(); ?>" crossorigin="anonymous" aria-hidden="true" class="thumb" alt="">
                                             <canvas width="<?php echo $thumbWidth ?>" height="<?php echo $thumbHeight ?>"></canvas>
                                             <noscript>
-                                                <video src="<?php echo c::get('pathThumbs') . '/' . $videoFile->filename(); ?>" muted autoplay loop class="media"></video>
+                                                <video src="<?php echo $videoFile->url(); ?>" muted autoplay loop class="media"></video>
                                             </noscript>
                                         </div>
                                     <?php else : ?>
