@@ -18,16 +18,26 @@ class Pages extends Obj {
   public $sortable = true;
   public $hide     = false;
   public $build    = array();
+  public $add      = true;
 
-  public function __construct($params = array()) {
+  public function __construct($blueprintName, $params = array()) {
 
     if($params === true) {
       $this->template = blueprint::all();
     } else if($params === false) {
-      $this->limit    = 0;
-      $this->max      = 0;
-      $this->sortable = false;
-      $this->hide     = true;
+      if($blueprintName === 'site') {
+        $this->limit    = 20;
+        $this->max      = 1;
+        $this->sortable = false;
+        $this->hide     = false;
+        $this->add      = false;
+      } else {
+        $this->limit    = 0;
+        $this->max      = 0;
+        $this->sortable = false;
+        $this->hide     = true;
+        $this->add      = false;
+      }
     } else if(is_array($params)) {
       $template = a::get($params, 'template');
       if($template == false) {
@@ -44,6 +54,7 @@ class Pages extends Obj {
       $this->max      = a::get($params, 'max', $this->max);
       $this->hide     = a::get($params, 'hide', $this->hide);
       $this->build    = a::get($params, 'build', $this->build);
+      $this->add      = a::get($params, 'add', $this->add);
     } else if(is_string($params)) {
       $this->template = array($params);
     }
@@ -62,9 +73,10 @@ class Pages extends Obj {
 
     $obj = new Obj();
 
-    $obj->mode   = 'default';
-    $obj->field  = null;
-    $obj->format = null;
+    $obj->mode    = 'default';
+    $obj->field   = null;
+    $obj->format  = null;
+    $obj->display = null;
 
     if(is_array($this->num)) {
       foreach($this->num as $k => $v) $obj->$k = $v;
@@ -73,13 +85,18 @@ class Pages extends Obj {
     }
 
     switch($obj->mode) {
+      case 'field':
+        isset($obj->field) or $obj->field = 'num';
+        break;
       case 'date':
         // switch the default date format by configured handler
-        $defaultDateFormat = kirby()->option('date.handler') == 'strftime' ? '%Y%m%d' : 'Ymd';
+        $defaultDateFormat    = kirby()->option('date.handler') == 'strftime' ? '%Y%m%d' : 'Ymd';
+        $defaultDisplayFormat = kirby()->option('date.handler') == 'strftime' ? '%Y/%m/%d' : 'Y/m/d';
 
         // set the defaults
-        isset($obj->field)  or $obj->field  = 'date';
-        isset($obj->format) or $obj->format = $defaultDateFormat;
+        isset($obj->field)   or $obj->field   = 'date';
+        isset($obj->format)  or $obj->format  = $defaultDateFormat;
+        isset($obj->display) or $obj->display = $defaultDisplayFormat;
         break;
     }
 
