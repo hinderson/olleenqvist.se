@@ -8,6 +8,15 @@ fields:
     title:
         label: Title
         type: text
+    category:
+        label: Category
+        type: select
+        default: photo
+        required: true
+        width: 1/4
+        options:
+            photo: Photo
+            video: Video
     subtitle:
         label: Subtitle
         type: text
@@ -20,6 +29,7 @@ fields:
     media:
         label: Project media
         type: builder
+        required: true
         fieldsets:
             image:
                 label: Image
