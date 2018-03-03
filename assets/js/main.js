@@ -32,8 +32,8 @@ var elems = {
     projectItems: document.querySelectorAll('.project .images'),
     projectLinks: document.querySelectorAll('.project .images a'),
     aboutSection: document.querySelector('section.about'),
-    viewToggler: document.querySelector('.view-toggler button'),
-    infoToggler: document.querySelector('.info-toggler button'),
+    viewToggler: document.querySelector('.view-toggler'),
+    infoToggler: document.querySelector('.info-toggler'),
     mediaNav: document.querySelector('.media-nav'),
 };
 
@@ -158,8 +158,8 @@ var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
 window.addEventListener('resize', resizeEvent);
 window.addEventListener('scroll', scrollEvent);
 window.addEventListener('orientationchange', resizeEvent);
-elems.viewToggler.addEventListener('click', utils.throttle(toggleProjectView, 300));
-elems.infoToggler.addEventListener('click', utils.throttle(toggleInfoView, 300));
+elems.viewToggler.addEventListener('click', toggleProjectView);
+elems.infoToggler.addEventListener('click', toggleInfoView);
 
 var toggleExpandedProject = function (e, callback) {
     if (uiDisabled) { return; }
@@ -327,7 +327,9 @@ function reloadFlickity (project, options) {
     refreshVideos();
 }
 
-function toggleProjectView ( ) {
+function toggleProjectView (event) {
+    event && this.blur();
+
     elems.viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
 
     utils.forEach(elems.projects, function (index, project) {
@@ -401,22 +403,24 @@ var clickOutsideInfo = function (e) {
     }
 };
 
-function toggleInfoView ( ) {
+function toggleInfoView (event) {
+    event && this.blur();
+
     if (!aboutState) {
         window.addEventListener('keydown', keysCloseInfoView);
         elems.aboutSection.addEventListener('click', clickOutsideInfo);
         elems.aboutSection.setAttribute('aria-hidden', false);
         setTimeout(function ( ) {
-            document.body.classList.add('overlay-open');
-            document.body.classList.add('about');
+            document.documentElement.classList.add('overlay-open');
+            document.documentElement.classList.add('about');
             lazyBlur.check();
         }, 5);
     } else {
         window.removeEventListener('keydown', keysCloseInfoView);
         elems.aboutSection.removeEventListener('click', clickOutsideInfo);
         elems.aboutSection.setAttribute('aria-hidden', true);
-        document.body.classList.remove('overlay-open');
-        document.body.classList.remove('about');
+        document.documentElement.classList.remove('overlay-open');
+        document.documentElement.classList.remove('about');
     }
 
     uiDisabled = !uiDisabled;
@@ -530,7 +534,7 @@ function initZoomableMedia ( ) {
             // States
             uiDisabled = true;
             isUiTransitioning = true;
-            document.body.classList.add('overlay-open');
+            document.documentElement.classList.add('overlay-open');
             currentlyZoomedIn = media;
 
             if (!stackState) {
@@ -600,7 +604,7 @@ function initZoomableMedia ( ) {
             // States
             uiDisabled = false;
             isUiTransitioning = true;
-            document.body.classList.remove('overlay-open');
+            document.documentElement.classList.remove('overlay-open');
             currentlyZoomedIn = '';
 
             // Remove swipeable media event listeners
