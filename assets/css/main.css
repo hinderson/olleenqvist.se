@@ -303,6 +303,12 @@ body {
         margin-left: 0.5em;
         margin-right: 0.5em;
         color: inherit;
+        text-decoration: underline;
+
+        &.is-selected {
+            text-decoration: none;
+            pointer-events: none;
+        }
     }
 }
 
