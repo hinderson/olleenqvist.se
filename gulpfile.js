@@ -10,8 +10,6 @@ var sourcemaps = require('gulp-sourcemaps');
 var webpackConfig = require('./webpack.config.js');
 var imagemin = require('gulp-imagemin');
 var imageminJpegtran = require('imagemin-jpegtran');
-var glob = require('glob');
-var ffmpeg = require('fluent-ffmpeg');
 var awspublish = require('gulp-awspublish');
 var cloudfront = require('gulp-cloudfront');
 var RevAll = require('gulp-rev-all');
@@ -101,40 +99,11 @@ gulp.task('optimize-thumbs', function ( ) {
         .pipe(gulp.dest('./thumbs'));
 });
 
-gulp.task('generate-video-thumbs', function ( ) {
-	return glob('./content/**/*.mp4', function (err, files) {
-		function generateThumb (file) {
-            var filename = file.substring(file.lastIndexOf('/'), file.lastIndexOf('.'));
-            if (fileExists('./thumbs/' + filename + '.jpg')) {
-                console.log(filename + ' exists');
-                return;
-            }
-			var command = ffmpeg(file)
-				.on('end', function (file) {
-					console.log('screenshots were saved as ' + filename + '.jpg');
-				})
-				.on('error', function (err) {
-					console.log('an error happened: ' + err.message);
-				})
-                .screenshots({
-					timestamps: [0],
-					folder: './thumbs',
-					filename: '%b.jpg'
-				});
-		}
-
-		for (var i = 0; i < files.length; i++) {
-			generateThumb(files[i]);
-		}
-	});
-});
-
 // Default dev watch task
 gulp.task('watch', function ( ) {
     gulp.watch('./thumbs/*.jpg', ['optimize-thumbs']);
 	gulp.watch('./assets/css/*.css', ['css:dev']);
     gulp.watch(['./assets/js/**/*'], ['webpack:dev']);
-    gulp.watch(['./content/**/*.mp4'], ['generate-video-thumbs']);
 });
 
 // Cachebusting
@@ -210,12 +179,7 @@ gulp.task('watch-thumbs', function ( ) {
 });
 
 gulp.task('watch-content', function ( ) {
-	watch('./content/**/*', function ( ) {
-        runSequence(
-    		'generate-video-thumbs',
-    		's3-sync-content'
-    	);
-	});
+	watch('./content/**/*', ['s3-sync-content']);
 });
 
 // Default watch task for use in production in conjunction with a daemon (Forever in our case)
@@ -224,4 +188,4 @@ gulp.task('production', function ( ) {
 	gulp.start('watch-thumbs');
 });
 
-gulp.task('default', ['generate-video-thumbs', 'optimize-thumbs', 'css:dev', 'webpack:dev']);
+gulp.task('default', ['optimize-thumbs', 'css:dev', 'webpack:dev']);
