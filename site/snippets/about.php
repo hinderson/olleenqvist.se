@@ -16,12 +16,12 @@
 
             $aspectRatio = ($thumbMicro->height() / $thumbMicro->width()) * 100;
         ?>
-        <div class="progressive-media" data-attributes='{ "src": "<?php echo c::get('pathThumbs') . '/' . $thumbSmall->filename() ?>", "srcset": "<?php echo c::get('pathThumbs') . '/' . $thumbLarge->filename() ?> <?php echo $thumbLarge->width() ?>w, <?php echo c::get('pathThumbs') . '/' . $thumbMedium->filename() ?> <?php echo $thumbMedium->width() ?>w, <?php echo c::get('pathThumbs') . '/' . $thumbSmall->filename() ?> <?php echo $thumbSmall->width() ?>w", "sizes": "100vw", "alt": "" }'>
+        <div class="progressive-media" data-attributes='{ "src": "<?php echo $thumbSmall->url() ?>", "srcset": "<?php echo $thumbLarge->url() ?> <?php echo $thumbLarge->width() ?>w, <?php echo $thumbMedium->url() ?> <?php echo $thumbMedium->width() ?>w, <?php echo $thumbSmall->url() ?> <?php echo $thumbSmall->width() ?>w", "sizes": "100vw", "alt": "" }'>
             <div class="aspect-ratio" style="padding-bottom: <?php echo ($thumbLarge->height() / $thumbLarge->width()) * 100 ?>%;"></div>
-            <img src="<?php echo c::get('pathThumbs') . '/' . $thumbMicro->filename() ?>" crossorigin="anonymous" aria-hidden="true" class="placeholder" alt="">
+            <img src="<?php echo $thumbMicro->url() ?>" crossorigin="anonymous" aria-hidden="true" class="placeholder" alt="">
             <canvas width="<?php echo $thumbLarge->width() ?>" height="<?php echo $thumbLarge->height() ?>"></canvas>
             <noscript>
-                <img src="<?php echo c::get('pathThumbs') . '/' . $thumbSmall->filename() ?>" srcset="<?php echo c::get('pathThumbs') . '/' . $thumbLarge->filename() ?> <?php echo $thumbLarge->width() ?>w, <?php echo c::get('pathThumbs') . '/' . $thumbMedium->filename() ?> <?php echo $thumbMedium->width() ?>w, <?php echo c::get('pathThumbs') . '/' . $thumbSmall->filename() ?> <?php echo $thumbSmall->width() ?>w" sizes="100vw" alt="">
+                <img src="<?php echo $thumbSmall->url() ?>" srcset="<?php echo $thumbLarge->url() ?> <?php echo $thumbLarge->width() ?>w, <?php echo $thumbMedium->url() ?> <?php echo $thumbMedium->width() ?>w, <?php echo $thumbSmall->url() ?> <?php echo $thumbSmall->width() ?>w" sizes="100vw" alt="">
             </noscript>
         </div>
         <div class="info">

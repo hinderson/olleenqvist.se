@@ -18,7 +18,7 @@
     <meta property="og:url" content="https://www.olleenqvist.se/" />
     <meta property="og:site_name" content="<?php echo $site->pageTitle()->text() ?>" />
     <?php if ($image = $site->images()->first()) : ?>
-        <meta property="og:image" content="<?php echo c::get('pathThumbs') . '/' . thumb($image, array('width' => 1200, 'height' => 630, 'crop' => true))->filename(); ?>" />
+        <meta property="og:image" content="<?php echo thumb($image, array('width' => 1200, 'height' => 630, 'crop' => true))->url(); ?>" />
     <?php endif ?>
 
     <script>
@@ -53,7 +53,7 @@
 
         <nav class="nav-main">
             <ul class="category-switcher">
-                <li class="is-selected"><a href="#" class="category-photo">Photo</a></li>
+                <li><a href="#" class="category-photo is-selected">Photo</a></li>
                 <li><a href="#" class="category-video">Video</a></li>
             </ul>
         </nav>
