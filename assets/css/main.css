@@ -171,9 +171,20 @@ body {
 @import "typography.css";
 
 
-/* Main navigation
+/* Site header
 -------------------------------------------------- */
-.nav-main {
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+
     button {
         position: relative;
         fill: rgba(255, 255, 255, 0.8);
@@ -220,44 +231,32 @@ body {
 -------------------------------------------------- */
 .info-toggler {
     text-align: center;
-    position: absolute;
-    top: 1em;
+    position: relative;
     z-index: 10;
-    left: 0;
-    right: 0;
+    font-size: 1.7rem;
+    margin: 0 0.77em;
+    cursor: help;
+
+    .overlay-open & {
+        cursor: nw-resize;
+    }
 
     .overlay-open.about & {
         z-index: 12;
     }
 
+    @media screen and (--medium-viewport) and (min-height: 400px) {
+        font-size: 2rem;
+    }
+
     @media screen and (--medium-viewport) {
         position: fixed;
-        left: 1em;
-        right: initial;
         text-align: left;
     }
-
-    button {
-        font-size: 1.7rem;
-        margin: 0 0.77em;
-        cursor: help;
-
-        @media screen and (--medium-viewport) and (min-height: 400px) {
-            font-size: 2rem;
-        }
-    }
 }
 
-.overlay-open .info-toggler {
-    position: fixed;
-
-    button {
-        cursor: nw-resize;
-    }
-}
-
-.overlay-open.about {
-    @media screen and (--small-viewport) {
+.overlay-open {
+    &.about {
         overflow: hidden;
     }
 }
@@ -267,23 +266,43 @@ body {
 -------------------------------------------------- */
 .view-toggler {
     display: none;
-    position: fixed;
-    top: 1em;
-    right: 1em;
     z-index: 9;
+    font-size: inherit;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    width: 104px;
 
     @media screen and (--medium-viewport) {
         .js & {
             display: block;
         }
     }
+}
 
-    button {
-        font-size: inherit;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 0.07em;
-        width: 104px;
+
+/* Nav main
+-------------------------------------------------- */
+.nav-main {
+    font-size: 1.4rem;
+
+    @media screen and (--medium-viewport) {
+        font-size: 1.8rem;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    li {
+        display: inline-block;
+    }
+
+    a {
+        margin-left: 0.5em;
+        margin-right: 0.5em;
+        color: inherit;
     }
 }
 
@@ -398,7 +417,7 @@ section.about {
 
 /* Footer
 -------------------------------------------------- */
-.footer {
+.site-footer {
     padding-bottom: 2em;
 
     .copyright {

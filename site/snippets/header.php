@@ -42,25 +42,25 @@
     <?php endif; ?>
 </head>
 <body>
-    <header class="header cf" role="banner">
-        <a href="<?php echo url() ?>" class="visuallyhidden">
-            <h1>Olle Enqvist</h1>
-        </a>
+    <header class="site-header" role="banner">
+        <h1 class="visuallyhidden">Olle Enqvist</h1>
 
-        <nav role="navigation" class="nav-main">
-            <div class="view-toggler">
-                <button>
-                    <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
-                    <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
-                    <span class="label">Stack view</span>
-                </button>
-            </div>
-            <div class="info-toggler">
-                <button>
-                    <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
-                    <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
-                    <span class="label">Olle Enqvist</span>
-                </button>
-            </div>
+        <button class="info-toggler">
+            <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
+            <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
+            <span class="label">Olle Enqvist</span>
+        </button>
+
+        <nav class="nav-main">
+            <ul class="category-switcher">
+                <li class="is-selected"><a href="#" class="category-photo">Photo</a></li>
+                <li><a href="#" class="category-video">Video</a></li>
+            </ul>
         </nav>
+
+        <button class="view-toggler">
+            <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
+            <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
+            <span class="label">Stack view</span>
+        </button>
     </header>

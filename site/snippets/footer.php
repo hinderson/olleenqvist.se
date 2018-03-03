@@ -1,4 +1,4 @@
-    <footer class="footer cf" role="contentinfo">
+    <footer class="site-footer cf" role="contentinfo">
         <div class="group">
             <div class="group-inner">
                 <div class="copyright">
