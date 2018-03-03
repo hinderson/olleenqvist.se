@@ -26,7 +26,7 @@ cat << 'EOF' > /etc/nginx/sites-available/default
 server {
 	listen 80;
 
-	server_name _;
+	server_name olleenqvist.local;
 	root /vagrant;
 	index index.php index.html;
 	charset utf-8;
