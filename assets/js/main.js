@@ -29,7 +29,6 @@ var cache = {
 // Elements
 var elems = {
     projects: document.querySelectorAll('.project'),
-    projectItems: document.querySelectorAll('.project .project-items'),
     projectLinks: document.querySelectorAll('.project .project-items a'),
     aboutSection: document.querySelector('section.about'),
     viewToggler: document.querySelector('.view-toggler'),
@@ -151,7 +150,8 @@ function makeVideoEmbed (vendor, id) {
 
 // Initiate progressive media lazyloader
 var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
-    blur: 50
+    blur: 50,
+    threshold: 0
 });
 
 // Event listeners
