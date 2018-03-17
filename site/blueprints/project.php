@@ -12,8 +12,8 @@ fields:
         label: Category
         type: select
         default: photo
-        required: true
         width: 1/4
+        required: true
         options:
             photo: Photo
             video: Video
@@ -29,7 +29,7 @@ fields:
     media:
         label: Project media
         type: builder
-        required: true
+        required: false
         fieldsets:
             image:
                 label: Image
@@ -45,17 +45,12 @@ fields:
                         options: images
             video:
                 label: Video
-                entry: >
-                    <div style="display: table; width: 100%;">
-                        <div style="float: left; position: relative; overflow: hidden; width: 50px; height: 50px; vertical-align: top; margin-right: 10px;"><video src="{{_fileUrl}}{{placeholder}}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video></div>
-                        <strong>{{placeholder}}</strong><br>
-                        <a href="{{video}}"><em style="font-size: 14px;">{{video}}</em></a>
-                    </div>
+                snippet: builder/preview
                 fields:
                     video:
                         label: Enter video URL (Vimeo or YouTube)
                         type: text
                     placeholder:
-                        label: Pick placeholder video (needs to be uploaded to the project first)
+                        label: Pick placeholder (needs to be uploaded to the project first)
                         type: select
-                        options: videos
+                        options: files
