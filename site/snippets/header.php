@@ -53,8 +53,8 @@
 
         <nav class="nav-main">
             <ul class="category-switcher">
-                <li><a href="#" class="category-photo is-selected">Photo</a></li>
-                <li><a href="#" class="category-video">Video</a></li>
+                <li><a href="<?= $site->url() ?>/?type=photo" class="category-photo<?php ecco(get('type') == 'photo' || get('type') !== 'video', ' is-selected') ?>">Photo</a></li>
+                <li><a href="<?= $site->url() ?>/?type=video" class="category-video<?php ecco(get('type') == 'video', ' is-selected') ?>">Video</a></li>
             </ul>
         </nav>
 

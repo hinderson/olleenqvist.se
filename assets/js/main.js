@@ -33,6 +33,7 @@ var elems = {
     aboutSection: document.querySelector('section.about'),
     viewToggler: document.querySelector('.view-toggler'),
     infoToggler: document.querySelector('.info-toggler'),
+    categorySwitchers: document.querySelectorAll('.category-switcher a'),
     mediaNav: document.querySelector('.media-nav'),
 };
 
@@ -160,6 +161,11 @@ window.addEventListener('scroll', scrollEvent);
 window.addEventListener('orientationchange', resizeEvent);
 elems.viewToggler.addEventListener('click', toggleProjectView);
 elems.infoToggler.addEventListener('click', toggleInfoView);
+utils.forEach(elems.categorySwitchers, function (index, elem) {
+    elem.addEventListener('click', function (event) {
+        //event.preventDefault();
+    });
+});
 
 var toggleExpandedProject = function (e, callback) {
     if (uiDisabled) { return; }
