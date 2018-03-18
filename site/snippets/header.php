@@ -41,7 +41,7 @@
         ?>
     <?php endif; ?>
 </head>
-<body>
+<body<?php e(strtolower(get('type')) == 'video', ' class="type-video"', ' class="type-photo"') ?>>
     <header class="site-header" role="banner">
         <h1 class="visuallyhidden">Olle Enqvist</h1>
 
@@ -58,9 +58,11 @@
             </ul>
         </nav>
 
+        <?php if (strtolower(get('type')) != 'video'): ?>
         <button class="view-toggler">
             <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
             <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
             <span class="label">Stack view</span>
         </button>
+        <?php endif; ?>
     </header>

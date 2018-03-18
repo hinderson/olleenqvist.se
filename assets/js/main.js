@@ -3,6 +3,7 @@
 // Requires
 var utils = require('./utils.js');
 var pubsub = require('./pubsub.js');
+var VideoEmbed = require('./video-embed.js');
 var keyboard = require('./keyboard-commands.js');
 var Flickity = require('flickity');
 var ImageZoom = require('image-zoom');
@@ -29,8 +30,9 @@ var cache = {
 // Elements
 var elems = {
     projects: document.querySelectorAll('.project'),
+    siteHeader: document.querySelector('.site-header'),
     projectLinks: document.querySelectorAll('.project .project-items a'),
-    aboutSection: document.querySelector('section.about'),
+    aboutSection: document.querySelector('.section-about'),
     viewToggler: document.querySelector('.view-toggler'),
     infoToggler: document.querySelector('.info-toggler'),
     categorySwitchers: document.querySelectorAll('.category-switcher a'),
@@ -159,7 +161,9 @@ var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
 window.addEventListener('resize', resizeEvent);
 window.addEventListener('scroll', scrollEvent);
 window.addEventListener('orientationchange', resizeEvent);
-elems.viewToggler.addEventListener('click', toggleProjectView);
+if (elems.viewToggler) {
+    elems.viewToggler.addEventListener('click', toggleProjectView);
+}
 elems.infoToggler.addEventListener('click', toggleInfoView);
 utils.forEach(elems.categorySwitchers, function (index, elem) {
     elem.addEventListener('click', function (event) {
@@ -334,6 +338,7 @@ function reloadFlickity (project, options) {
 }
 
 function toggleProjectView (event) {
+    if (!elems.viewToggler) return;
     event && this.blur();
 
     elems.viewToggler.querySelector('.label').innerHTML = !stackState ? 'Strip view' : 'Stack view';
@@ -376,14 +381,14 @@ function toggleProjectView (event) {
 
     var closestProject = cache.closestProject;
     if (!stackState && breakpoint.value !== 'small-viewport') {
-        document.documentElement.classList.remove('view-list');
-        document.documentElement.classList.add('view-collage');
+        document.body.classList.remove('view-list');
+        document.body.classList.add('view-collage');
 
         lazyBlur.check();
         storeProjectPositions();
     } else {
-        document.documentElement.classList.remove('view-collage');
-        document.documentElement.classList.add('view-list');
+        document.body.classList.remove('view-collage');
+        document.body.classList.add('view-list');
 
         lazyBlur.check();
         storeProjectPositions();
@@ -404,7 +409,7 @@ var keysCloseInfoView = function (e) {
 };
 
 var clickOutsideInfo = function (e) {
-    if (e.target.classList.contains('about')) {
+    if (e.target.classList.contains('section-about')) {
         toggleInfoView();
     }
 };
@@ -416,17 +421,27 @@ function toggleInfoView (event) {
         window.addEventListener('keydown', keysCloseInfoView);
         elems.aboutSection.addEventListener('click', clickOutsideInfo);
         elems.aboutSection.setAttribute('aria-hidden', false);
+
         setTimeout(function ( ) {
+            var scrollbarWidth = cache.viewportWidth - document.body.clientWidth;
             document.documentElement.classList.add('overlay-open');
             document.documentElement.classList.add('about');
+
+            elems.siteHeader.style.right = scrollbarWidth + 'px';
+            document.documentElement.style.paddingRight = scrollbarWidth + 'px';
+
             lazyBlur.check();
         }, 5);
     } else {
         window.removeEventListener('keydown', keysCloseInfoView);
         elems.aboutSection.removeEventListener('click', clickOutsideInfo);
         elems.aboutSection.setAttribute('aria-hidden', true);
+
         document.documentElement.classList.remove('overlay-open');
         document.documentElement.classList.remove('about');
+
+        elems.siteHeader.style.right = null;
+        document.documentElement.style.paddingRight = null;
     }
 
     uiDisabled = !uiDisabled;
@@ -688,3 +703,9 @@ if (breakpoint.value === 'small-viewport') {
 }
 toggleProjectView();
 initZoomableMedia();
+
+
+
+// Initiate embedded videos
+var videoEmbeds = new VideoEmbed('.video-embed .video-embed-placeholder');
+console.log(videoEmbeds);
