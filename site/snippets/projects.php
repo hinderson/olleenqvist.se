@@ -1,4 +1,4 @@
-<section class="projects">
+<section class="section section-projects">
     <header>
         <h2 class="visuallyhidden">Projects</h2>
     </header>

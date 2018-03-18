@@ -1,6 +1,6 @@
 <?php $about = $pages->visible()->find('about'); ?>
 
-<section class="about" aria-hidden="true">
+<section class="section section-about" aria-hidden="true">
     <header>
         <h2 class="visuallyhidden" aria-hidden="true"><?php echo $about->title()->html() ?></h2>
     </header>

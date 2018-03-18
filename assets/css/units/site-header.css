@@ -1,0 +1,135 @@
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+
+    button {
+        position: relative;
+        fill: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.8);
+        color: currentColor;
+        border: 0;
+        margin: 0 1.03em;
+        padding: .53em 0.2em .6em;
+        outline: 0;
+        height: 45px;
+        width: 122px;
+        touch-action: manipulation;
+
+        .type-video & {
+            fill: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .chard-left svg,
+        .chard-right svg {
+            position: absolute;
+            top: 0;
+            width: auto;
+            height: 100%;
+        }
+
+        .chard-left svg {
+            left: 0;
+            transform: translateX(-100%);
+        }
+
+        .chard-right svg {
+            right: 0;
+            transform: translateX(100%);
+        }
+    }
+
+    .js & {
+        button:hover,
+        button:focus {
+            color: #fff;
+            background: #ff0000;
+            fill: #ff0000;
+        }
+    }
+
+    .info-toggler {
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        font-size: 1.7rem;
+        margin: 0 0.77em;
+        cursor: help;
+
+        @media screen and (--medium-viewport) and (min-height: 400px) {
+            font-size: 2rem;
+        }
+
+        .overlay-open & {
+            cursor: nw-resize;
+        }
+
+        .overlay-open.about & {
+            z-index: 12;
+        }
+    }
+
+    .view-toggler {
+        display: none;
+        z-index: 9;
+        font-size: inherit;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        width: 104px;
+
+        @media screen and (--medium-viewport) {
+            .js & {
+                display: block;
+            }
+        }
+    }
+
+    .nav-main {
+        font-size: 1.4rem;
+
+        @media screen and (--medium-viewport) {
+            font-size: 1.8rem;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            display: inline-block;
+        }
+
+        a {
+            margin-left: 0.5em;
+            margin-right: 0.5em;
+            color: inherit;
+            text-decoration: underline;
+            transition: opacity 0.2s ease;
+            opacity: 0.5;
+
+            &:hover, &:focus {
+                opacity: 1;
+            }
+
+            &.is-selected {
+                text-decoration: none;
+                pointer-events: none;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.overlay-open.about {
+    overflow: hidden;
+}

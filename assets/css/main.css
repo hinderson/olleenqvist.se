@@ -33,8 +33,7 @@ body::before {
 
 /* Pix
 -------------------------------------------------- */
-img,
-video {
+img, video {
     display: block;
     max-width: 100%;
     height: auto;
@@ -46,6 +45,7 @@ video {
 a {
     text-decoration: none;
     transition: color .3s, background .3s, border .3s;
+    color: #ff0000;
 }
 
 a:visited {color: inherit;}
@@ -91,10 +91,6 @@ a:focus {
     border: 0;
 }
 
-[aria-hidden="true"] {
-    display: none;
-}
-
 
 /* Site
 -------------------------------------------------- */
@@ -126,6 +122,11 @@ body {
     background: #fff;
     color: #000;
     overflow-x: hidden;
+
+    &.type-video {
+        background-color: #000;
+        color: #fff;
+    }
 }
 
 .group {
@@ -136,14 +137,14 @@ body {
         display: table;
         clear: both;
     }
-}
 
-.group-inner {
-    max-width: 100rem;
-    margin: 0 auto;
+    &-inner {
+        max-width: 100rem;
+        margin: 0 auto;
 
-    .view-list & {
-        max-width: 160rem;
+        .view-list & {
+            max-width: 160rem;
+        }
     }
 }
 
@@ -167,271 +168,22 @@ body {
 }
 
 
-@import "fonts.css";
-@import "typography.css";
-
-
-/* Site header
--------------------------------------------------- */
-.site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1em;
-
-    button {
-        position: relative;
-        fill: rgba(255, 255, 255, 0.8);
-        background: rgba(255, 255, 255, 0.8);
-        border: 0;
-        margin: 0 1.03em;
-        padding: .53em 0.2em .6em;
-        outline: 0;
-        height: 45px;
-        width: 122px;
-        touch-action: manipulation;
-
-        .chard-left svg,
-        .chard-right svg {
-            position: absolute;
-            top: 0;
-            width: auto;
-            height: 100%;
-        }
-
-        .chard-left svg {
-            left: 0;
-            transform: translateX(-100%);
-        }
-
-        .chard-right svg {
-            right: 0;
-            transform: translateX(100%);
-        }
-    }
-
-    .js & {
-        button:hover,
-        button:focus {
-            color: #fff;
-            background: #ff0000;
-            fill: #ff0000;
-        }
-    }
-}
-
-
-/* Info toggler
--------------------------------------------------- */
-.info-toggler {
-    text-align: center;
-    position: relative;
-    z-index: 10;
-    font-size: 1.7rem;
-    margin: 0 0.77em;
-    cursor: help;
-
-    .overlay-open & {
-        cursor: nw-resize;
-    }
-
-    .overlay-open.about & {
-        z-index: 12;
-    }
-
-    @media screen and (--medium-viewport) and (min-height: 400px) {
-        font-size: 2rem;
-    }
-
-    @media screen and (--medium-viewport) {
-        position: fixed;
-        text-align: left;
-    }
-}
-
-.overlay-open {
-    &.about {
-        overflow: hidden;
-    }
-}
-
-
-/* View toggler
--------------------------------------------------- */
-.view-toggler {
-    display: none;
-    z-index: 9;
-    font-size: inherit;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.07em;
-    width: 104px;
-
-    @media screen and (--medium-viewport) {
-        .js & {
-            display: block;
-        }
-    }
-}
-
-
-/* Nav main
--------------------------------------------------- */
-.nav-main {
-    font-size: 1.4rem;
-
-    @media screen and (--medium-viewport) {
-        font-size: 1.8rem;
-    }
-
-    ul {
-        list-style: none;
-        padding-left: 0;
-    }
-
-    li {
-        display: inline-block;
-    }
-
-    a {
-        margin-left: 0.5em;
-        margin-right: 0.5em;
-        color: inherit;
-        text-decoration: underline;
-
-        &.is-selected {
-            text-decoration: none;
-            pointer-events: none;
-        }
-    }
-}
-
-
-
-/* Projects
--------------------------------------------------- */
-@import "projects.css";
-
-
-
-/* Main
--------------------------------------------------- */
 .main {
     padding-bottom: 1em;
 
     @media screen and (--medium-viewport) {
         padding-bottom: 3em;
     }
-}
 
-.main p,
-.main figure,
-.main ul,
-.main ol {
-    margin-bottom: 1.5em;
-}
-
-
-/* About section
--------------------------------------------------- */
-section.about {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100%;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 11;
-    visibility: hidden;
-    opacity: 0;
-    overflow-y: scroll;
-    overflow-x: hidden;
-
-    .overlay-open & {
-        visibility: visible;
-        opacity: 1;
-        transition: opacity 0.3s cubic-bezier(.2,0,.2,1), visibility 0s cubic-bezier(.2,0,.2,1);
-    }
-
-    .content {
-        position: absolute;
-        top: 3em;
-        left: 0;
-        width: 100%;
-        padding: 1.4em;
-        max-width: 74rem;
-
-        @media screen and (--medium-viewport) {
-            display: flex;
-            align-items: center;
-            top: 50%;
-            left: 50%;
-            transform: translateY(-50%) translateX(-50%);
-        }
-
-        @media screen and (--large-viewport) {
-            padding: 0;
-        }
-
-        .progressive-media {
-            display: block;
-            width: 100%;
-            margin-bottom: 1.5em;
-            flex: 1 1 auto;
-            align-self: auto;
-
-            @media screen and (--medium-viewport) {
-                margin-right: 4rem;
-                margin-bottom: 0;
-            }
-
-            @media screen and (--medium-viewport) and (min-height: 400px) {
-                width: 140rem;
-            }
-        }
-
-        .info {
-            flex: 1 1 auto;
-            align-self: auto;
-
-            p {
-                max-width: none;
-                font-size: 1.45rem;
-
-                @media screen and (--medium-viewport) and (min-height: 400px) {
-                    font-size: 1.75rem;
-
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
-                }
-
-                @media screen and (--large-viewport) {
-                    font-size: 1.85rem;
-                }
-            }
-        }
+    p, figure, ul, ol {
+        margin-bottom: 1.5em;
     }
 }
 
-
-/* Footer
--------------------------------------------------- */
-.site-footer {
-    padding-bottom: 2em;
-
-    .copyright {
-        text-align: center;
-    }
-
-    small {
-        display: block;
-        font-size: 1.25rem;
-    }
-}
+@import "fonts.css";
+@import "typography.css";
+@import "units/site-header.css";
+@import "units/site-footer.css";
+@import "units/projects.css";
+@import "units/video-embed.css";
+@import "units/about.css";

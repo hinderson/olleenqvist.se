@@ -1,0 +1,12 @@
+.site-footer {
+    padding-bottom: 2em;
+
+    .copyright {
+        text-align: center;
+    }
+
+    small {
+        display: block;
+        font-size: 1.25rem;
+    }
+}
