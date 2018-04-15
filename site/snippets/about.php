@@ -9,9 +9,9 @@
         <?php
             $file = $about->images()->first();
 
-            $thumbLarge = thumb($file, array('width' => 1200, '', 'quality' => 90));
-            $thumbMedium = thumb($file, array('width' => 840, '', 'quality' => 90));
-            $thumbSmall = thumb($file, array('width' => 620, 'quality' => 90));
+            $thumbLarge = thumb($file, array('width' => 1200, '', 'quality' => 100));
+            $thumbMedium = thumb($file, array('width' => 840, '', 'quality' => 100));
+            $thumbSmall = thumb($file, array('width' => 620, 'quality' => 100));
             $thumbMicro = thumb($file, array('width' => 50, 'quality' => 20));
 
             $aspectRatio = ($thumbMicro->height() / $thumbMicro->width()) * 100;
