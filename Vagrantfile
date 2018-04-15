@@ -27,11 +27,6 @@ Vagrant.configure(2) do |config|
   	id: "site",
   	:nfs => true
 
-  # This shares the global node_modules folder to enable simple npm linking
-  config.vm.synced_folder "/usr/local/lib/node_modules", "/usr/local/lib/node_modules",
-  	id: "node_modules",
-  	:nfs => true
-
   # Set bash
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
