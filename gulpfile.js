@@ -102,7 +102,7 @@ gulp.task('optimize-thumbs', function ( ) {
 // Default dev watch task
 gulp.task('watch', function ( ) {
     gulp.watch('./thumbs/*.jpg', ['optimize-thumbs']);
-	gulp.watch('./assets/css/*.css', ['css:dev']);
+	gulp.watch('./assets/css/**/*.css', ['css:dev']);
     gulp.watch(['./assets/js/**/*'], ['webpack:dev']);
 });
 
