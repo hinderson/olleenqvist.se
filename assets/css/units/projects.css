@@ -16,9 +16,11 @@
 
     ul {
         list-style: none;
+        margin-bottom: 1.5em;
+        padding-left: 0;
     }
 
-    html:not(.view-list) & {
+    body:not(.view-list) & {
         ul {
             @media screen and (--medium-viewport) {
                 margin: -0.4em;
@@ -49,7 +51,7 @@
         }
     }
 
-    html:not(.view-list) .overlay-open & {
+    body:not(.view-list) .overlay-open & {
         li:nth-child(5) {
             z-index: 10;
         }
