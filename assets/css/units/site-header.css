@@ -23,6 +23,10 @@
         width: 122px;
         touch-action: manipulation;
 
+        [aria-busy="true"] {
+            transition: background 0.65s ease, fill 0.65s ease;
+        }
+
         .type-video & {
             fill: rgba(0, 0, 0, 0.5);
             background: rgba(0, 0, 0, 0.5);
@@ -89,6 +93,12 @@
         @media screen and (--medium-viewport) {
             .js & {
                 display: block;
+            }
+
+            .type-video & {
+                visibility: hidden;
+                opacity: 0;
+                pointer-events: none;
             }
         }
     }

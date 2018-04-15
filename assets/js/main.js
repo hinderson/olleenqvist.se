@@ -16,6 +16,8 @@ var stackState = false;
 var uiDisabled = false;
 var aboutState = false;
 var isUiTransitioning = false;
+var currentCategory = utils.getQueryString('type', window.location) || 'photo';
+var lazyBlur;
 
 // Cache variables
 var cache = {
@@ -29,9 +31,10 @@ var cache = {
 
 // Elements
 var elems = {
-    projects: document.querySelectorAll('.project'),
+    projects: null,
     siteHeader: document.querySelector('.site-header'),
-    projectLinks: document.querySelectorAll('.project .project-items a'),
+    projectLinks: null,
+    projectsSection: document.querySelector('.section-projects'),
     aboutSection: document.querySelector('.section-about'),
     viewToggler: document.querySelector('.view-toggler'),
     infoToggler: document.querySelector('.info-toggler'),
@@ -151,12 +154,6 @@ function makeVideoEmbed (vendor, id) {
     return container;
 }
 
-// Initiate progressive media lazyloader
-var lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
-    blur: 50,
-    threshold: 0
-});
-
 // Event listeners
 window.addEventListener('resize', resizeEvent);
 window.addEventListener('scroll', scrollEvent);
@@ -166,9 +163,7 @@ if (elems.viewToggler) {
 }
 elems.infoToggler.addEventListener('click', toggleInfoView);
 utils.forEach(elems.categorySwitchers, function (index, elem) {
-    elem.addEventListener('click', function (event) {
-        //event.preventDefault();
-    });
+    elem.addEventListener('click', toggleCategoryView);
 });
 
 var toggleExpandedProject = function (e, callback) {
@@ -187,7 +182,7 @@ var toggleExpandedProject = function (e, callback) {
 };
 
 var toggleCollapsedProject = function (e) {
-    if (uiDisabled) { return; }
+    if (uiDisabled || !e) { return; }
 
     var project = e.target || e;
     var projectListItems = project.querySelectorAll('li');
@@ -265,6 +260,36 @@ var toggleCollapsedProject = function (e) {
         });
     });
 };
+
+function toggleCategoryView (event) {
+    document.body.setAttribute('aria-busy', true);
+
+    var categoryType = utils.getQueryString('type', event.target.href);
+    utils.getJSON('/projects.json?type=' + categoryType).then(function (result) {
+        // Switch current category class
+        document.body.classList.remove('type-' + currentCategory);
+        currentCategory = categoryType;
+        document.body.classList.add('type-' + currentCategory);
+
+        // Change active state class on nav links
+        utils.forEach(elems.categorySwitchers, function (index, elem) {
+            elem.classList[elem == event.target ? 'add' : 'remove']('is-selected');
+        });
+
+        var html = result.html;
+        if (html) {
+            elems.projectsSection.querySelector('.group-inner').innerHTML = html;
+            init();
+        }
+
+        document.body.removeAttribute('aria-busy');
+    }).catch(function (err) {
+        console.log('An error occured', err);
+        document.body.removeAttribute('aria-busy');
+    });
+
+    event.preventDefault();
+}
 
 function refreshVideos ( ) {
     // Bug fix: Force all videos to play again
@@ -345,6 +370,8 @@ function toggleProjectView (event) {
 
     utils.forEach(elems.projects, function (index, project) {
         var projectImages = project.querySelector('.project-items');
+        if (!projectImages) return;
+
         var breakPointChange;
 
         if (!stackState && breakpoint.value !== 'small-viewport') {
@@ -482,7 +509,7 @@ function setVideoDimensions (videoEmbed, media) {
 function initZoomableMedia ( ) {
     utils.forEach(elems.projects, function (index, project) {
         var currentlyZoomedIn;
-        var items = project.querySelectorAll('.project-items a');
+        var items = elems.projectLinks;
 
         function keysPressed (e) {
             e = e || window.event;
@@ -693,19 +720,32 @@ keyboard.on('arrowLeft', function (event) {
     }
 });
 
-breakpoint.update();
-storeProjectPositions();
+function init ( ) {
+    lazyBlur = new LazyBlur(document.querySelectorAll('.progressive-media'), {
+        blur: 50,
+        threshold: 0
+    });
+    lazyBlur.check();
 
-// Kick it off
-if (breakpoint.value === 'small-viewport') {
-    // Start at true if we're using a small viewport
-    stackState = true;
+    elems.projects = document.querySelectorAll('.project');
+    elems.projectLinks = document.querySelectorAll('.project .project-items a');
+
+    if (currentCategory === 'photo') {
+        storeProjectPositions();
+
+        if (breakpoint.value === 'small-viewport') {
+            // Start at true if we're using a small viewport
+            stackState = true;
+        }
+        toggleProjectView();
+        initZoomableMedia();
+    } else {
+        // Initiate embedded videos
+        var videoEmbeds = new VideoEmbed('.video-embed .video-embed-placeholder');
+        stackState = false;
+        document.body.classList.remove('view-list');
+    }
 }
-toggleProjectView();
-initZoomableMedia();
 
-
-
-// Initiate embedded videos
-var videoEmbeds = new VideoEmbed('.video-embed .video-embed-placeholder');
-console.log(videoEmbeds);
+breakpoint.update();
+init();

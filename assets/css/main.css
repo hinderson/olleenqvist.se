@@ -123,6 +123,15 @@ body {
     color: #000;
     overflow-x: hidden;
 
+    &[aria-busy="true"] {
+        cursor: wait;
+        transition: background 0.65s ease, color 0.65s ease;
+
+        * {
+            pointer-events: none;
+        }
+    }
+
     &.type-video {
         background-color: #000;
         color: #fff;

@@ -94,6 +94,51 @@ utils = {
         };
     },
 
+    get: function (url, params) {
+        return new Promise(function (resolve, reject) {
+            if (params && !utils.isObjectEmpty(params)) {
+                url = url + '?' + utils.toQueryString(params);
+            }
+
+            var req = new XMLHttpRequest();
+            req.open('GET', url);
+
+            req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+            req.onload = function ( ) {
+                if (req.status === 200) {
+                    resolve(req.response);
+                } else {
+                    reject(Error(req.statusText));
+                }
+            };
+
+            req.onerror = function ( ) {
+                reject(Error('Network Error'));
+            };
+
+            req.send();
+        });
+    },
+
+    getJSON: function (url, params) {
+		return utils.get(url, params).then(JSON.parse);
+	},
+
+    getQueryString: function (field, url) {
+        var href = url ? url : window.location.href;
+        var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+        var string = reg.exec(href);
+        return string ? string[1] : null;
+    },
+
+    toQueryString: function (obj) {
+        return Object.keys(obj).map(function(key) {
+            return key + '=' + obj[key];
+        }).join('&');
+    },
+
     scrollToPosition: function (destination, duration, callback) {
     	var start = window.pageYOffset;
     	var startTime = 0;
