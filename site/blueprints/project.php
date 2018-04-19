@@ -33,11 +33,6 @@ fields:
         fieldsets:
             image:
                 label: Image
-                entry: >
-                    <div style="display: table; width: 100%;">
-                        <div style="float: left; width: 50px; height: 50px; vertical-align: top; margin-right: 10px; background-image: url({{_fileUrl}}{{image}}); background-position: 50% 50%; background-size: cover;"></div>
-                        <strong>{{image}}</strong>
-                    </div>
                 fields:
                     image:
                         label: Choose image
@@ -45,7 +40,6 @@ fields:
                         options: images
             video:
                 label: Video
-                snippet: builder/preview
                 fields:
                     video:
                         label: Enter video URL (Vimeo or YouTube)

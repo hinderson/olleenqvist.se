@@ -13,5 +13,4 @@
         <?php endif; ?>
     </div>
     <strong><?= $placeholder ?></strong><br>
-    <a href="<?= $embedUrl ?>"><em style="font-size: 14px;"><?= $embedUrl ?></em></a>
 </div>
