@@ -31,7 +31,6 @@ var cache = {
 
 // Elements
 var elems = {
-    siteCanvas: document.querySelector('.site-canvas'),
     projects: null,
     siteHeader: document.querySelector('.site-header'),
     projectLinks: null,
@@ -270,11 +269,11 @@ function toggleCategoryView (event) {
     function switchCategory () {
         return utils.getJSON('/projects.json?type=' + category).then(function (result) {
             function transitionDone (event) {
-                if (event.target === elems.siteCanvas) {
+                if (event.target === document.body) {
                     isUiTransitioning = false;
                     document.body.classList.remove('is-transitioning');
                     document.body.classList.remove('view-list'); // Hack to get rid of view-list class before the init() is triggered
-                    elems.siteCanvas.removeEventListener(transitionEvent, transitionDone);
+                    document.body.removeEventListener(transitionEvent, transitionDone);
 
                     elems.projectsSection.querySelector('.group-inner').innerHTML = result.html;
                     window.setTimeout(init, 10);
@@ -289,7 +288,7 @@ function toggleCategoryView (event) {
                 currentCategory = category;
 
                 // Once transition is done
-                elems.siteCanvas.addEventListener(transitionEvent, transitionDone);
+                document.body.addEventListener(transitionEvent, transitionDone);
                 document.body.classList.add('is-transitioning');
                 document.body.classList.add('type-' + currentCategory);
 

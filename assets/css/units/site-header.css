@@ -1,5 +1,5 @@
 .site-header {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -9,6 +9,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 1em;
+
+    @media screen and (--medium-viewport) {
+        position: fixed;
+    }
 
     button {
         position: relative;
@@ -68,6 +72,10 @@
         font-size: 1.7rem;
         margin: 0 0.77em;
         cursor: help;
+
+        @media screen and (--small-viewport) {
+            margin-left: 0;
+        }
 
         @media screen and (--medium-viewport) and (min-height: 400px) {
             font-size: 2rem;
