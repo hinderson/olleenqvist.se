@@ -273,6 +273,7 @@ function toggleCategoryView (event) {
                 if (event.target === elems.siteCanvas) {
                     isUiTransitioning = false;
                     document.body.classList.remove('is-transitioning');
+                    document.body.classList.remove('view-list'); // Hack to get rid of view-list class before the init() is triggered
                     elems.siteCanvas.removeEventListener(transitionEvent, transitionDone);
 
                     elems.projectsSection.querySelector('.group-inner').innerHTML = result.html;
