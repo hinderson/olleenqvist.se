@@ -10,15 +10,21 @@
     opacity: 0;
     overflow-y: scroll;
     overflow-x: hidden;
+    pointer-events: none;
 
     .type-video & {
         background: rgba(0, 0, 0, 0.9);
+    }
+
+    &[aria-hidden="true"] {
+        display: none;
     }
 
     .overlay-open & {
         visibility: visible;
         opacity: 1;
         transition: opacity 0.3s cubic-bezier(.2,0,.2,1), visibility 0s cubic-bezier(.2,0,.2,1);
+        pointer-events: auto;
     }
 
     .content {
