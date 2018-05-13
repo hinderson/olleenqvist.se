@@ -140,7 +140,6 @@ gulp.task('publish-assets', function ( ) {
 		.pipe(cloudfront(aws));
 });
 
-
 // Generates rev'd asset files and deploys them to Amazon S3 and Cloudfront
 gulp.task('deploy', function (done) {
 	runSequence(
@@ -150,8 +149,6 @@ gulp.task('deploy', function (done) {
 		'publish-assets',
 	done);
 });
-
-
 
 // Use s3cmd for more reliable continuous deployment of content like thumbs and regular images
 var exec = require('child_process').exec;

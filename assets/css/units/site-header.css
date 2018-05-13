@@ -12,9 +12,6 @@
 
     button {
         position: relative;
-        fill: rgba(255, 255, 255, 0.8);
-        background: rgba(255, 255, 255, 0.8);
-        color: currentColor;
         border: 0;
         margin: 0 1.03em;
         padding: .53em 0.2em .6em;
@@ -22,14 +19,18 @@
         height: 45px;
         width: 122px;
         touch-action: manipulation;
-
-        [aria-busy="true"] {
-            transition: background 0.65s ease, fill 0.65s ease;
-        }
+        fill: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.8);
+        color: currentColor;
 
         .type-video & {
-            fill: rgba(0, 0, 0, 0.5);
-            background: rgba(0, 0, 0, 0.5);
+            fill: rgba(18, 18, 18, 0.5);
+            background: rgba(18, 18, 18, 0.5);
+        }
+
+        .is-transitioning & {
+            fill: none;
+            background: none;
         }
 
         .chard-left svg,

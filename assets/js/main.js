@@ -31,6 +31,7 @@ var cache = {
 
 // Elements
 var elems = {
+    siteCanvas: document.querySelector('.site-canvas'),
     projects: null,
     siteHeader: document.querySelector('.site-header'),
     projectLinks: null,
@@ -261,32 +262,56 @@ var toggleCollapsedProject = function (e) {
     });
 };
 
+var transitionEvent = utils.whichTransitionEvent();
+
 function toggleCategoryView (event) {
+    var category= utils.getQueryString('type', event.target.href);
+
+    function switchCategory () {
+        return utils.getJSON('/projects.json?type=' + category).then(function (result) {
+            function transitionDone (event) {
+                if (event.target === elems.siteCanvas) {
+                    isUiTransitioning = false;
+                    document.body.classList.remove('is-transitioning');
+                    elems.siteCanvas.removeEventListener(transitionEvent, transitionDone);
+
+                    elems.projectsSection.querySelector('.group-inner').innerHTML = result.html;
+                    window.setTimeout(init, 10);
+                }
+            }
+
+            if (result.html.length) {
+                isUiTransitioning = true;
+
+                // Switch current category class
+                document.body.classList.remove('type-' + currentCategory);
+                currentCategory = category;
+
+                // Once transition is done
+                elems.siteCanvas.addEventListener(transitionEvent, transitionDone);
+                document.body.classList.add('is-transitioning');
+                document.body.classList.add('type-' + currentCategory);
+
+                // Change active state class on nav links
+                utils.forEach(elems.categorySwitchers, function (index, elem) {
+                    elem.classList[elem == event.target ? 'add' : 'remove']('is-selected');
+                });
+            }
+
+            document.body.removeAttribute('aria-busy');
+        }).catch(function (err) {
+            console.log('An error occured', err);
+            document.body.removeAttribute('aria-busy');
+        });
+    }
+
     document.body.setAttribute('aria-busy', true);
 
-    var categoryType = utils.getQueryString('type', event.target.href);
-    utils.getJSON('/projects.json?type=' + categoryType).then(function (result) {
-        // Switch current category class
-        document.body.classList.remove('type-' + currentCategory);
-        currentCategory = categoryType;
-        document.body.classList.add('type-' + currentCategory);
-
-        // Change active state class on nav links
-        utils.forEach(elems.categorySwitchers, function (index, elem) {
-            elem.classList[elem == event.target ? 'add' : 'remove']('is-selected');
-        });
-
-        var html = result.html;
-        if (html) {
-            elems.projectsSection.querySelector('.group-inner').innerHTML = html;
-            init();
-        }
-
-        document.body.removeAttribute('aria-busy');
-    }).catch(function (err) {
-        console.log('An error occured', err);
-        document.body.removeAttribute('aria-busy');
-    });
+    if (window.pageYOffset > 0) {
+        utils.scrollToPosition(0, 200, switchCategory);
+    } else {
+        switchCategory();
+    }
 
     event.preventDefault();
 }
@@ -606,30 +631,6 @@ function initZoomableMedia ( ) {
             // Events
             elems.mediaNav.querySelector('.left').addEventListener('click', togglePrevItem);
             elems.mediaNav.querySelector('.right').addEventListener('click', toggleNextItem);
-
-            // Toggle swipeable media
-            // TODO: Temporarily disabling swipable media until I can avoid conflict with zoomable action
-            /*
-            var item = media.firstChild;
-            utils.onSwipe(item, function (event, dir, phase, swipeType, distance) {
-                if (phase === 'move' && (dir === 'left' || dir === 'right')) {
-                    media.style.pointerEvents = 'none'; // Temporarily disable all other click events
-
-                    var totalDist = distance;
-                    item.style.transform = 'translateX(' + Math.min(totalDist, 1 * item.offsetWidth) + 'px)';
-                } else if (phase === 'end') {
-                    item.style.transform = 'translateX(' + (-0 * item.offsetWidth) + 'px)';
-
-                    if (swipeType === 'left') {
-                        toggleNextItem();
-                    } else if (swipeType === 'right') {
-                        togglePrevItem();
-                    }
-
-                    media.style.pointerEvents = ''; // Enable all click events again
-                }
-            });
-            */
 
             // Swap in embedded video when src is not an image
             if (!media.href.match(/\.(jpg|jpeg|png|gif)$/)) {

@@ -35,14 +35,13 @@
                             var_dump($e->getMessage());
                         }
                     } else {
-                        $source = $media->image()->toFile();
-                        $thumbFile = $source;
+                        $thumbFile = $media->image()->toFile();
                     }
 
                     if (isset($thumbFile)) {
                         $original = thumb($thumbFile, array('width' => 1500, 'height' => 1000, 'quality' => 100, 'crop' => true));
-                        $thumb = thumb($thumbFile, array('width' => $thumbWidth, 'height' => $thumbHeight, 'quality' => 90, 'crop' => true));
-                        $retina = thumb($thumbFile, array('width' => ($thumbWidth * 2), 'height' => ($thumbHeight * 2), 'quality' => 90, 'crop' => true));
+                        $thumb = thumb($thumbFile, array('width' => $thumbWidth, 'height' => $thumbHeight, 'quality' => 100, 'crop' => true));
+                        $retina = thumb($thumbFile, array('width' => ($thumbWidth * 2), 'height' => ($thumbHeight * 2), 'quality' => 100, 'crop' => true));
                         $micro = thumb($thumbFile, array('width' => 50, 'height' => 33, 'quality' => 20, 'crop' => true));
                     }
                 ?>

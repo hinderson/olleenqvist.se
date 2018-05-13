@@ -1,6 +1,6 @@
 <?php
     $placeholder = $media->placeholder()->toFile();
-    $placeholderThumb = thumb($placeholder, array('width' => 1500, 'quality' => 100, 'crop' => false));
+    $placeholderThumb = thumb($placeholder, array('width' => 1000, 'quality' => 100, 'crop' => false));
     $videoId = uniqid();
 ?>
 <div class="video-embed" style="background-image: url(<?php echo $placeholderThumb->url() ?>);">

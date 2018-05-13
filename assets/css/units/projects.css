@@ -1,4 +1,15 @@
 /* General project styling */
+.section-projects {
+    transition: opacity 0.45s ease, transform 0.75s ease;
+    opacity: 1;
+    transform: translateY(0);
+
+    .is-transitioning & {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
 .project {
     padding-top: 3em;
 
@@ -20,6 +31,10 @@
         padding-left: 0;
     }
 
+    .video-embed {
+        margin-bottom: 1.5em;
+    }
+
     body:not(.view-list) & {
         ul {
             @media screen and (--medium-viewport) {
@@ -33,7 +48,7 @@
 
         li {
             position: relative;
-            transition: 0.08s transform ease;
+            transition: 0.09s transform ease;
 
             &:nth-child(5) {
                 z-index: 5;
@@ -82,7 +97,8 @@
             min-width: 23em;
         }
 
-        .view-list & {
+        .view-list &,
+        .type-video & {
             width: 90%;
 
             @media screen and (--medium-viewport) {

@@ -42,25 +42,26 @@
     <?php endif; ?>
 </head>
 <body<?php e(strtolower(get('type')) == 'video', ' class="type-video"', ' class="type-photo"') ?>>
-    <header class="site-header" role="banner">
-        <h1 class="visuallyhidden">Olle Enqvist</h1>
+    <div class="site-canvas">
+        <header class="site-header" role="banner">
+            <h1 class="visuallyhidden">Olle Enqvist</h1>
 
-        <button class="info-toggler">
-            <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
-            <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
-            <span class="label">Olle Enqvist</span>
-        </button>
+            <button class="info-toggler">
+                <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
+                <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
+                <span class="label">Olle Enqvist</span>
+            </button>
 
-        <nav class="nav-main">
-            <ul class="category-switcher">
-                <li><a href="<?= $site->url() ?>/?type=photo" class="category-photo<?php ecco(get('type') == 'photo' || get('type') !== 'video', ' is-selected') ?>">Photo</a></li>
-                <li><a href="<?= $site->url() ?>/?type=video" class="category-video<?php ecco(get('type') == 'video', ' is-selected') ?>">Video</a></li>
-            </ul>
-        </nav>
+            <nav class="nav-main">
+                <ul class="category-switcher">
+                    <li><a href="<?= $site->url() ?>/?type=photo" class="category-photo<?php ecco(get('type') == 'photo' || get('type') !== 'video', ' is-selected') ?>">Photo</a></li>
+                    <li><a href="<?= $site->url() ?>/?type=video" class="category-video<?php ecco(get('type') == 'video', ' is-selected') ?>">Video</a></li>
+                </ul>
+            </nav>
 
-        <button class="view-toggler">
-            <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
-            <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
-            <span class="label">Stack view</span>
-        </button>
-    </header>
+            <button class="view-toggler">
+                <span class="chard-left"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-left.svg') ?></span>
+                <span class="chard-right"><?php include($_SERVER['DOCUMENT_ROOT'] . '/assets/images/btn-faceted-right.svg') ?></span>
+                <span class="label">Stack view</span>
+            </button>
+        </header>
