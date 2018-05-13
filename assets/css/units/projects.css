@@ -2,7 +2,6 @@
 .section-projects {
     transition: opacity 0.45s ease, transform 0.75s ease;
     opacity: 1;
-    transform: translateY(0);
 
     .is-transitioning & {
         opacity: 0;
