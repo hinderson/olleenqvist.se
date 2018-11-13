@@ -16,7 +16,7 @@ var stackState = false;
 var uiDisabled = false;
 var aboutState = false;
 var isUiTransitioning = false;
-var currentCategory = utils.getQueryString('type', window.location) || 'photo';
+var currentCategory = document.body.getAttribute('data-selected-category');
 var lazyBlur;
 
 // Cache variables

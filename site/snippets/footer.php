@@ -4,7 +4,7 @@
                 <div class="copyright">
                     <?php $email = $pages->visible()->find('about')->email(); ?>
                     <a href="mailto:<?php echo $email ?>" class="email"><?php echo $email ?></a>
-                    <small>© <?php echo date("Y") ?> Olle Enqvist</small>
+                    <small>©<?php echo date("Y") ?> Olle Enqvist</small>
                 </div>
             </div>
         </div>

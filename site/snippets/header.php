@@ -41,7 +41,7 @@
         ?>
     <?php endif; ?>
 </head>
-<body<?php e(strtolower(get('type')) == 'video', ' class="type-video"', ' class="type-photo"') ?>>
+<body class="type-<?= $type ?>" data-selected-category="<?= $type ?>">
     <header class="site-header" role="banner">
         <h1 class="visuallyhidden">Olle Enqvist</h1>
 
@@ -53,8 +53,10 @@
 
         <nav class="nav-main">
             <ul class="category-switcher">
-                <li><a href="<?= $site->url() ?>/?type=photo" class="category-photo<?php ecco(get('type') == 'photo' || get('type') !== 'video', ' is-selected') ?>">Photo</a></li>
-                <li><a href="<?= $site->url() ?>/?type=video" class="category-video<?php ecco(get('type') == 'video', ' is-selected') ?>">Video</a></li>
+                <?php foreach(page('projects')->children()->visible() as $item): ?>
+                    <?php $current_type = $item->slug(); ?>
+                    <li><a href="<?= $site->url() ?>/?type=<?php echo $current_type; ?>" class="category-<?php echo $current_type; ?><?php ecco($type == $current_type, ' is-selected') ?>"><?= html($item->title()) ?></a></li>
+                <?php endforeach ?>
             </ul>
         </nav>
 

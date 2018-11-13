@@ -1,5 +1,5 @@
 <div class="project <?php echo strtolower($project->uid()) ?>" data-category="<?php echo $project->category(); ?>">
-    <?php if (strtolower($project->category()) == 'video'): ?>
+    <?php if ($type == 'video'): ?>
         <?php foreach($project->media()->limit(1)->toStructure() as $media): ?>
             <?php snippet('video-embed', compact('media')) ?>
         <?php endforeach; ?>
