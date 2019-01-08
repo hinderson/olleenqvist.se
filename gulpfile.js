@@ -185,4 +185,13 @@ gulp.task('production', function ( ) {
 	gulp.start('watch-thumbs');
 });
 
+// Generates rev'd asset files
+gulp.task('build', function (done) {
+	runSequence(
+		'css:prod',
+        'webpack:prod',
+		'rev-assets',
+	done);
+});
+
 gulp.task('default', ['optimize-thumbs', 'css:dev', 'webpack:dev']);
