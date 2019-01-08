@@ -63,7 +63,7 @@
                                 </noscript>
                             </div>
                         <?php else : ?>
-                            <div class="progressive-media <?php echo $mediaType; ?>" data-attributes='{ "src" : "<?php echo $thumb->url() ?>", "srcset": "<?php echo $thumb->url() ?> 1x, <?php echo $retina->url() ?> 2x", "width": "<?php echo $thumb->width() ?>", "height" : "<?php echo $thumb->height() ?>", "alt": "<?php echo $project->title()->html() ?>"}'>
+                            <div class="progressive-media <?php echo $mediaType; ?><?php echo ($mediaType == 'video' ? ' using-video-fallback' : ''); ?>" data-attributes='{ "src" : "<?php echo $thumb->url() ?>", "srcset": "<?php echo $thumb->url() ?> 1x, <?php echo $retina->url() ?> 2x", "width": "<?php echo $thumb->width() ?>", "height" : "<?php echo $thumb->height() ?>", "alt": "<?php echo $project->title()->html() ?>"}'>
                                 <div class="aspect-ratio" style="padding-bottom: <?php echo ($thumbHeight / $thumbWidth) * 100 ?>%;"></div>
                                 <img src="<?php echo $micro->url() ?>" crossorigin="anonymous" aria-hidden="true" class="thumb" alt="">
                                 <canvas width="<?php echo $thumbWidth ?>" height="<?php echo $thumbHeight ?>"></canvas>
