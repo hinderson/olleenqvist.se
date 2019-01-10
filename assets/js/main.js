@@ -523,7 +523,7 @@ function highlightVisibleProject (lastScrollY) {
 }
 
 function setVideoDimensions (videoEmbed, media) {
-    var $image = media.firstChild;
+    var $image = media.firstElementChild;
     var mediaRect = $image.getBoundingClientRect();
     videoEmbed.style.top = mediaRect.top + 'px';
     videoEmbed.style.left = mediaRect.left + 'px';
