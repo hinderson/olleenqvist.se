@@ -17,21 +17,25 @@ function parseVideoUrl (url) {
 }
 
 function makeVideoEmbed (vendor, id) {
+    if (vendor !== 'youtube' && vendor !== 'vimeo') return;
+
     var videoEmbed = document.createElement('IFRAME');
     if (vendor === 'youtube') {
-        videoEmbed.setAttribute('src', 'https://www.youtube.com/embed/' + id + '?enablejsapi=1&version=3&playerapiid=ytplayer&autoplay=1&showinfo=0&controls=0&rel=0&showinfo=0');
+        videoEmbed.setAttribute('src', 'https://www.youtube.com/embed/' + id + '?autoplay=1&showinfo=0&controls=0&rel=0&showinfo=0');
     } else if (vendor === 'vimeo') {
-        videoEmbed.setAttribute('src', 'https://player.vimeo.com/video/' + id + '?api=1&autoplay=true&title=0&byline=0&portrait=0');
-    } else {
-        return;
+        videoEmbed.setAttribute('src', 'https://player.vimeo.com/video/' + id + '?api=1&title=0&byline=0&portrait=0&autoplay=1');
     }
 
     videoEmbed.setAttribute('webkitallowfullscreen', '');
     videoEmbed.setAttribute('mozallowfullscreen', '');
     videoEmbed.setAttribute('allowfullscreen', '');
     videoEmbed.setAttribute('frameborder', 0);
+    videoEmbed.setAttribute('allow', 'autoplay');
 
-    return videoEmbed;
+    var container = document.createElement('DIV');
+    container.appendChild(videoEmbed);
+
+    return container;
 }
 
 function setVideoState (videoEmbedElem, state) {
