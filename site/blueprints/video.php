@@ -27,8 +27,10 @@ fields:
                     fields:
                         video:
                             label: Enter video URL (Vimeo or YouTube)
+                            required: true
                             type: text
                         placeholder:
                             label: Pick placeholder (needs to be uploaded to the project first)
                             type: select
+                            required: true
                             options: files
