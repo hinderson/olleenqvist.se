@@ -31,8 +31,8 @@
                                 $cmd2 = "ffmpeg -i $escapedSource -vf 'scale=(iw*sar)*max($thumbWidth/(iw*sar)\,$thumbHeight/ih):ih*max($thumbWidth/(iw*sar)\,$thumbHeight/ih), crop=$thumbWidth:$thumbHeight' $videoThumb";
                                 exec($cmd2);
 
-                                $thumbFile = new Media($screenshot, c::get('pathThumbs') . '/' . $screenshotFilename);
-                                $videoFile = new Media($videoThumb, c::get('pathThumbs') . '/' . $videoFilename);
+                                $thumbFile = new Media($screenshot, url('thumbs') . '/' . $screenshotFilename);
+                                $videoFile = new Media($videoThumb, url('thumbs') . '/' . $videoFilename);
                             } catch (Exception $e) {
                                 var_dump($e->getMessage());
                             }
