@@ -41,7 +41,7 @@
     "gulp-watch": "^4.3.5",
     "image-zoom": "github:hinderson/image-zoom#0.1.0",
     "imagemin-jpegtran": "^4.3.2",
-    "imports-loader": "^0.6.5",
+    "imports-loader": "^4.0.1",
     "lazyblur": "github:hinderson/lazyblur",
     "normalize.css": "^3.0.3",
     "path": "^0.12.7",
@@ -54,7 +54,7 @@
     "postcss-simple-vars": "^1.1.0",
     "promise-polyfill": "^5.0.0",
     "run-sequence": "^1.2.1",
-    "webpack": "^1.12.9"
+    "webpack": "^5.75.0"
   },
   "dependencies": {
     "buffer-shims": "^1.0.0"
