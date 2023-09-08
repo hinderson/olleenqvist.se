@@ -1,89 +1,90 @@
 .video-embed {
-	position: relative;
-	overflow: hidden;
-	background-size: cover;
-	background-position: 50% 50%;
-	background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
 
-	&-placeholder {
-		position: relative;
-		margin: 0;
-		padding-bottom: 56.25%;
-		overflow: hidden;
-		height: 0;
-		cursor: pointer;
-		transition: opacity 1.25s ease-in;
+  &-placeholder {
+    position: relative;
+    margin: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+    height: 0;
+    cursor: pointer;
+    transition: opacity 1.25s ease-in;
 
-	    &[aria-hidden="true"] {
-	        opacity: 0;
-	    }
+    &[aria-hidden="true"] {
+      opacity: 0;
+    }
 
-		&[aria-hidden="false"] {
-			opacity: 1;
-		}
+    &[aria-hidden="false"] {
+      opacity: 1;
+    }
 
-	    iframe {
-	    	position: absolute;
-	    	top: 0;
-	    	left: 0;
-	    	width: 100%;
-	    	height: 100%;
-	    	z-index: 1;
-	    }
+    iframe {
+      position: absolute;
+      top: -0.5px;
+      left: -0.5px;
+      width: calc(100% + 0.5px);
+      height: calc(100% + 0.5px);
+      z-index: 1;
+    }
 
-	    .no-js & .toggle-video {
-	    	display: none;
-	    }
-	}
+    .no-js & .toggle-video {
+      display: none;
+    }
+  }
 }
 
 .toggle-video {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 1;
-	width: 100%;
-	height: 100%;
-	background: transparent;
-	border: 0;
-	margin: 0;
-	padding: 0;
-    cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
 
-	.icon {
-		display: inline-block;
-		width: 7rem;
-		height: 7rem;
-		pointer-events: none;
+  .icon {
+    display: inline-block;
+    width: 7rem;
+    height: 7rem;
+    pointer-events: none;
 
-		@media screen and (--medium-viewport) {
-			width: 8rem;
-			height: 8rem;
-		}
-
-		@media screen and (--large-viewport) {
-			width: 9rem;
-			height: 9rem;
-		}
-	}
-
-	&:focus, &:focus {
-		.icon {
-			transform: scale(1.04);
-		}
-	}
-
-    &:active {
-        .icon {
-            transform: scale(0.94);
-        }
+    @media screen and (--medium-viewport) {
+      width: 8rem;
+      height: 8rem;
     }
 
-	.svg-container {
-		padding-bottom: 105.047%;
-	}
-
-	&.video-playing {
-        display: none;
+    @media screen and (--large-viewport) {
+      width: 9rem;
+      height: 9rem;
     }
+  }
+
+  &:focus,
+  &:focus {
+    .icon {
+      transform: scale(1.04);
+    }
+  }
+
+  &:active {
+    .icon {
+      transform: scale(0.94);
+    }
+  }
+
+  .svg-container {
+    padding-bottom: 105.047%;
+  }
+
+  &.video-playing {
+    display: none;
+  }
 }
