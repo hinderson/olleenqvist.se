@@ -11,14 +11,14 @@ c::set('cache.driver', 'memcached');
 c::set('ssl', true);
 
 // Set global CDN url
-c::set('cdnUrl', 'https://d32x2ylr3hfw2f.cloudfront.net');
+c::set('cdnUrl', 'https://olleenqvist.se/dist');
 
 // CDN settings
-c::set('cdn.assets', 'https://d32x2ylr3hfw2f.cloudfront.net');
+c::set('cdn.assets', 'https://olleenqvist.se/dist');
 c::set('cdn.content', false);
 c::set('cdn.thumbs', false);
 
 // CDN paths
-c::set('pathAssets', 'https://d32x2ylr3hfw2f.cloudfront.net');
-c::set('pathThumbs', 'https://d32x2ylr3hfw2f.cloudfront.net/thumbs');
-c::set('pathContent', 'https://d32x2ylr3hfw2f.cloudfront.net/content');
+c::set('pathAssets', 'https://olleenqvist.se/dist');
+c::set('pathThumbs', 'https://olleenqvist.se/thumbs');
+c::set('pathContent', 'https://olleenqvist.se/content');
